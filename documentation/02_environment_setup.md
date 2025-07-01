@@ -266,51 +266,51 @@ mkdir -p monitoring/{grafana,prometheus,custom}
 ### Expected Enhanced Directory Structure
 ```
 maht-net/
-├── documentation/           # Project documentation
-├── src/                    # Source code
-│   ├── models/            # Model implementations
-│   ├── datasets/          # Dataset handling
-│   ├── training/          # Training pipeline
-│   ├── evaluation/        # Evaluation metrics
-│   ├── utils/            # Utility functions
-│   └── visualization/    # Plotting and visualization
-├── data/                  # Dataset storage
-│   ├── raw/              # Original ISBI 2015 data
-│   ├── processed/        # Preprocessed images
-│   ├── annotations/      # Ground truth labels
-│   ├── augmented/        # Augmented datasets
-│   └── external/         # External datasets
-├── configs/               # Configuration files
-│   ├── models/           # Model configurations
-│   ├── training/         # Training configurations
-│   ├── datasets/         # Dataset configurations
-│   └── experiments/      # Experiment configurations
-├── experiments/           # Experiment organization
-│   ├── baseline/         # Baseline experiments
-│   ├── ablation/         # Ablation studies
-│   └── optimization/     # Hyperparameter optimization
-├── scripts/               # Utility scripts
-│   ├── preprocessing/    # Data preprocessing scripts
-│   ├── training/         # Training scripts
-│   ├── evaluation/       # Evaluation scripts
-│   └── deployment/       # Deployment scripts
-├── aws/                   # AWS-specific files
-│   ├── s3_sync/          # S3 synchronization scripts
-│   ├── cloudwatch/       # CloudWatch configuration
-│   └── lambda/           # Lambda functions
-├── deployment/            # Deployment configurations
-│   ├── docker/           # Docker configurations
-│   ├── terraform/        # Infrastructure as code
-│   └── kubernetes/       # K8s manifests
-├── monitoring/            # Monitoring setup
-├── notebooks/             # Jupyter notebooks
-├── tests/                 # Unit tests
-├── checkpoints/           # Model checkpoints
-├── logs/                  # Training logs
-├── results/               # Experiment results
-├── requirements.txt       # Python dependencies
-├── docker-compose.yml     # Development environment
-└── Makefile              # Build automation
+├── documentation/              # Project documentation
+├── src/                        # Source code
+│   ├── models/                 # Model implementations
+│   ├── datasets/               # Dataset handling
+│   ├── training/               # Training pipeline
+│   ├── evaluation/             # Evaluation metrics
+│   ├── utils/                  # Utility functions
+│   └── visualization/          # Plotting and visualization
+├── data/                       # Dataset storage
+│   ├── raw/                    # Original ISBI 2015 data
+│   ├── processed/              # Preprocessed images
+│   ├── annotations/            # Ground truth labels
+│   ├── augmented/              # Augmented datasets
+│   └── external/               # External datasets
+├── configs/                    # Configuration files
+│   ├── models/                 # Model configurations
+│   ├── training/               # Training configurations
+│   ├── datasets/               # Dataset configurations
+│   └── experiments/            # Experiment configurations
+├── experiments/                # Experiment organization
+│   ├── baseline/               # Baseline experiments
+│   ├── ablation/               # Ablation studies
+│   └── optimization/           # Hyperparameter optimization
+├── scripts/                    # Utility scripts
+│   ├── preprocessing/          # Data preprocessing scripts
+│   ├── training/               # Training scripts
+│   ├── evaluation/             # Evaluation scripts
+│   └── deployment/             # Deployment scripts
+├── aws/                        # AWS-specific files
+│   ├── s3_sync/                # S3 synchronization scripts
+│   ├── cloudwatch/             # CloudWatch configuration
+│   └── lambda/                 # Lambda functions
+├── deployment/                 # Deployment configurations
+│   ├── docker/                 # Docker configurations
+│   ├── terraform/              # Infrastructure as code
+│   └── kubernetes/             # K8s manifests
+├── monitoring/                 # Monitoring setup
+├── notebooks/                  # Jupyter notebooks
+├── tests/                      # Unit tests
+├── checkpoints/                # Model checkpoints
+├── logs/                       # Training logs
+├── results/                    # Experiment results
+├── requirements.txt            # Python dependencies
+├── docker-compose.yml          # Development environment
+└── Makefile                    # Build automation
 ```
 
 ### Step 8: Environment Configuration Files

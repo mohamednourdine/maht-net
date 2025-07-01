@@ -1,0 +1,52 @@
+# Development Dependencies for MAHT-Net
+# Additional packages for development, testing, and code quality
+
+# Enhanced Testing
+pytest-xdist>=3.3.0          # Parallel test execution
+pytest-mock>=3.11.0          # Mocking utilities
+pytest-benchmark>=4.0.0      # Performance benchmarking
+coverage>=7.3.0              # Code coverage analysis
+pytest-html>=4.1.0           # HTML test reports
+
+# Code Quality & Linting
+bandit>=1.7.0                # Security linting
+safety>=2.3.0                # Dependency vulnerability scanner
+vulture>=2.10.0              # Dead code finder
+radon>=6.0.0                 # Code complexity analysis
+xenon>=0.9.0                 # Code complexity monitoring
+
+# Type Checking
+types-PyYAML>=6.0.0
+types-requests>=2.31.0
+types-setuptools>=68.0.0
+
+# Development Tools
+ipython>=8.16.0              # Enhanced Python shell
+jupyter>=1.0.0               # Jupyter notebooks
+jupyterlab>=4.0.0            # JupyterLab interface
+notebook>=7.0.0              # Jupyter notebook
+
+# Debugging & Profiling
+pdb++>=0.10.0                # Enhanced debugger
+line_profiler>=4.1.0         # Line-by-line profiling
+memory_profiler>=0.61.0      # Memory usage profiling
+py-spy>=0.3.0                # Sampling profiler
+
+# Git Hooks & Automation
+pre-commit>=3.5.0            # Git pre-commit hooks
+commitizen>=3.12.0           # Conventional commits
+gitpython>=3.1.0             # Git repository management
+
+# Documentation Development
+sphinx-autobuild>=2021.3.0   # Auto-rebuild docs
+sphinx-copybutton>=0.5.0     # Copy code buttons
+furo>=2023.9.0                # Modern Sphinx theme
+
+# AWS Development Tools
+localstack>=3.0.0            # Local AWS cloud stack
+moto>=4.2.0                  # AWS service mocking
+
+# Performance Monitoring
+psutil>=5.9.0                # System monitoring
+gpustat>=1.1.0               # GPU monitoring
+py3nvml>=0.2.0               # NVIDIA GPU monitoring

@@ -1,0 +1,69 @@
+{
+  "model": {
+    "num_landmarks": 7,
+    "pretrained": false,
+    "heatmap_size": 64
+  },
+  
+  "data": {
+    "data_dir": "data/processed",
+    "image_size": [512, 512],
+    "heatmap_size": [64, 64],
+    "pixel_spacing": 0.1,
+    "normalize": true
+  },
+  
+  "evaluation": {
+    "batch_size": 16,
+    "num_workers": 4,
+    "save_predictions": true,
+    "generate_visualizations": true,
+    "compute_uncertainty": true
+  },
+  
+  "clinical_thresholds": {
+    "target_mre": 1.2,
+    "target_sdr_2mm": 95.0,
+    "target_sdr_2.5mm": 98.0,
+    "target_sdr_3mm": 99.0,
+    "safety_threshold": 2.0,
+    "uncertainty_threshold": 0.5,
+    "excellence_threshold": 1.0,
+    "acceptable_threshold": 1.5,
+    "poor_threshold": 2.0,
+    "unacceptable_threshold": 4.0
+  },
+  
+  "output": {
+    "output_dir": "results/evaluation",
+    "save_individual_predictions": true,
+    "generate_report": true,
+    "create_visualizations": true,
+    "export_format": "json"
+  },
+  
+  "visualization": {
+    "error_distribution": true,
+    "landmark_comparison": true,
+    "clinical_summary": true,
+    "heatmap_overlay": true,
+    "uncertainty_analysis": true,
+    "per_patient_analysis": false
+  },
+  
+  "clinical_validation": {
+    "regulatory_compliance": true,
+    "fda_guidelines": true,
+    "iso_standards": true,
+    "uncertainty_quantification": true,
+    "performance_monitoring": true
+  },
+  
+  "metrics": {
+    "primary": ["mre", "sdr_2mm", "sdr_2.5mm", "sdr_3mm"],
+    "secondary": ["std", "max_error", "percentile_95"],
+    "clinical": ["clinical_excellent_rate", "clinical_acceptable_rate", "clinical_overall_acceptable"],
+    "per_landmark": true,
+    "uncertainty_calibration": true
+  }
+}

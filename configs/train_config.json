@@ -1,0 +1,108 @@
+{
+  "model": {
+    "num_landmarks": 7,
+    "pretrained": true,
+    "heatmap_size": 64,
+    "architecture": "maht_net"
+  },
+  
+  "data": {
+    "data_dir": "data/processed",
+    "image_size": [512, 512],
+    "heatmap_size": [64, 64],
+    "gaussian_sigma": 2.0,
+    "normalize": true,
+    "augmentation": {
+      "rotation_limit": 10,
+      "shift_limit": 0.1,
+      "scale_limit": 0.1,
+      "brightness_limit": 0.2,
+      "contrast_limit": 0.2,
+      "noise_probability": 0.3,
+      "blur_probability": 0.2
+    }
+  },
+  
+  "training": {
+    "stage_epochs": 12,
+    "total_stages": 3,
+    "batch_size": 8,
+    "num_workers": 4,
+    "base_lr": 1e-4,
+    "min_lr": 1e-6,
+    "weight_decay": 1e-4,
+    "grad_clip": 1.0,
+    
+    "loss_weights": {
+      "heatmap_weight": 1.0,
+      "coord_weight": 1.0,
+      "uncertainty_weight": 0.1
+    },
+    
+    "scheduler": {
+      "type": "CosineAnnealingWarmRestarts",
+      "t0": 10,
+      "t_mult": 2,
+      "eta_min": 1e-6
+    },
+    
+    "early_stopping": {
+      "patience": 20,
+      "min_delta": 0.01,
+      "monitor": "val_mre"
+    },
+    
+    "checkpointing": {
+      "save_interval": 20,
+      "monitor": "val_mre",
+      "mode": "min"
+    },
+    
+    "logging": {
+      "log_interval": 100,
+      "clinical_eval_interval": 10,
+      "tensorboard": true,
+      "wandb": false
+    }
+  },
+  
+  "clinical_validation": {
+    "target_mre": 1.2,
+    "target_sdr_2mm": 95.0,
+    "target_sdr_2_5mm": 98.0,
+    "target_sdr_3mm": 99.0,
+    "safety_threshold": 2.0,
+    "uncertainty_threshold": 0.5
+  },
+  
+  "experiment": {
+    "name": "maht_net_progressive_training",
+    "output_dir": "results/experiments/progressive_training",
+    "description": "Progressive 3-stage training of MAHT-Net for cephalometric landmark detection",
+    "tags": ["maht-net", "cephalometric", "progressive-training", "clinical-ai"],
+    "random_seed": 42
+  },
+  
+  "aws": {
+    "instance_type": "g5.xlarge",
+    "region": "us-east-1",
+    "s3_bucket": "maht-net-data",
+    "cloudwatch_logging": true,
+    "auto_scaling": false
+  },
+  
+  "deployment": {
+    "model_format": "torchscript",
+    "optimization": {
+      "quantization": false,
+      "pruning": false,
+      "tensorrt": true
+    },
+    "api": {
+      "framework": "fastapi",
+      "host": "0.0.0.0",
+      "port": 8000,
+      "workers": 2
+    }
+  }
+}
