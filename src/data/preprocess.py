@@ -53,7 +53,7 @@ class CephalometricDataProcessor:
         (self.output_dir / 'images').mkdir(exist_ok=True)
         (self.output_dir / 'annotations').mkdir(exist_ok=True)
         
-        logger.info(f"✅ Data processor initialized with output: {self.output_dir}")
+        logger.info(f"Data processor initialized with output: {self.output_dir}")
     
     def process_dataset(self, 
                        input_dir: str,
@@ -116,7 +116,7 @@ class CephalometricDataProcessor:
             'landmark_names': self.landmark_names
         }
         
-        logger.info(f"✅ Processing completed: {len(processed_samples)}/{len(annotations)} samples")
+        logger.info(f"Processing completed: {len(processed_samples)}/{len(annotations)} samples")
         
         return stats
     
@@ -467,7 +467,7 @@ class CephalometricDataProcessor:
             'random_seed': random_seed
         }
         
-        logger.info(f"✅ Created data splits:")
+        logger.info(f"Created data splits:")
         logger.info(f"  Train: {len(train_samples)} samples ({len(train_samples)/n_total*100:.1f}%)")
         logger.info(f"  Val: {len(val_samples)} samples ({len(val_samples)/n_total*100:.1f}%)")
         logger.info(f"  Test: {len(test_samples)} samples ({len(test_samples)/n_total*100:.1f}%)")
@@ -515,8 +515,8 @@ def main():
             annotation_format=args.annotation_format
         )
         
-        print(f"\n✅ Processing completed successfully!")
-        print(f"📊 Statistics:")
+        print(f"\nProcessing completed successfully!")
+        print(f"Statistics:")
         print(f"  Total samples: {stats['total_samples']}")
         print(f"  Successful: {stats['successful_samples']}")
         print(f"  Failed: {stats['failed_samples']}")
@@ -532,7 +532,7 @@ def main():
                 test_ratio=args.test_ratio
             )
             
-            print(f"\n📊 Data splits created:")
+            print(f"\nData splits created:")
             print(f"  Train: {split_stats['train_samples']} samples")
             print(f"  Val: {split_stats['val_samples']} samples")
             print(f"  Test: {split_stats['test_samples']} samples")

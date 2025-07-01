@@ -139,7 +139,7 @@ def main():
     
     logger.info("🚀 Starting MAHT-Net Training")
     logger.info(f"📋 Experiment: {config['experiment']['name']}")
-    logger.info(f"📊 Configuration: {args.config}")
+    logger.info(f"Configuration: {args.config}")
     
     try:
         # Create model
@@ -150,10 +150,10 @@ def main():
             heatmap_size=config['model']['heatmap_size']
         )
         
-        logger.info(f"✅ Model created with {sum(p.numel() for p in model.parameters()):,} parameters")
+        logger.info(f"Model created with {sum(p.numel() for p in model.parameters()):,} parameters")
         
         # Create data loaders
-        logger.info("📊 Creating data loaders...")
+        logger.info("Creating data loaders...")
         dataloaders = create_dataloaders(
             data_dir=config['data']['data_dir'],
             batch_size=config['training']['batch_size'],
@@ -168,7 +168,7 @@ def main():
             if split not in dataloaders:
                 raise ValueError(f"Missing required data split: {split}")
         
-        logger.info(f"✅ Data loaders created:")
+        logger.info(f"Data loaders created:")
         for split, loader in dataloaders.items():
             logger.info(f"  {split}: {len(loader.dataset)} samples")
         
@@ -217,7 +217,7 @@ def main():
         trainer.save_training_summary()
         
         # Generate training report
-        logger.info("📊 Generating training report...")
+        logger.info("Generating training report...")
         trainer.generate_training_report()
         
     except KeyboardInterrupt:

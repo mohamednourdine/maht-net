@@ -294,7 +294,7 @@ def create_metrics_report(metrics: Dict[str, float],
     report.append("")
     
     # Overall Performance
-    report.append("📊 OVERALL PERFORMANCE")
+    report.append("OVERALL PERFORMANCE")
     report.append("-" * 30)
     report.append(f"Mean Radial Error (MRE):      {metrics['mre']:.3f} mm")
     report.append(f"Standard Deviation:           {metrics['std']:.3f} mm")
@@ -353,14 +353,14 @@ def create_metrics_report(metrics: Dict[str, float],
     report.append("💡 CLINICAL RECOMMENDATIONS")
     report.append("-" * 30)
     if metrics['mre'] <= 1.2:
-        report.append("✅ Model meets clinical requirements (MRE ≤ 1.2mm)")
+        report.append("Model meets clinical requirements (MRE ≤ 1.2mm)")
     else:
         report.append("⚠️  Model requires improvement for clinical use")
     
     if metrics['sdr_2mm'] >= 95.0:
-        report.append("✅ Excellent reliability (SDR@2mm ≥ 95%)")
+        report.append("Excellent reliability (SDR@2mm ≥ 95%)")
     elif metrics['sdr_2mm'] >= 90.0:
-        report.append("✅ Good reliability (SDR@2mm ≥ 90%)")
+        report.append("Good reliability (SDR@2mm ≥ 90%)")
     else:
         report.append("⚠️  Reliability needs improvement")
     
@@ -391,7 +391,7 @@ if __name__ == "__main__":
     # Compute metrics
     metrics = compute_landmark_metrics(predictions, targets)
     
-    print("✅ Metrics computed successfully:")
+    print("Metrics computed successfully:")
     for key, value in metrics.items():
         if isinstance(value, np.ndarray):
             print(f"  {key}: {value}")

@@ -405,14 +405,14 @@ def create_maht_net(num_landmarks: int = 7,
 if __name__ == "__main__":
     # Test model instantiation
     model = create_maht_net(num_landmarks=7)
-    print("✅ MAHT-Net model created successfully")
-    print(f"📊 Model info: {model.get_model_info()}")
+    print("MAHT-Net model created successfully")
+    print(f"Model info: {model.get_model_info()}")
     
     # Test forward pass
     dummy_input = torch.randn(2, 3, 512, 512)  # Batch of 2 images
     with torch.no_grad():
         output = model(dummy_input)
     
-    print(f"🔍 Output shapes:")
+    print(f"Output shapes:")
     for key, value in output.items():
         print(f"  {key}: {value.shape}")

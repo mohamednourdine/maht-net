@@ -81,8 +81,8 @@ class MAHTNetTrainer:
         # Setup logging
         self._setup_logging()
         
-        logger.info("✅ MAHT-Net Trainer initialized successfully")
-        logger.info(f"📊 Model parameters: {sum(p.numel() for p in model.parameters()):,}")
+        logger.info("MAHT-Net Trainer initialized successfully")
+        logger.info(f"Model parameters: {sum(p.numel() for p in model.parameters()):,}")
         
     def _setup_training_components(self):
         """Setup optimizers, schedulers, loss functions, and monitoring"""
@@ -350,7 +350,7 @@ class MAHTNetTrainer:
             if (epoch + 1) % self.config.get('clinical_eval_interval', 10) == 0:
                 self._clinical_validation_check(val_metrics)
         
-        logger.info(f"✅ Stage {stage} training completed")
+        logger.info(f"Stage {stage} training completed")
     
     def _configure_training_stage(self, stage: int):
         """Configure model and training parameters for specific stage"""
@@ -491,7 +491,7 @@ class MAHTNetTrainer:
         with open(summary_path, 'w') as f:
             json.dump(summary, f, indent=2, default=str)
         
-        logger.info(f"📊 Training summary saved to {summary_path}")
+        logger.info(f"Training summary saved to {summary_path}")
 
 
 def train_maht_net(config_path: str):

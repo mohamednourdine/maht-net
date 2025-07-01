@@ -62,7 +62,7 @@ class MAHTNetEvaluator:
             'safety_threshold': config.get('safety_threshold', 2.0)
         }
         
-        logger.info("✅ MAHT-Net Evaluator initialized")
+        logger.info("MAHT-Net Evaluator initialized")
     
     def evaluate_dataset(self, dataloader: torch.utils.data.DataLoader, 
                         save_predictions: bool = False) -> Dict:
@@ -85,7 +85,7 @@ class MAHTNetEvaluator:
         all_image_paths = []
         all_patient_ids = []
         
-        logger.info(f"🔍 Evaluating on {len(dataloader.dataset)} samples...")
+        logger.info(f"Evaluating on {len(dataloader.dataset)} samples...")
         
         with torch.no_grad():
             for batch_idx, batch in enumerate(tqdm(dataloader, desc="Evaluation")):
@@ -222,7 +222,7 @@ class MAHTNetEvaluator:
         # Generate detailed report
         report = self._generate_clinical_report(metrics, clinical_assessment)
         
-        logger.info("✅ Clinical validation completed")
+        logger.info("Clinical validation completed")
         
         return {
             'metrics': metrics,
@@ -297,7 +297,7 @@ class MAHTNetEvaluator:
         report += "=" * 80 + "\n\n"
         
         if assessment['overall_ready']:
-            report += "✅ MODEL APPROVED FOR CLINICAL DEPLOYMENT\n\n"
+            report += "MODEL APPROVED FOR CLINICAL DEPLOYMENT\n\n"
             if 'strengths' in assessment:
                 report += "🎯 Key Strengths:\n"
                 for strength in assessment['strengths']:
@@ -347,7 +347,7 @@ class MAHTNetEvaluator:
         # Generate visualizations
         self._create_evaluation_visualizations(predictions, targets, output_dir)
         
-        logger.info(f"📊 Predictions saved to {output_dir}")
+        logger.info(f"Predictions saved to {output_dir}")
     
     def _create_evaluation_visualizations(self, predictions: torch.Tensor, 
                                         targets: torch.Tensor, output_dir: Path):
@@ -564,7 +564,7 @@ def main():
         # Load checkpoint
         checkpoint = torch.load(args.checkpoint, map_location=device)
         model.load_state_dict(checkpoint['model_state_dict'])
-        logger.info(f"✅ Model loaded from {args.checkpoint}")
+        logger.info(f"Model loaded from {args.checkpoint}")
         
         # Create evaluator
         evaluator = MAHTNetEvaluator(model, device, config)
@@ -574,14 +574,14 @@ def main():
             logger.info(f"🖼️  Evaluating single image: {args.single_image}")
             results = evaluator.evaluate_single_image(args.single_image)
             
-            print("\n📊 Single Image Results:")
+            print("\nSingle Image Results:")
             print(f"Coordinates: {results['coordinates']}")
             if results['uncertainties'] is not None:
                 print(f"Uncertainties: {results['uncertainties']}")
             
         else:
             # Dataset evaluation
-            logger.info("📊 Loading test dataset...")
+            logger.info("Loading test dataset...")
             dataloaders = create_dataloaders(
                 data_dir=args.data_dir,
                 batch_size=config.get('batch_size', 16),
@@ -601,7 +601,7 @@ def main():
                 # Print clinical assessment
                 assessment = validation_results['clinical_assessment']
                 if assessment['overall_ready']:
-                    print("\n✅ MODEL APPROVED FOR CLINICAL DEPLOYMENT")
+                    print("\nMODEL APPROVED FOR CLINICAL DEPLOYMENT")
                 else:
                     print("\n⚠️  MODEL REQUIRES IMPROVEMENT")
                     print("\nIssues:")
@@ -619,11 +619,11 @@ def main():
                 
             else:
                 # Standard evaluation
-                logger.info("📊 Starting standard evaluation...")
+                logger.info("Starting standard evaluation...")
                 metrics = evaluator.evaluate_dataset(test_loader, save_predictions=True)
                 
                 # Print key metrics
-                print(f"\n📊 Evaluation Results:")
+                print(f"\nEvaluation Results:")
                 print(f"Mean Radial Error: {metrics['mre']:.3f} mm")
                 print(f"SDR@2mm: {metrics['sdr_2mm']:.1f}%")
                 print(f"SDR@2.5mm: {metrics['sdr_2.5mm']:.1f}%")

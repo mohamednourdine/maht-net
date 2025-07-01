@@ -23,7 +23,7 @@ if [ ! -f "models/checkpoints/best_model.pth" ]; then
     exit 1
 fi
 
-echo "✅ Model checkpoint found"
+echo "Model checkpoint found"
 
 # Create deployment directory structure
 echo "📁 Creating deployment structure..."
@@ -136,14 +136,14 @@ async def startup_event():
         if os.path.exists(checkpoint_path):
             checkpoint = torch.load(checkpoint_path, map_location=device)
             model.load_state_dict(checkpoint['model_state_dict'])
-            logger.info(f"✅ Model loaded from {checkpoint_path}")
+            logger.info(f"Model loaded from {checkpoint_path}")
         else:
             logger.warning("⚠️  No checkpoint found, using untrained model")
         
         model.to(device)
         model.eval()
         
-        logger.info("✅ MAHT-Net API ready for predictions")
+        logger.info("MAHT-Net API ready for predictions")
         
     except Exception as e:
         logger.error(f"❌ Failed to load model: {str(e)}")
@@ -496,7 +496,7 @@ http {
 EOF
 
 # Create monitoring configuration
-echo "📊 Creating monitoring configuration..."
+echo "Creating monitoring configuration..."
 cat > deployment/docker/prometheus.yml << 'EOF'
 global:
   scrape_interval: 15s
@@ -537,7 +537,7 @@ sleep 30
 # Health check
 echo "🏥 Performing health check..."
 if curl -f http://localhost:8000/health > /dev/null 2>&1; then
-    echo "✅ MAHT-Net API is healthy"
+    echo "MAHT-Net API is healthy"
 else
     echo "❌ Health check failed"
     docker-compose logs maht-net-api
@@ -545,7 +545,7 @@ else
 fi
 
 # Setup monitoring alerts (optional)
-echo "📊 Setting up monitoring..."
+echo "Setting up monitoring..."
 # Add monitoring setup here if needed
 
 # Create systemd service for auto-restart
@@ -579,12 +579,12 @@ echo "======================"
 echo "🌐 API Endpoint:     http://localhost:8000"
 echo "📚 API Documentation: http://localhost:8000/docs"
 echo "🏥 Health Check:     http://localhost:8000/health"
-echo "📊 Monitoring:       http://localhost:3000 (Grafana)"
+echo "Monitoring:       http://localhost:3000 (Grafana)"
 echo "📈 Metrics:          http://localhost:9090 (Prometheus)"
 echo ""
 echo "💡 Management Commands:"
 echo "======================"
-echo "📊 View logs:        docker-compose logs -f maht-net-api"
+echo "View logs:        docker-compose logs -f maht-net-api"
 echo "🔄 Restart service:  docker-compose restart maht-net-api"
 echo "⏹️  Stop service:     docker-compose down"
 echo "🔧 Update service:   sudo systemctl restart maht-net"
@@ -595,6 +595,6 @@ echo "curl -X POST 'http://localhost:8000/predict' \\"
 echo "  -H 'Content-Type: multipart/form-data' \\"
 echo "  -F 'image=@path/to/your/xray.jpg'"
 echo ""
-echo "✅ MAHT-Net is ready for clinical deployment!"
+echo "MAHT-Net is ready for clinical deployment!"
 
 cd ../..  # Return to project root

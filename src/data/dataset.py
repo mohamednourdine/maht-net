@@ -75,7 +75,7 @@ class CephalometricDataset(Dataset):
         # Setup data transforms
         self.transforms = self._setup_transforms()
         
-        logger.info(f"✅ Loaded {len(self.samples)} samples for {split} split")
+        logger.info(f"Loaded {len(self.samples)} samples for {split} split")
     
     def _load_annotations(self) -> List[Dict]:
         """Load annotations from the dataset directory"""
@@ -434,13 +434,13 @@ if __name__ == "__main__":
     #     split="train"
     # )
     # 
-    # print(f"✅ Dataset loaded: {len(dataset)} samples")
+    # print(f"Dataset loaded: {len(dataset)} samples")
     # 
     # # Test sample loading
     # sample = dataset[0]
-    # print(f"📊 Sample shapes:")
+    # print(f"Sample shapes:")
     # for key, value in sample.items():
     #     if isinstance(value, torch.Tensor):
     #         print(f"  {key}: {value.shape}")
     
-    print("✅ Dataset implementation ready for use!")
+    print("Dataset implementation ready for use!")

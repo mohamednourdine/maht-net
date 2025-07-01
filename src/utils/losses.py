@@ -441,7 +441,7 @@ if __name__ == "__main__":
     criterion = CombinedLandmarkLoss()
     losses = criterion(predictions, targets)
     
-    print("✅ Loss computation successful:")
+    print("Loss computation successful:")
     for key, value in losses.items():
         print(f"  {key}: {value.item():.4f}")
     

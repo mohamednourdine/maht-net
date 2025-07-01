@@ -9,7 +9,7 @@ echo "🚀 MAHT-Net AWS EC2 Environment Setup"
 echo "======================================"
 
 # System information
-echo "📊 System Information:"
+echo "System Information:"
 echo "OS: $(lsb_release -d | cut -f2)"
 echo "Kernel: $(uname -r)"
 echo "Architecture: $(uname -m)"
@@ -117,7 +117,7 @@ echo "Please configure your AWS credentials:"
 aws configure
 
 # Install monitoring tools
-echo "📊 Installing monitoring tools..."
+echo "Installing monitoring tools..."
 sudo apt-get install -y htop nvtop iotop nethogs
 
 # Install Node.js for web dashboard (optional)
@@ -156,7 +156,7 @@ cd $HOME/maht-net/models/pretrained
 wget -O efficientnet_b3_imagenet.pth https://github.com/lukemelas/EfficientNet-PyTorch/releases/download/1.0/efficientnet-b3-5fb5a3c3.pth
 
 # Setup TensorBoard service
-echo "📊 Setting up TensorBoard service..."
+echo "Setting up TensorBoard service..."
 sudo tee /etc/systemd/system/tensorboard.service > /dev/null <<EOF
 [Unit]
 Description=TensorBoard
@@ -194,7 +194,7 @@ sudo nvidia-smi -ac 6001,1590  # Memory and graphics clocks for optimal ML perfo
 echo 'performance' | sudo tee /sys/devices/system/cpu/cpu*/cpufreq/scaling_governor
 
 # Verify installations
-echo "✅ Verifying installations..."
+echo "Verifying installations..."
 echo "Python version: $(python3 --version)"
 echo "CUDA version: $(nvcc --version | grep release)"
 echo "Docker version: $(docker --version)"
@@ -215,7 +215,7 @@ echo "4. Run: make setup"
 echo "5. Start training: make train"
 echo ""
 echo "🌐 Access TensorBoard at: http://<instance-ip>:6006"
-echo "📊 Monitor GPU usage: watch -n 1 nvidia-smi"
+echo "Monitor GPU usage: watch -n 1 nvidia-smi"
 echo ""
 echo "💡 For production deployment, run: make deploy"
 
