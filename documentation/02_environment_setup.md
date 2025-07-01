@@ -218,64 +218,6 @@ pre-commit install
 
 ### Step 9: Environment Validation
 
-Create a test script to verify the setup:
-
-```python
-# test_environment.py
-import torch
-import torchvision
-import numpy as np
-import cv2
-import matplotlib.pyplot as plt
-from transformers import AutoModel
-import timm
-
-def test_environment():
-    print("Testing MAHT-Net Environment Setup")
-    print("=" * 40)
-    
-    # Python version
-    import sys
-    print(f"Python version: {sys.version}")
-    
-    # PyTorch
-    print(f"PyTorch version: {torch.__version__}")
-    print(f"CUDA available: {torch.cuda.is_available()}")
-    if torch.cuda.is_available():
-        print(f"CUDA device: {torch.cuda.get_device_name()}")
-        print(f"CUDA memory: {torch.cuda.get_device_properties(0).total_memory / 1e9:.1f} GB")
-    
-    # Test basic operations
-    x = torch.randn(1, 3, 224, 224)
-    if torch.cuda.is_available():
-        x = x.cuda()
-        print("GPU tensor creation: ✓")
-    
-    # Test model loading
-    try:
-        model = timm.create_model('efficientnet_b3', pretrained=True)
-        print("EfficientNet loading: ✓")
-    except Exception as e:
-        print(f"EfficientNet loading: ✗ ({e})")
-    
-    # Test transformer
-    try:
-        from transformers import ViTModel
-        print("Transformers library: ✓")
-    except Exception as e:
-        print(f"Transformers library: ✗ ({e})")
-    
-    print("\nEnvironment setup completed successfully!")
-
-if __name__ == "__main__":
-    test_environment()
-```
-
-Run the validation:
-```bash
-python test_environment.py
-```
-
 ## Performance Optimization
 
 ### Memory Management Settings
