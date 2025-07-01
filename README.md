@@ -231,6 +231,12 @@ maht-net/
 
 ## 👥 Contributors & Acknowledgments
 
+**Dr. Öğr. Üyesi Betül Uzbaş** - *Research Supervisor*
+- 🎓 Assistant Professor (Doktor Öğretim Üyesi)
+- 🏛️ Faculty of Engineering and Natural Sciences, Konya Technical University
+- 📅 Academic Position: 2018 - Present
+- 🔬 Supervision Focus: Medical AI applications and computer vision research
+
 **Mohamed Nourdine** - *Principal Investigator & Lead Developer*
 - 🎓 PhD Candidate in Medical AI & Computer Vision
 - ☁️ AWS Cloud Architecture Expert
@@ -249,19 +255,6 @@ maht-net/
 - **Technical Reviewers**: AI researchers contributing to architectural validation
 - **Open Source Community**: PyTorch, Transformers, and medical imaging communities
 - **Infrastructure Support**: AWS for cloud computing resources and technical guidance
-
-## 📄 Citation & License
-
-### Academic Citation
-```bibtex
-@article{nourdine2025mahtnet,
-  title={MAHT-Net: Multi-Stage Attention-enhanced Hybrid Transformer Network for Cephalometric Landmark Detection},
-  author={Nourdine, Mohamed},
-  journal={arXiv preprint},
-  year={2025},
-  note={PhD Research - In Progress}
-}
-```
 
 ### License & Usage
 This project represents ongoing PhD research with comprehensive documentation and implementation methodology. 
