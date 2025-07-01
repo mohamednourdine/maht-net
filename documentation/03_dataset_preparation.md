@@ -19,86 +19,217 @@
 6. **Menton (Me)** - Most inferior point on mandibular symphysis
 7. **Gnathion (Gn)** - Most anterior-inferior point on mandibular symphysis
 
-## Data Acquisition
+## Data Acquisition and Setup
 
-### Step 1: Download ISBI 2015 Dataset
+### Step 1: Download and Organize ISBI 2015 Dataset
 
+**What We'll Do**:
 ```bash
-# Create data directories
-mkdir -p data/{raw,processed,annotations,splits}
+# Create comprehensive data directory structure
+mkdir -p data/{raw,processed,annotations,splits,augmented,cache,backup}
+mkdir -p data/raw/{images,landmarks,metadata}
+mkdir -p data/processed/{images,heatmaps,coordinates}
+mkdir -p data/splits/{train,val,test}
 
-# Dataset download (adjust URL based on actual source)
+# Download ISBI 2015 dataset (adjust URL based on actual source)
 # Note: You may need to request access from ISBI organizers
+echo "Downloading ISBI 2015 Cephalometric Dataset..."
 wget -O data/raw/isbi2015_cephalometric.zip "DATASET_URL"
 unzip data/raw/isbi2015_cephalometric.zip -d data/raw/
 
-# Expected structure after extraction:
-# data/raw/
-# ├── images/           # Raw radiograph images
-# ├── landmarks/        # Landmark annotations
-# └── metadata/         # Subject information (if available)
+# Organize files into proper structure
+python scripts/organize_raw_data.py --input data/raw --output data/raw/organized
 ```
 
-### Step 2: Data Inspection and Validation
+**Expected Outcomes**:
+- 400 lateral cephalometric radiographs properly organized
+- Landmark annotations in standardized format
+- Metadata files for patient demographics (if available)
+- Quality assessment reports for each image
 
-```python
-# data_inspection.py
-import os
-import pandas as pd
-import numpy as np
-import cv2
-import matplotlib.pyplot as plt
-from pathlib import Path
+### Step 2: Comprehensive Data Quality Assessment
 
-def inspect_dataset():
-    """Comprehensive dataset inspection"""
-    
-    data_dir = Path("data/raw")
-    
-    # Check directory structure
-    print("Dataset Structure:")
-    for root, dirs, files in os.walk(data_dir):
-        level = root.replace(str(data_dir), '').count(os.sep)
-        indent = ' ' * 2 * level
-        print(f"{indent}{os.path.basename(root)}/")
-        subindent = ' ' * 2 * (level + 1)
-        for file in files[:5]:  # Show first 5 files
-            print(f"{subindent}{file}")
-        if len(files) > 5:
-            print(f"{subindent}... and {len(files)-5} more files")
-    
-    # Image analysis
-    image_dir = data_dir / "images"
-    image_files = list(image_dir.glob("*"))
-    
-    print(f"\nTotal images found: {len(image_files)}")
-    
-    # Analyze image properties
-    resolutions = []
-    file_sizes = []
-    
-    for img_path in image_files[:10]:  # Sample first 10 images
-        img = cv2.imread(str(img_path), cv2.IMREAD_GRAYSCALE)
-        if img is not None:
-            resolutions.append(img.shape)
-            file_sizes.append(os.path.getsize(img_path) / 1024 / 1024)  # MB
-    
-    print(f"Sample resolutions: {set(resolutions)}")
-    print(f"Average file size: {np.mean(file_sizes):.2f} MB")
-    
-    return image_files
+**What We'll Analyze**:
+```bash
+# Run comprehensive data inspection
+python scripts/inspect_dataset.py --data-dir data/raw/organized --output data/quality_report.json
 
-if __name__ == "__main__":
-    inspect_dataset()
+# Generate visual quality assessment
+python scripts/visualize_dataset.py --data-dir data/raw/organized --output data/quality_plots/
 ```
 
-## Data Preprocessing Pipeline
+**Quality Checks We'll Perform**:
+- **Image Resolution Analysis**: Check for consistent dimensions and DPI
+- **Contrast and Brightness Assessment**: Identify images needing enhancement
+- **Landmark Annotation Validation**: Verify all 7 landmarks are present
+- **Anatomical Consistency Check**: Detect potential annotation errors
+- **File Format Standardization**: Convert all images to consistent format
 
-### Step 3: Image Preprocessing
+**Success Criteria**:
+- All 400 images successfully loaded and processed
+- Complete landmark annotations (7 points × 400 images = 2,800 points)
+- Image quality scores above acceptable threshold (>6/10)
+- No missing or corrupted files
 
-```python
-# src/datasets/preprocessing.py
-import cv2
+## Advanced Data Preprocessing Pipeline
+
+### Step 3: Image Standardization and Enhancement
+
+**What We'll Implement**:
+1. **Image Format Standardization**
+   - Convert all images to PNG format with 16-bit depth
+   - Standardize image orientation and coordinate systems
+   - Remove DICOM metadata while preserving image quality
+   - Validate image integrity after conversion
+
+2. **Resolution and Sizing Strategy**
+   - Analyze optimal input resolution for model performance
+   - Implement aspect-ratio preserving resize to 512×512
+   - Create multi-scale versions (256×256, 512×512, 1024×1024)
+   - Maintain landmark coordinate accuracy during resizing
+
+3. **Contrast and Quality Enhancement**
+   - Apply Contrast Limited Adaptive Histogram Equalization (CLAHE)
+   - Implement noise reduction using bilateral filtering
+   - Enhance bone structure visibility while preserving soft tissue
+   - Create quality-enhanced versions for training
+
+4. **Preprocessing Validation**
+   - Visual quality assessment before/after preprocessing
+   - Landmark coordinate validation after transformations
+   - Statistical analysis of image properties post-processing
+   - Generate preprocessing quality reports
+
+**Implementation Commands**:
+```bash
+# Run complete preprocessing pipeline
+python scripts/preprocess_images.py \
+    --input data/raw/organized \
+    --output data/processed \
+    --target-size 512 \
+    --enhance-contrast \
+    --validate-landmarks
+
+# Generate preprocessing reports
+python scripts/preprocessing_report.py \
+    --original data/raw/organized \
+    --processed data/processed \
+    --output reports/preprocessing_analysis.html
+```
+
+### Step 4: Heatmap Generation for Ground Truth
+
+**What We'll Create**:
+1. **Gaussian Heatmap Generation**
+   - Generate 2D Gaussian heatmaps for each landmark
+   - Optimize sigma values for different landmark types
+   - Create multi-scale heatmaps for FPN training
+   - Validate heatmap-to-coordinate conversion accuracy
+
+2. **Heatmap Quality Optimization**
+   - Test different Gaussian sigma values (1.0, 1.5, 2.0, 2.5)
+   - Implement adaptive sigma based on image resolution
+   - Create normalized heatmaps with proper scaling
+   - Generate confidence masks for uncertain landmarks
+
+3. **Multi-Resolution Heatmap Creation**
+   - Create heatmaps at 128×128, 256×256, 512×512 resolutions
+   - Ensure consistency across different scales
+   - Implement downsampling strategies that preserve peak locations
+   - Validate coordinate extraction from multi-scale heatmaps
+
+**Heatmap Generation Process**:
+```bash
+# Generate ground truth heatmaps
+python scripts/generate_heatmaps.py \
+    --landmarks data/processed/coordinates \
+    --output data/processed/heatmaps \
+    --sigma 1.5 \
+    --multi-scale \
+    --validate
+
+# Validate heatmap quality
+python scripts/validate_heatmaps.py \
+    --heatmaps data/processed/heatmaps \
+    --coordinates data/processed/coordinates \
+    --output reports/heatmap_validation.json
+```
+
+### Step 5: Data Splitting and Cross-Validation Setup
+
+**What We'll Organize**:
+1. **Stratified Splitting Strategy**
+   - Ensure balanced representation across age groups
+   - Maintain equal landmark difficulty distribution
+   - Preserve anatomical variation in each split
+   - Account for potential patient-level clustering
+
+2. **Cross-Validation Framework**
+   - Implement 5-fold stratified cross-validation
+   - Create patient-level splits to avoid data leakage
+   - Generate reproducible splits with fixed random seeds
+   - Validate split quality and balance
+
+3. **Test Set Isolation**
+   - Reserve 20% of data for final testing (80 images)
+   - Ensure test set represents full data distribution
+   - Keep test set completely separate until final evaluation
+   - Create multiple test scenarios (easy, medium, hard cases)
+
+**Splitting Implementation**:
+```bash
+# Create stratified data splits
+python scripts/create_data_splits.py \
+    --data-dir data/processed \
+    --output data/splits \
+    --cv-folds 5 \
+    --test-ratio 0.2 \
+    --stratify-by age_group,landmark_difficulty \
+    --seed 42
+
+# Validate split quality
+python scripts/validate_splits.py \
+    --splits-dir data/splits \
+    --output reports/split_analysis.json
+```
+
+### Step 6: Advanced Data Augmentation Pipeline
+
+**What We'll Implement**:
+1. **Medical Image Specific Augmentations**
+   - Realistic geometric transformations (rotation ±15°, scaling 0.8-1.2)
+   - X-ray specific intensity modifications (brightness, contrast, gamma)
+   - Anatomically plausible deformations
+   - Equipment simulation (different X-ray machines, exposures)
+
+2. **Progressive Augmentation Strategy**
+   - Light augmentation for Stage 1 training
+   - Medium augmentation for Stage 2 training
+   - Heavy augmentation for Stage 3 robust training
+   - Curriculum-based augmentation difficulty
+
+3. **Quality-Preserving Augmentation**
+   - Maintain landmark annotation accuracy
+   - Preserve anatomical relationships
+   - Avoid unrealistic image distortions
+   - Validate augmented samples for clinical plausibility
+
+**Augmentation Pipeline**:
+```bash
+# Generate augmented training data
+python scripts/generate_augmentations.py \
+    --input data/splits/train \
+    --output data/augmented \
+    --augmentation-factor 3 \
+    --strategy progressive \
+    --validate-landmarks
+
+# Create augmentation quality report
+python scripts/augmentation_report.py \
+    --original data/splits/train \
+    --augmented data/augmented \
+    --output reports/augmentation_analysis.html
+```
 import numpy as np
 import torch
 from typing import Tuple, Dict, List

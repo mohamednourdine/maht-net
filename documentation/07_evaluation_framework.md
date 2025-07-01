@@ -1,308 +1,619 @@
-# Evaluation Framework: Comprehensive Assessment of MAHT-Net
+# Evaluation Framework: MAHT-Net Clinical Assessment Strategy
 
-## Overview
+## Executive Summary
 
-This document outlines the comprehensive evaluation framework for MAHT-Net, focusing on clinical relevance, research rigor, and systematic performance assessment. The evaluation covers multiple perspectives to ensure robust validation of the proposed architecture.
+This document outlines a comprehensive evaluation strategy for MAHT-Net that ensures both technical excellence and clinical viability. We'll detail **what we'll measure**, **why each metric matters clinically**, and **how to implement robust evaluation protocols** that meet medical AI standards.
 
-## Evaluation Philosophy
+## Evaluation Philosophy: Clinical-First Assessment
 
-### 1. Multi-Dimensional Assessment
-- **Clinical Relevance**: Metrics that matter in real-world orthodontic practice
-- **Research Rigor**: Statistical significance and comparative analysis
-- **Interpretability**: Understanding model behavior and decision-making
-- **Robustness**: Performance under various conditions and data variations
+**Our Approach**: Prioritize metrics that directly impact clinical decision-making while maintaining rigorous scientific validation standards. Every evaluation component should answer: "Does this help clinicians provide better patient care?"
 
-### 2. Evaluation Stages
-- **Development Evaluation**: During model development for iterative improvement
-- **Validation Evaluation**: On held-out validation set for model selection
-- **Test Evaluation**: Final assessment on independent test set
-- **Clinical Evaluation**: Real-world performance with expert clinicians
+**Why This Matters**: Medical AI systems must meet higher standards than general computer vision applications. Clinical deployment requires demonstrated safety, reliability, and measurable improvement over existing methods.
 
-## Core Evaluation Metrics
+## What We'll Accomplish Through Evaluation
 
-### 1. Primary Clinical Metrics
+1. **Establish Clinical Viability** through metrics that correlate with orthodontic treatment success
+2. **Validate Technical Performance** using statistically robust methodologies
+3. **Demonstrate Reliability** across diverse patient populations and imaging conditions
+4. **Enable Regulatory Approval** by meeting FDA/CE marking requirements for medical devices
+5. **Build Clinical Trust** through transparent, interpretable performance assessment
 
-**Mean Radial Error (MRE)**
-- **Purpose**: Measures average distance between predicted and ground truth landmarks
-- **Unit**: Millimeters (mm)
-- **Clinical Significance**: Direct correlation with clinical accuracy requirements
-- **Target**: < 2mm for clinical acceptability, < 1mm for excellence
+## Core Evaluation Framework
 
-**Success Detection Rate (SDR)**
-- **Purpose**: Percentage of landmarks detected within specified threshold
-- **Thresholds**: 1.5mm, 2.0mm, 2.5mm, 3.0mm, 4.0mm
-- **Clinical Significance**: Reflects reliability for clinical decision-making
-- **Target**: > 95% at 2mm threshold
+### Primary Clinical Metrics: What Matters Most
 
-### 2. Landmark-Specific Analysis
+#### 1. Mean Radial Error (MRE) - Clinical Distance Accuracy
 
-**Per-Landmark Performance**
-- Individual MRE for each of the 7 landmarks
-- Difficulty assessment based on anatomical visibility
-- Clinical importance weighting based on orthodontic treatment planning
+**What We'll Measure**: Average Euclidean distance between predicted and ground truth landmark coordinates, converted to real-world millimeters.
 
-**Landmark Categories**:
-- **Critical Landmarks**: Sella, Nasion (high clinical importance)
-- **Treatment Planning**: A-point, B-point (orthodontic analysis)
-- **Facial Profile**: Pogonion, Menton, Gnathion (aesthetic considerations)
+**Why This Matters Clinically**: 
+- **Treatment Planning Accuracy**: Errors >2mm can lead to incorrect orthodontic treatment decisions
+- **Measurement Reliability**: Clinical measurements require sub-millimeter precision for optimal outcomes
+- **Patient Safety**: Inaccurate landmarks can result in inappropriate treatment plans
 
-### 3. Clinical Accuracy Classification
+**Implementation Strategy**:
+```python
+# src/evaluation/clinical_metrics.py
+def mean_radial_error(predictions, targets, pixel_spacing):
+    """
+    Calculate MRE in millimeters for clinical relevance
+    
+    Args:
+        predictions: Model landmark coordinates [N, 7, 2]
+        targets: Ground truth coordinates [N, 7, 2]
+        pixel_spacing: Physical spacing per pixel in mm
+    
+    Returns:
+        dict: MRE per landmark and overall average
+    """
+    distances = np.sqrt(np.sum((predictions - targets) ** 2, axis=2))
+    mre_mm = distances * pixel_spacing
+    
+    return {
+        'overall_mre': np.mean(mre_mm),
+        'per_landmark_mre': np.mean(mre_mm, axis=0),
+        'std_mre': np.std(mre_mm),
+        'max_mre': np.max(mre_mm)
+    }
+```
+
+**Clinical Acceptance Thresholds**:
+- **Excellent**: MRE < 1.0mm (Research-grade accuracy)
+- **Good**: MRE < 1.5mm (Clinical acceptability)
+- **Acceptable**: MRE < 2.0mm (Minimal clinical utility)
+- **Unacceptable**: MRE ≥ 2.0mm (Risk of treatment errors)
+
+#### 2. Success Detection Rate (SDR) - Reliability Assessment
+
+**What We'll Measure**: Percentage of landmarks detected within specified distance thresholds from ground truth.
+
+**Why This Matters Clinically**:
+- **Reliability Indicator**: High SDR indicates consistent, dependable performance
+- **Risk Assessment**: Low SDR at clinical thresholds indicates unreliable system
+- **Workflow Integration**: Predictable performance enables clinical workflow planning
+
+**Multi-Threshold Analysis**:
+- **SDR@1.5mm**: Research-grade precision benchmark
+- **SDR@2.0mm**: Clinical acceptability threshold
+- **SDR@2.5mm**: Minimal utility threshold
+- **SDR@3.0mm**: Gross error detection
+
+**Implementation Strategy**:
+```python
+def success_detection_rate(predictions, targets, thresholds, pixel_spacing):
+    """
+    Calculate SDR at multiple thresholds for comprehensive assessment
+    """
+    distances_mm = calculate_distances_mm(predictions, targets, pixel_spacing)
+    
+    sdr_results = {}
+    for threshold in thresholds:
+        success_mask = distances_mm <= threshold
+        sdr_results[f'SDR@{threshold}mm'] = {
+            'overall': np.mean(success_mask),
+            'per_landmark': np.mean(success_mask, axis=0),
+            'confidence_interval': calculate_ci(success_mask)
+        }
+    
+    return sdr_results
+```
+
+**Clinical Targets**:
+- **SDR@2.0mm ≥ 95%**: Required for clinical deployment
+- **SDR@1.5mm ≥ 90%**: Excellent clinical performance
+- **SDR@2.5mm ≥ 98%**: Minimum safety threshold
+
+### Secondary Clinical Metrics: Comprehensive Assessment
+
+#### 3. Landmark-Specific Performance Analysis
+
+**What We'll Measure**: Individual performance for each of the 7 cephalometric landmarks with clinical importance weighting.
+
+**Why This Matters Clinically**: Different landmarks have varying clinical importance and detection difficulty. Orthodontists need to understand which landmarks are most reliable.
+
+**Landmark Clinical Importance**:
+
+1. **Sella (S)** - Weight: 1.5
+   - **Clinical Role**: Central reference point for all cephalometric analyses
+   - **Difficulty**: Moderate (clear anatomical landmark)
+   - **Clinical Impact**: High (affects all angular and linear measurements)
+
+2. **Nasion (N)** - Weight: 1.4
+   - **Clinical Role**: Frontal reference for facial profile analysis
+   - **Difficulty**: Easy (clearly defined anatomical point)
+   - **Clinical Impact**: High (key for ANB angle calculation)
+
+3. **A-Point (A)** - Weight: 1.3
+   - **Clinical Role**: Maxillary base reference for orthodontic analysis
+   - **Difficulty**: Difficult (requires curve fitting on maxillary outline)
+   - **Clinical Impact**: Very High (critical for treatment planning)
+
+4. **B-Point (B)** - Weight: 1.3
+   - **Clinical Role**: Mandibular base reference for orthodontic analysis
+   - **Difficulty**: Difficult (curve fitting on mandibular outline)
+   - **Clinical Impact**: Very High (critical for treatment planning)
+
+5. **Pogonion (Pog)** - Weight: 1.1
+   - **Clinical Role**: Chin prominence for aesthetic evaluation
+   - **Difficulty**: Moderate (anterior chin point)
+   - **Clinical Impact**: Moderate (aesthetic planning)
+
+6. **Menton (Me)** - Weight: 1.0
+   - **Clinical Role**: Lower jaw reference point
+   - **Difficulty**: Easy (clearly defined anatomical point)
+   - **Clinical Impact**: Moderate (vertical analysis)
+
+7. **Gnathion (Gn)** - Weight: 1.0
+   - **Clinical Role**: Anatomical chin point for facial analysis
+   - **Difficulty**: Moderate (midpoint between Me and Pog)
+   - **Clinical Impact**: Moderate (facial balance assessment)
+
+**Weighted Performance Calculation**:
+```python
+def calculate_weighted_clinical_score(landmark_errors, weights):
+    """
+    Calculate clinical performance score weighted by landmark importance
+    """
+    weighted_errors = landmark_errors * weights
+    clinical_score = 100 - (np.mean(weighted_errors) * 10)  # 0-100 scale
+    
+    return {
+        'clinical_score': clinical_score,
+        'weighted_mre': np.mean(weighted_errors),
+        'critical_landmark_performance': weighted_errors[:4].mean(),  # S, N, A, B
+        'aesthetic_landmark_performance': weighted_errors[4:].mean()   # Pog, Me, Gn
+    }
+```
+
+#### 4. Clinical Acceptability Classification
+
+**What We'll Measure**: Categorize predictions into clinically meaningful performance levels.
 
 **Performance Categories**:
-- **Excellent**: ≤ 1mm error (suitable for precise measurements)
-- **Good**: ≤ 2mm error (clinically acceptable)
-- **Acceptable**: ≤ 3mm error (may require manual verification)
-- **Poor**: > 3mm error (requires manual correction)
 
-## Advanced Evaluation Methods
+1. **Excellent (Grade A)**: All landmarks within 1.0mm
+   - **Clinical Interpretation**: Research-grade accuracy, suitable for any clinical application
+   - **Recommendation**: Full clinical deployment recommended
 
-### 1. Statistical Analysis
+2. **Good (Grade B)**: All landmarks within 1.5mm, >95% within 1.0mm
+   - **Clinical Interpretation**: High clinical utility, suitable for most applications
+   - **Recommendation**: Clinical deployment with standard supervision
 
-**Significance Testing**
-- Paired t-tests for comparing with baseline methods
-- Wilcoxon signed-rank test for non-parametric comparisons
-- ANOVA for multiple method comparisons
-- Effect size calculation (Cohen's d) for practical significance
+3. **Acceptable (Grade C)**: All landmarks within 2.0mm, >90% within 1.5mm
+   - **Clinical Interpretation**: Basic clinical utility, requires expert oversight
+   - **Recommendation**: Limited clinical deployment with expert validation
 
-**Confidence Intervals**
-- 95% confidence intervals for all metrics
-- Bootstrap sampling for robust error estimation
-- Cross-validation for generalization assessment
+4. **Poor (Grade D)**: Any landmark >2.0mm or <85% within 1.5mm
+   - **Clinical Interpretation**: Insufficient clinical reliability
+   - **Recommendation**: Not suitable for clinical use
 
-### 2. Comparative Analysis
-
-**Baseline Comparisons**
-- Standard U-Net architecture
-- State-of-the-art landmark detection methods
-- Traditional image processing approaches
-- Expert manual annotations (inter-observer variability)
-
-**Performance Benchmarking**
-- ISBI 2015 challenge leaderboard comparison
-- Literature survey of recent methods
-- Cross-dataset validation when possible
-
-### 3. Robustness Evaluation
-
-**Data Variations**
-- Image quality variations (blur, noise, contrast)
-- Anatomical variations (age, gender, ethnicity)
-- Pathological cases (malocclusions, abnormalities)
-- Technical variations (different X-ray machines, protocols)
-
-**Model Robustness**
-- Adversarial robustness testing
-- Out-of-distribution detection
-- Uncertainty quantification
-- Error analysis and failure case identification
-
-## Evaluation Pipeline Components
-
-### 1. Automated Evaluation System
-
-**Continuous Evaluation**
-- Integration with training pipeline for real-time monitoring
-- Automated metric computation and logging
-- Performance tracking across training epochs
-- Early stopping based on evaluation criteria
-
-**Batch Evaluation**
-- Efficient processing of large test sets
-- Parallel computation for faster evaluation
-- Memory-optimized inference for large images
-- Progress tracking and error handling
-
-### 2. Visualization and Analysis Tools
-
-**Performance Visualization**
-- Error distribution histograms and box plots
-- Landmark-specific performance radar charts
-- Success rate curves across different thresholds
-- Attention map visualization for interpretability
-
-**Clinical Assessment Plots**
-- Before/after comparison visualizations
-- Error magnitude and direction analysis
-- Correlation analysis between different landmarks
-- Clinical accuracy categorization charts
-
-### 3. Interpretability Analysis
-
-**Attention Mechanism Analysis**
-- Visualization of transformer attention maps
-- Spatial attention pattern analysis
-- Feature importance assessment
-- Model decision explanation for clinical validation
-
-**Failure Case Analysis**
-- Systematic analysis of high-error cases
-- Common failure pattern identification
-- Anatomical difficulty correlation
-- Improvement strategy recommendations
-
-## Evaluation Commands and Workflow
-
-### Basic Evaluation Commands
-```bash
-# Run complete evaluation on test set
-python src/evaluation/evaluate_model.py --model_path checkpoints/best_model.pth --test_data data/test
-
-# Generate comprehensive evaluation report
-python src/evaluation/generate_report.py --results_dir results/evaluation --output_dir reports/
-
-# Compare multiple models
-python src/evaluation/model_comparison.py --models baseline,maht_net --test_data data/test
+**Implementation**:
+```python
+def classify_clinical_acceptability(predictions, targets, pixel_spacing):
+    """
+    Classify each prediction into clinical acceptability grades
+    """
+    mre_results = mean_radial_error(predictions, targets, pixel_spacing)
+    per_image_max_error = np.max(mre_results['per_image_errors'], axis=1)
+    
+    grades = []
+    for max_error in per_image_max_error:
+        if max_error <= 1.0:
+            grades.append('A')
+        elif max_error <= 1.5:
+            grades.append('B')
+        elif max_error <= 2.0:
+            grades.append('C')
+        else:
+            grades.append('D')
+    
+    return {
+        'grade_distribution': Counter(grades),
+        'clinical_deployment_ready': (grades.count('A') + grades.count('B')) / len(grades)
+    }
 ```
 
-### Specialized Analysis Commands
-```bash
-# Robustness analysis
-python src/evaluation/robustness_analysis.py --model_path checkpoints/best_model.pth
+## Advanced Evaluation Methodologies
 
-# Clinical validation analysis
-python src/evaluation/clinical_validation.py --expert_annotations data/expert_labels.json
+### Statistical Robustness Framework
 
-# Attention visualization
-python src/evaluation/attention_analysis.py --model_path checkpoints/best_model.pth --output_dir visualizations/
+#### 1. Cross-Validation Strategy
+
+**What We'll Implement**: 5-fold stratified cross-validation with proper train/validation/test splits.
+
+**Why This Approach**: Ensures robust performance estimation and prevents overfitting to specific data characteristics.
+
+**Implementation Strategy**:
+```python
+# src/evaluation/cross_validation.py
+class ClinicalCrossValidator:
+    def __init__(self, n_folds=5, stratify_by=['age_group', 'sex', 'image_quality']):
+        self.n_folds = n_folds
+        self.stratify_by = stratify_by
+    
+    def split_data(self, dataset):
+        """
+        Create stratified splits maintaining demographic balance
+        """
+        # Stratify by clinical relevant factors
+        # Ensure no patient data leakage between folds
+        # Maintain landmark annotation quality balance
+        
+    def evaluate_fold(self, model, train_data, val_data, test_data):
+        """
+        Comprehensive evaluation for single fold
+        """
+        # Train model on fold training data
+        # Validate hyperparameters on validation data
+        # Test final performance on hold-out test data
 ```
 
-## Clinical Validation Protocol
+#### 2. Confidence Interval Estimation
 
-### 1. Expert Validation Study
+**What We'll Calculate**: 95% confidence intervals for all performance metrics using bootstrap sampling.
 
-**Study Design**
-- Independent expert annotation of test cases
-- Inter-observer reliability assessment
-- Comparison of model predictions with expert consensus
-- Clinical acceptability scoring by orthodontists
+**Clinical Significance**: Provides uncertainty quantification essential for medical decision-making.
 
-**Validation Metrics**
-- Agreement rate with expert annotations
-- Inter-observer correlation analysis
-- Clinical decision impact assessment
-- Time efficiency comparison
+**Implementation**:
+```python
+def bootstrap_confidence_intervals(metric_values, n_bootstrap=1000, confidence=0.95):
+    """
+    Calculate bootstrap confidence intervals for clinical metrics
+    """
+    bootstrap_means = []
+    n_samples = len(metric_values)
+    
+    for _ in range(n_bootstrap):
+        bootstrap_sample = np.random.choice(metric_values, size=n_samples, replace=True)
+        bootstrap_means.append(np.mean(bootstrap_sample))
+    
+    alpha = 1 - confidence
+    lower_percentile = (alpha / 2) * 100
+    upper_percentile = (1 - alpha / 2) * 100
+    
+    return {
+        'mean': np.mean(metric_values),
+        'ci_lower': np.percentile(bootstrap_means, lower_percentile),
+        'ci_upper': np.percentile(bootstrap_means, upper_percentile),
+        'std_error': np.std(bootstrap_means)
+    }
+```
 
-### 2. Real-World Validation
+### Comparative Evaluation Framework
 
-**Clinical Integration Testing**
-- Integration with existing clinical workflows
-- User acceptance and usability assessment
-- Performance in real clinical environments
-- Long-term reliability monitoring
+#### 1. Baseline Method Comparisons
 
-## Ablation Study Framework
+**What We'll Compare Against**:
 
-### 1. Component-wise Analysis
+1. **Manual Expert Annotations**:
+   - **Purpose**: Establish upper bound performance
+   - **Method**: Compare against expert orthodontist annotations
+   - **Metrics**: Inter-observer variability analysis
 
-**Architecture Components**
-- Encoder contribution (CNN vs different backbones)
-- Transformer bottleneck impact
-- Attention mechanism effectiveness
-- Decoder design validation
+2. **Traditional Computer Vision Methods**:
+   - **Active Shape Models (ASM)**: Classical landmark detection
+   - **Template Matching**: Correlation-based approaches
+   - **Feature-based Detection**: SIFT/ORB-based methods
 
-**Training Components**
-- Loss function component analysis
-- Data augmentation impact
-- Multi-stage training effectiveness
-- Optimization strategy comparison
+3. **Deep Learning Baselines**:
+   - **U-Net**: Standard medical segmentation architecture
+   - **HR-Net**: High-resolution landmark detection network
+   - **ResNet + Heatmap Regression**: Direct regression approaches
 
-### 2. Systematic Ablation Protocol
+4. **Commercial Software** (when available):
+   - **Dolphin Imaging**: Commercial cephalometric analysis software
+   - **OnDemand3D**: Professional orthodontic planning software
 
-**Ablation Study Design**
-- Remove each component systematically
-- Measure performance degradation
-- Identify critical components
-- Validate design decisions
+**Comparison Protocol**:
+```python
+# src/evaluation/comparative_analysis.py
+class ComparativeEvaluator:
+    def __init__(self, baseline_methods, test_dataset):
+        self.methods = baseline_methods
+        self.test_data = test_dataset
+    
+    def run_comparison_study(self):
+        """
+        Comprehensive comparison across all methods
+        """
+        results = {}
+        for method_name, method in self.methods.items():
+            # Run evaluation for each method
+            # Calculate statistical significance of differences
+            # Generate comparison visualizations
+            
+    def statistical_significance_testing(self, method_a_results, method_b_results):
+        """
+        Paired t-test for statistical significance
+        """
+        # Paired t-test for MRE differences
+        # McNemar's test for SDR differences
+        # Effect size calculation (Cohen's d)
+```
 
-**Key Ablation Experiments**:
-1. **No Transformer**: MAHT-Net without transformer bottleneck
-2. **No Attention**: Remove attention gates from decoder
-3. **Different Encoders**: Compare various CNN backbones
-4. **Loss Components**: Ablate individual loss terms
-5. **Training Strategies**: Compare single-stage vs multi-stage training
+#### 2. Inter-Observer Agreement Analysis
 
-## Cross-Validation Strategy
+**What We'll Measure**: Agreement between MAHT-Net predictions and multiple expert annotations.
 
-### 1. Stratified Cross-Validation
+**Clinical Relevance**: Demonstrates that AI performance is within human expert variability range.
 
-**Patient-Level Splits**
-- Ensure no data leakage between training/validation/test
-- Stratify by age, gender, and anatomical variations
-- Maintain balanced landmark difficulty distribution
-- Account for imaging protocol variations
+**Analysis Framework**:
+```python
+def inter_observer_agreement(ai_predictions, expert_annotations):
+    """
+    Analyze agreement between AI and human experts
+    """
+    # Calculate intraclass correlation coefficient (ICC)
+    # Bland-Altman analysis for systematic bias detection
+    # Limits of agreement calculation
+    
+    return {
+        'icc_agreement': calculate_icc(ai_predictions, expert_annotations),
+        'bland_altman': bland_altman_analysis(ai_predictions, expert_annotations),
+        'systematic_bias': detect_systematic_bias(ai_predictions, expert_annotations)
+    }
+```
 
-**K-Fold Validation Protocol**
-- 5-fold cross-validation for robust performance estimation
-- Bootstrap confidence intervals for statistical significance
-- Nested cross-validation for hyperparameter optimization
-- Consistent evaluation across all folds
+## Robustness and Generalization Assessment
 
-### 2. Subgroup Analysis
+### 1. Multi-Center Validation
 
-**Demographic Stratification**
-- Performance by age groups (pediatric, adolescent, adult)
-- Gender-specific analysis
-- Ethnicity considerations where applicable
-- Pathology-specific evaluation
+**What We'll Test**: Performance across different imaging centers, X-ray machines, and protocols.
 
-**Technical Stratification**
-- Image quality variations
-- Different X-ray equipment
-- Varying imaging protocols
-- Resolution and contrast variations
+**Why This Matters**: Clinical deployment requires robustness across diverse imaging conditions and equipment.
 
-## Quality Assurance
+**Validation Strategy**:
+- **Center A**: High-end digital radiography equipment
+- **Center B**: Standard clinical X-ray machines  
+- **Center C**: Older analog-to-digital converted systems
+- **Center D**: Mobile/portable X-ray units
 
-### 1. Evaluation Reliability
+**Metrics per Center**:
+- Performance degradation analysis
+- Equipment-specific error patterns
+- Image quality impact assessment
 
-**Reproducibility Measures**
-- Fixed random seeds for consistent results
-- Deterministic evaluation protocols
-- Version control for evaluation scripts
-- Comprehensive logging and documentation
+### 2. Demographic Robustness
 
-**Validation Checks**
-- Sanity checks for metric computation
-- Ground truth validation and verification
-- Statistical significance validation
-- Cross-validation consistency checks
+**What We'll Analyze**: Performance across different patient demographics and anatomical variations.
 
-### 2. Reporting Standards
+**Demographic Factors**:
+- **Age Groups**: Children (6-12), Adolescents (13-17), Adults (18-65), Elderly (65+)
+- **Sex**: Male vs Female anatomical differences
+- **Ethnicity**: Asian, Caucasian, African American, Hispanic populations
+- **Orthodontic Status**: Pre-treatment, During treatment, Post-treatment
 
-**Comprehensive Documentation**
-- Detailed methodology description
-- Statistical analysis procedures
-- Limitation acknowledgment
-- Future improvement recommendations
+**Implementation**:
+```python
+def demographic_robustness_analysis(predictions, targets, metadata):
+    """
+    Analyze performance across demographic groups
+    """
+    results = {}
+    for demographic_factor in ['age_group', 'sex', 'ethnicity']:
+        group_results = {}
+        for group in metadata[demographic_factor].unique():
+            group_mask = metadata[demographic_factor] == group
+            group_predictions = predictions[group_mask]
+            group_targets = targets[group_mask]
+            
+            group_results[group] = evaluate_performance(group_predictions, group_targets)
+        
+        results[demographic_factor] = group_results
+    
+    return results
+```
 
-**Standardized Reporting**
-- Consistent metric definitions across experiments
-- Transparent reporting of all results
-- Error bar and confidence interval inclusion
-- Clinical interpretation guidelines
+### 3. Edge Case Analysis
 
-## Expected Performance Targets
+**What We'll Test**: Performance under challenging conditions that test system limits.
 
-### 1. Primary Targets
+**Edge Case Categories**:
 
-**Clinical Acceptability**
-- Overall MRE < 2.0mm for clinical use
-- SDR@2mm > 95% for reliable detection
-- Clinical acceptance rate > 90% (≤3mm threshold)
-- Expert agreement rate > 85%
+1. **Image Quality Issues**:
+   - Low contrast images
+   - Motion blur artifacts
+   - Noise and compression artifacts
+   - Over/under-exposed images
 
-**Research Excellence**
-- 15-25% improvement over baseline U-Net
-- State-of-the-art performance on ISBI 2015 dataset
-- Statistical significance (p < 0.05) in comparative studies
-- Robust performance across all patient subgroups
+2. **Anatomical Variations**:
+   - Severe malocclusions
+   - Surgical cases (orthognathic surgery)
+   - Developmental anomalies
+   - Implants and orthodontic appliances
 
-### 2. Stretch Goals
+3. **Technical Challenges**:
+   - Extreme head positioning
+   - Partial landmark occlusion
+   - Tilted or rotated images
+   - Resolution variations
 
-**Clinical Excellence**
-- Overall MRE < 1.5mm for precision applications
-- SDR@1.5mm > 90% for excellent detection
-- Per-landmark consistency (all landmarks < 2mm average)
-- Real-time inference capability (< 100ms per image)
+**Edge Case Evaluation Protocol**:
+```python
+def edge_case_evaluation(model, edge_case_dataset):
+    """
+    Systematic evaluation of challenging cases
+    """
+    edge_case_results = {}
+    
+    for case_type, cases in edge_case_dataset.items():
+        # Evaluate model performance on edge cases
+        # Compare against normal case performance
+        # Identify failure patterns and modes
+        
+        case_performance = evaluate_model(model, cases)
+        edge_case_results[case_type] = {
+            'performance': case_performance,
+            'degradation': calculate_degradation(case_performance, baseline_performance),
+            'failure_analysis': analyze_failure_patterns(cases, case_performance)
+        }
+    
+    return edge_case_results
+```
 
-This evaluation framework ensures thorough and clinically relevant assessment of MAHT-Net performance, providing the foundation for scientific validation and clinical deployment.
+## Clinical Integration Evaluation
+
+### 1. Workflow Integration Assessment
+
+**What We'll Measure**: How effectively MAHT-Net integrates into clinical orthodontic workflows.
+
+**Integration Metrics**:
+- **Processing Time**: Total time from image upload to results
+- **User Interaction**: Required manual corrections and adjustments
+- **Clinical Decision Impact**: How results influence treatment decisions
+- **Training Requirements**: Time needed to train clinical staff
+
+**Workflow Evaluation Protocol**:
+```python
+# src/evaluation/workflow_assessment.py
+class ClinicalWorkflowEvaluator:
+    def __init__(self, clinical_sites, orthodontists):
+        self.sites = clinical_sites
+        self.clinicians = orthodontists
+    
+    def conduct_workflow_study(self, duration_weeks=4):
+        """
+        Real-world workflow integration study
+        """
+        # Deploy MAHT-Net in clinical settings
+        # Monitor usage patterns and outcomes
+        # Collect clinician feedback and satisfaction scores
+        # Measure impact on treatment planning efficiency
+        
+        return {
+            'efficiency_metrics': self.measure_efficiency_improvements(),
+            'user_satisfaction': self.collect_satisfaction_scores(),
+            'clinical_outcomes': self.assess_treatment_outcomes(),
+            'adoption_barriers': self.identify_adoption_challenges()
+        }
+```
+
+### 2. Clinical Decision Support Evaluation
+
+**What We'll Assess**: How MAHT-Net predictions influence clinical decision-making and treatment outcomes.
+
+**Decision Support Metrics**:
+- **Treatment Plan Accuracy**: Correlation between automated measurements and optimal treatment
+- **Decision Confidence**: Clinician confidence when using AI-assisted measurements
+- **Time Efficiency**: Reduction in measurement and analysis time
+- **Error Reduction**: Decrease in measurement errors and treatment planning mistakes
+
+### 3. Safety and Risk Assessment
+
+**What We'll Evaluate**: Potential risks and safety considerations for clinical deployment.
+
+**Safety Framework**:
+```python
+def clinical_safety_assessment(model_predictions, expert_annotations, safety_thresholds):
+    """
+    Comprehensive safety evaluation for clinical deployment
+    """
+    safety_results = {
+        'critical_errors': identify_critical_errors(model_predictions, safety_thresholds),
+        'systematic_biases': detect_systematic_biases(model_predictions, expert_annotations),
+        'failure_modes': analyze_failure_modes(model_predictions),
+        'risk_stratification': stratify_predictions_by_risk(model_predictions)
+    }
+    
+    return safety_results
+```
+
+**Safety Thresholds**:
+- **Critical Error**: Any prediction >4mm from ground truth
+- **Systematic Bias**: Consistent directional error >1mm
+- **High Risk Cases**: Predictions with high uncertainty or edge case characteristics
+
+## Interpretability and Explainability
+
+### 1. Attention Visualization
+
+**What We'll Visualize**: Attention maps showing which image regions influence landmark predictions.
+
+**Clinical Value**: Helps clinicians understand and trust AI decision-making process.
+
+**Implementation**:
+```python
+# src/evaluation/interpretability.py
+def generate_attention_visualizations(model, image, landmark_predictions):
+    """
+    Generate attention maps for clinical interpretation
+    """
+    # Extract attention weights from transformer layers
+    # Create heatmaps overlaid on original X-ray images
+    # Highlight anatomically relevant regions
+    
+    return {
+        'attention_maps': attention_heatmaps,
+        'landmark_confidence': prediction_confidence_scores,
+        'anatomical_focus': identified_anatomical_regions
+    }
+```
+
+### 2. Uncertainty Quantification
+
+**What We'll Provide**: Confidence scores and uncertainty estimates for each prediction.
+
+**Clinical Application**: Enables clinicians to identify cases requiring additional scrutiny.
+
+**Methods**:
+- **Monte Carlo Dropout**: Multiple forward passes with dropout for uncertainty estimation
+- **Ensemble Predictions**: Multiple models for prediction variance
+- **Bayesian Neural Networks**: Inherent uncertainty quantification
+
+## Regulatory and Validation Requirements
+
+### 1. FDA/CE Marking Preparation
+
+**What We'll Document**: Complete validation package for regulatory submission.
+
+**Required Documentation**:
+- **Clinical Validation Study**: Multi-center, prospective validation
+- **Software Documentation**: Complete technical documentation
+- **Risk Management**: ISO 14971 risk management documentation
+- **Quality System**: ISO 13485 quality management system
+
+### 2. Clinical Evidence Generation
+
+**What We'll Establish**: Clinical evidence demonstrating safety and effectiveness.
+
+**Evidence Requirements**:
+- **Substantial Equivalence**: Comparison with existing cleared devices
+- **Clinical Performance**: Demonstration of clinical utility
+- **Safety Profile**: Comprehensive safety assessment
+- **User Training**: Validated training protocols
+
+## Evaluation Timeline and Milestones
+
+### Phase 1: Development Evaluation (Week 13-14)
+- **Objective**: Validate technical performance and identify optimization opportunities
+- **Deliverables**: Comprehensive performance metrics, ablation study results
+- **Success Criteria**: MRE < 1.5mm, SDR@2mm > 90%
+
+### Phase 2: Clinical Validation (Week 15)
+- **Objective**: Demonstrate clinical utility and safety
+- **Deliverables**: Clinical validation study results, expert evaluation
+- **Success Criteria**: Clinical acceptability rating > 4.0/5.0
+
+### Phase 3: Regulatory Preparation (Week 16)
+- **Objective**: Prepare documentation for regulatory approval
+- **Deliverables**: Regulatory submission package, risk assessment
+- **Success Criteria**: Complete documentation meeting FDA/CE requirements
+
+## Success Criteria Summary
+
+### Technical Performance:
+- **Primary**: MRE < 1.2mm across all landmarks
+- **Secondary**: SDR@2mm > 95%, SDR@1.5mm > 90%
+- **Robustness**: <20% performance degradation across sites
+
+### Clinical Acceptance:
+- **Expert Rating**: >4.0/5.0 from practicing orthodontists
+- **Workflow Integration**: <5 minutes additional workflow time
+- **Safety**: Zero critical errors (>4mm) in validation dataset
+
+### Regulatory Readiness:
+- **Documentation**: Complete technical and clinical documentation
+- **Validation**: Multi-center validation study completed
+- **Quality**: ISO 13485 compliant quality management system
+
+This comprehensive evaluation framework ensures MAHT-Net meets the highest standards for clinical deployment while providing rigorous scientific validation of its performance and safety.
