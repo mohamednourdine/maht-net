@@ -1,0 +1,913 @@
+[
+    {
+        "label": "os",
+        "kind": 6,
+        "isExtraImport": true,
+        "importPath": "os",
+        "description": "os",
+        "detail": "os",
+        "documentation": {}
+    },
+    {
+        "label": "json",
+        "kind": 6,
+        "isExtraImport": true,
+        "importPath": "json",
+        "description": "json",
+        "detail": "json",
+        "documentation": {}
+    },
+    {
+        "label": "cv2",
+        "kind": 6,
+        "isExtraImport": true,
+        "importPath": "cv2",
+        "description": "cv2",
+        "detail": "cv2",
+        "documentation": {}
+    },
+    {
+        "label": "numpy",
+        "kind": 6,
+        "isExtraImport": true,
+        "importPath": "numpy",
+        "description": "numpy",
+        "detail": "numpy",
+        "documentation": {}
+    },
+    {
+        "label": "torch",
+        "kind": 6,
+        "isExtraImport": true,
+        "importPath": "torch",
+        "description": "torch",
+        "detail": "torch",
+        "documentation": {}
+    },
+    {
+        "label": "Dataset",
+        "importPath": "torch.utils.data",
+        "description": "torch.utils.data",
+        "isExtraImport": true,
+        "detail": "torch.utils.data",
+        "documentation": {}
+    },
+    {
+        "label": "DataLoader",
+        "importPath": "torch.utils.data",
+        "description": "torch.utils.data",
+        "isExtraImport": true,
+        "detail": "torch.utils.data",
+        "documentation": {}
+    },
+    {
+        "label": "DataLoader",
+        "importPath": "torch.utils.data",
+        "description": "torch.utils.data",
+        "isExtraImport": true,
+        "detail": "torch.utils.data",
+        "documentation": {}
+    },
+    {
+        "label": "Dict",
+        "importPath": "typing",
+        "description": "typing",
+        "isExtraImport": true,
+        "detail": "typing",
+        "documentation": {}
+    },
+    {
+        "label": "List",
+        "importPath": "typing",
+        "description": "typing",
+        "isExtraImport": true,
+        "detail": "typing",
+        "documentation": {}
+    },
+    {
+        "label": "Tuple",
+        "importPath": "typing",
+        "description": "typing",
+        "isExtraImport": true,
+        "detail": "typing",
+        "documentation": {}
+    },
+    {
+        "label": "Optional",
+        "importPath": "typing",
+        "description": "typing",
+        "isExtraImport": true,
+        "detail": "typing",
+        "documentation": {}
+    },
+    {
+        "label": "Union",
+        "importPath": "typing",
+        "description": "typing",
+        "isExtraImport": true,
+        "detail": "typing",
+        "documentation": {}
+    },
+    {
+        "label": "Dict",
+        "importPath": "typing",
+        "description": "typing",
+        "isExtraImport": true,
+        "detail": "typing",
+        "documentation": {}
+    },
+    {
+        "label": "List",
+        "importPath": "typing",
+        "description": "typing",
+        "isExtraImport": true,
+        "detail": "typing",
+        "documentation": {}
+    },
+    {
+        "label": "Tuple",
+        "importPath": "typing",
+        "description": "typing",
+        "isExtraImport": true,
+        "detail": "typing",
+        "documentation": {}
+    },
+    {
+        "label": "Optional",
+        "importPath": "typing",
+        "description": "typing",
+        "isExtraImport": true,
+        "detail": "typing",
+        "documentation": {}
+    },
+    {
+        "label": "Union",
+        "importPath": "typing",
+        "description": "typing",
+        "isExtraImport": true,
+        "detail": "typing",
+        "documentation": {}
+    },
+    {
+        "label": "Dict",
+        "importPath": "typing",
+        "description": "typing",
+        "isExtraImport": true,
+        "detail": "typing",
+        "documentation": {}
+    },
+    {
+        "label": "List",
+        "importPath": "typing",
+        "description": "typing",
+        "isExtraImport": true,
+        "detail": "typing",
+        "documentation": {}
+    },
+    {
+        "label": "Tuple",
+        "importPath": "typing",
+        "description": "typing",
+        "isExtraImport": true,
+        "detail": "typing",
+        "documentation": {}
+    },
+    {
+        "label": "Optional",
+        "importPath": "typing",
+        "description": "typing",
+        "isExtraImport": true,
+        "detail": "typing",
+        "documentation": {}
+    },
+    {
+        "label": "Dict",
+        "importPath": "typing",
+        "description": "typing",
+        "isExtraImport": true,
+        "detail": "typing",
+        "documentation": {}
+    },
+    {
+        "label": "List",
+        "importPath": "typing",
+        "description": "typing",
+        "isExtraImport": true,
+        "detail": "typing",
+        "documentation": {}
+    },
+    {
+        "label": "Optional",
+        "importPath": "typing",
+        "description": "typing",
+        "isExtraImport": true,
+        "detail": "typing",
+        "documentation": {}
+    },
+    {
+        "label": "Tuple",
+        "importPath": "typing",
+        "description": "typing",
+        "isExtraImport": true,
+        "detail": "typing",
+        "documentation": {}
+    },
+    {
+        "label": "Dict",
+        "importPath": "typing",
+        "description": "typing",
+        "isExtraImport": true,
+        "detail": "typing",
+        "documentation": {}
+    },
+    {
+        "label": "Optional",
+        "importPath": "typing",
+        "description": "typing",
+        "isExtraImport": true,
+        "detail": "typing",
+        "documentation": {}
+    },
+    {
+        "label": "Dict",
+        "importPath": "typing",
+        "description": "typing",
+        "isExtraImport": true,
+        "detail": "typing",
+        "documentation": {}
+    },
+    {
+        "label": "List",
+        "importPath": "typing",
+        "description": "typing",
+        "isExtraImport": true,
+        "detail": "typing",
+        "documentation": {}
+    },
+    {
+        "label": "Tuple",
+        "importPath": "typing",
+        "description": "typing",
+        "isExtraImport": true,
+        "detail": "typing",
+        "documentation": {}
+    },
+    {
+        "label": "Optional",
+        "importPath": "typing",
+        "description": "typing",
+        "isExtraImport": true,
+        "detail": "typing",
+        "documentation": {}
+    },
+    {
+        "label": "Dict",
+        "importPath": "typing",
+        "description": "typing",
+        "isExtraImport": true,
+        "detail": "typing",
+        "documentation": {}
+    },
+    {
+        "label": "List",
+        "importPath": "typing",
+        "description": "typing",
+        "isExtraImport": true,
+        "detail": "typing",
+        "documentation": {}
+    },
+    {
+        "label": "Optional",
+        "importPath": "typing",
+        "description": "typing",
+        "isExtraImport": true,
+        "detail": "typing",
+        "documentation": {}
+    },
+    {
+        "label": "albumentations",
+        "kind": 6,
+        "isExtraImport": true,
+        "importPath": "albumentations",
+        "description": "albumentations",
+        "detail": "albumentations",
+        "documentation": {}
+    },
+    {
+        "label": "ToTensorV2",
+        "importPath": "albumentations.pytorch",
+        "description": "albumentations.pytorch",
+        "isExtraImport": true,
+        "detail": "albumentations.pytorch",
+        "documentation": {}
+    },
+    {
+        "label": "pandas",
+        "kind": 6,
+        "isExtraImport": true,
+        "importPath": "pandas",
+        "description": "pandas",
+        "detail": "pandas",
+        "documentation": {}
+    },
+    {
+        "label": "Path",
+        "importPath": "pathlib",
+        "description": "pathlib",
+        "isExtraImport": true,
+        "detail": "pathlib",
+        "documentation": {}
+    },
+    {
+        "label": "Path",
+        "importPath": "pathlib",
+        "description": "pathlib",
+        "isExtraImport": true,
+        "detail": "pathlib",
+        "documentation": {}
+    },
+    {
+        "label": "Path",
+        "importPath": "pathlib",
+        "description": "pathlib",
+        "isExtraImport": true,
+        "detail": "pathlib",
+        "documentation": {}
+    },
+    {
+        "label": "Path",
+        "importPath": "pathlib",
+        "description": "pathlib",
+        "isExtraImport": true,
+        "detail": "pathlib",
+        "documentation": {}
+    },
+    {
+        "label": "Path",
+        "importPath": "pathlib",
+        "description": "pathlib",
+        "isExtraImport": true,
+        "detail": "pathlib",
+        "documentation": {}
+    },
+    {
+        "label": "Path",
+        "importPath": "pathlib",
+        "description": "pathlib",
+        "isExtraImport": true,
+        "detail": "pathlib",
+        "documentation": {}
+    },
+    {
+        "label": "logging",
+        "kind": 6,
+        "isExtraImport": true,
+        "importPath": "logging",
+        "description": "logging",
+        "detail": "logging",
+        "documentation": {}
+    },
+    {
+        "label": "tqdm",
+        "importPath": "tqdm",
+        "description": "tqdm",
+        "isExtraImport": true,
+        "detail": "tqdm",
+        "documentation": {}
+    },
+    {
+        "label": "tqdm",
+        "importPath": "tqdm",
+        "description": "tqdm",
+        "isExtraImport": true,
+        "detail": "tqdm",
+        "documentation": {}
+    },
+    {
+        "label": "tqdm",
+        "importPath": "tqdm",
+        "description": "tqdm",
+        "isExtraImport": true,
+        "detail": "tqdm",
+        "documentation": {}
+    },
+    {
+        "label": "argparse",
+        "kind": 6,
+        "isExtraImport": true,
+        "importPath": "argparse",
+        "description": "argparse",
+        "detail": "argparse",
+        "documentation": {}
+    },
+    {
+        "label": "torch.nn",
+        "kind": 6,
+        "isExtraImport": true,
+        "importPath": "torch.nn",
+        "description": "torch.nn",
+        "detail": "torch.nn",
+        "documentation": {}
+    },
+    {
+        "label": "torch.nn.functional",
+        "kind": 6,
+        "isExtraImport": true,
+        "importPath": "torch.nn.functional",
+        "description": "torch.nn.functional",
+        "detail": "torch.nn.functional",
+        "documentation": {}
+    },
+    {
+        "label": "timm",
+        "kind": 6,
+        "isExtraImport": true,
+        "importPath": "timm",
+        "description": "timm",
+        "detail": "timm",
+        "documentation": {}
+    },
+    {
+        "label": "rearrange",
+        "importPath": "einops",
+        "description": "einops",
+        "isExtraImport": true,
+        "detail": "einops",
+        "documentation": {}
+    },
+    {
+        "label": "time",
+        "kind": 6,
+        "isExtraImport": true,
+        "importPath": "time",
+        "description": "time",
+        "detail": "time",
+        "documentation": {}
+    },
+    {
+        "label": "torch.optim",
+        "kind": 6,
+        "isExtraImport": true,
+        "importPath": "torch.optim",
+        "description": "torch.optim",
+        "detail": "torch.optim",
+        "documentation": {}
+    },
+    {
+        "label": "SummaryWriter",
+        "importPath": "torch.utils.tensorboard",
+        "description": "torch.utils.tensorboard",
+        "isExtraImport": true,
+        "detail": "torch.utils.tensorboard",
+        "documentation": {}
+    },
+    {
+        "label": "matplotlib.pyplot",
+        "kind": 6,
+        "isExtraImport": true,
+        "importPath": "matplotlib.pyplot",
+        "description": "matplotlib.pyplot",
+        "detail": "matplotlib.pyplot",
+        "documentation": {}
+    },
+    {
+        "label": "seaborn",
+        "kind": 6,
+        "isExtraImport": true,
+        "importPath": "seaborn",
+        "description": "seaborn",
+        "detail": "seaborn",
+        "documentation": {}
+    },
+    {
+        "label": "sys",
+        "kind": 6,
+        "isExtraImport": true,
+        "importPath": "sys",
+        "description": "sys",
+        "detail": "sys",
+        "documentation": {}
+    },
+    {
+        "label": "create_maht_net",
+        "importPath": "src.models.maht_net",
+        "description": "src.models.maht_net",
+        "isExtraImport": true,
+        "detail": "src.models.maht_net",
+        "documentation": {}
+    },
+    {
+        "label": "create_maht_net",
+        "importPath": "src.models.maht_net",
+        "description": "src.models.maht_net",
+        "isExtraImport": true,
+        "detail": "src.models.maht_net",
+        "documentation": {}
+    },
+    {
+        "label": "create_dataloaders",
+        "importPath": "src.data.dataset",
+        "description": "src.data.dataset",
+        "isExtraImport": true,
+        "detail": "src.data.dataset",
+        "documentation": {}
+    },
+    {
+        "label": "CephalometricDataset",
+        "importPath": "src.data.dataset",
+        "description": "src.data.dataset",
+        "isExtraImport": true,
+        "detail": "src.data.dataset",
+        "documentation": {}
+    },
+    {
+        "label": "create_dataloaders",
+        "importPath": "src.data.dataset",
+        "description": "src.data.dataset",
+        "isExtraImport": true,
+        "detail": "src.data.dataset",
+        "documentation": {}
+    },
+    {
+        "label": "compute_landmark_metrics",
+        "importPath": "src.utils.metrics",
+        "description": "src.utils.metrics",
+        "isExtraImport": true,
+        "detail": "src.utils.metrics",
+        "documentation": {}
+    },
+    {
+        "label": "compute_clinical_accuracy_metrics",
+        "importPath": "src.utils.metrics",
+        "description": "src.utils.metrics",
+        "isExtraImport": true,
+        "detail": "src.utils.metrics",
+        "documentation": {}
+    },
+    {
+        "label": "visualize_landmark_errors",
+        "importPath": "src.utils.metrics",
+        "description": "src.utils.metrics",
+        "isExtraImport": true,
+        "detail": "src.utils.metrics",
+        "documentation": {}
+    },
+    {
+        "label": "create_metrics_report",
+        "importPath": "src.utils.metrics",
+        "description": "src.utils.metrics",
+        "isExtraImport": true,
+        "detail": "src.utils.metrics",
+        "documentation": {}
+    },
+    {
+        "label": "MAHTNetTrainer",
+        "importPath": "src.training.trainer",
+        "description": "src.training.trainer",
+        "isExtraImport": true,
+        "detail": "src.training.trainer",
+        "documentation": {}
+    },
+    {
+        "label": "CephalometricDataset",
+        "kind": 6,
+        "importPath": "src.data.dataset",
+        "description": "src.data.dataset",
+        "peekOfCode": "class CephalometricDataset(Dataset):\n    \"\"\"\n    Dataset class for cephalometric landmark detection\n    Supports multiple cephalometric datasets with standardized 7-landmark annotation:\n    1. Nasion (N)\n    2. Sella (S) \n    3. Articulare (Ar)\n    4. Gonion (Go)\n    5. Menton (Me)\n    6. Pogonion (Pog)",
+        "detail": "src.data.dataset",
+        "documentation": {}
+    },
+    {
+        "label": "create_dataloaders",
+        "kind": 2,
+        "importPath": "src.data.dataset",
+        "description": "src.data.dataset",
+        "peekOfCode": "def create_dataloaders(data_dir: str,\n                      batch_size: int = 8,\n                      num_workers: int = 4,\n                      image_size: Tuple[int, int] = (512, 512),\n                      heatmap_size: Tuple[int, int] = (64, 64)) -> Dict[str, DataLoader]:\n    \"\"\"\n    Create train, validation, and test dataloaders\n    Args:\n        data_dir: Root directory containing the dataset\n        batch_size: Batch size for training",
+        "detail": "src.data.dataset",
+        "documentation": {}
+    },
+    {
+        "label": "visualize_sample",
+        "kind": 2,
+        "importPath": "src.data.dataset",
+        "description": "src.data.dataset",
+        "peekOfCode": "def visualize_sample(dataset: CephalometricDataset, \n                    idx: int, \n                    save_path: Optional[str] = None) -> np.ndarray:\n    \"\"\"\n    Visualize a dataset sample with landmarks and heatmaps\n    Args:\n        dataset: CephalometricDataset instance\n        idx: Sample index to visualize\n        save_path: Optional path to save the visualization\n    Returns:",
+        "detail": "src.data.dataset",
+        "documentation": {}
+    },
+    {
+        "label": "logger",
+        "kind": 5,
+        "importPath": "src.data.dataset",
+        "description": "src.data.dataset",
+        "peekOfCode": "logger = logging.getLogger(__name__)\nclass CephalometricDataset(Dataset):\n    \"\"\"\n    Dataset class for cephalometric landmark detection\n    Supports multiple cephalometric datasets with standardized 7-landmark annotation:\n    1. Nasion (N)\n    2. Sella (S) \n    3. Articulare (Ar)\n    4. Gonion (Go)\n    5. Menton (Me)",
+        "detail": "src.data.dataset",
+        "documentation": {}
+    },
+    {
+        "label": "CephalometricDataProcessor",
+        "kind": 6,
+        "importPath": "src.data.preprocess",
+        "description": "src.data.preprocess",
+        "peekOfCode": "class CephalometricDataProcessor:\n    \"\"\"\n    Comprehensive data processor for cephalometric datasets\n    Handles multiple dataset formats and standardizes to MAHT-Net format\n    \"\"\"\n    def __init__(self, \n                 output_dir: str,\n                 target_size: Tuple[int, int] = (512, 512),\n                 quality_check: bool = True):\n        \"\"\"",
+        "detail": "src.data.preprocess",
+        "documentation": {}
+    },
+    {
+        "label": "main",
+        "kind": 2,
+        "importPath": "src.data.preprocess",
+        "description": "src.data.preprocess",
+        "peekOfCode": "def main():\n    \"\"\"Main function for command-line usage\"\"\"\n    parser = argparse.ArgumentParser(description=\"Preprocess cephalometric datasets for MAHT-Net\")\n    parser.add_argument('--input-dir', required=True, help='Input directory containing raw data')\n    parser.add_argument('--output-dir', required=True, help='Output directory for processed data')\n    parser.add_argument('--dataset-name', required=True, help='Name of the dataset')\n    parser.add_argument('--annotation-format', default='auto', choices=['auto', 'json', 'csv', 'xml'],\n                       help='Format of annotation files')\n    parser.add_argument('--target-size', nargs=2, type=int, default=[512, 512],\n                       help='Target image size (width height)')",
+        "detail": "src.data.preprocess",
+        "documentation": {}
+    },
+    {
+        "label": "logger",
+        "kind": 5,
+        "importPath": "src.data.preprocess",
+        "description": "src.data.preprocess",
+        "peekOfCode": "logger = logging.getLogger(__name__)\nclass CephalometricDataProcessor:\n    \"\"\"\n    Comprehensive data processor for cephalometric datasets\n    Handles multiple dataset formats and standardizes to MAHT-Net format\n    \"\"\"\n    def __init__(self, \n                 output_dir: str,\n                 target_size: Tuple[int, int] = (512, 512),\n                 quality_check: bool = True):",
+        "detail": "src.data.preprocess",
+        "documentation": {}
+    },
+    {
+        "label": "MultiScaleFeatureExtractor",
+        "kind": 6,
+        "importPath": "src.models.maht_net",
+        "description": "src.models.maht_net",
+        "peekOfCode": "class MultiScaleFeatureExtractor(nn.Module):\n    \"\"\"\n    CNN-based multi-scale feature extractor using EfficientNet-B3 backbone\n    Extracts hierarchical features at 5 different scales for comprehensive analysis\n    \"\"\"\n    def __init__(self, pretrained: bool = True):\n        super().__init__()\n        # EfficientNet-B3 backbone for robust feature extraction\n        self.backbone = timm.create_model(\n            'efficientnet_b3', ",
+        "detail": "src.models.maht_net",
+        "documentation": {}
+    },
+    {
+        "label": "SpatialAttentionModule",
+        "kind": 6,
+        "importPath": "src.models.maht_net",
+        "description": "src.models.maht_net",
+        "peekOfCode": "class SpatialAttentionModule(nn.Module):\n    \"\"\"\n    Spatial attention mechanism for enhanced feature focusing\n    \"\"\"\n    def __init__(self, in_channels: int, reduction: int = 16):\n        super().__init__()\n        self.attention = nn.Sequential(\n            nn.AdaptiveAvgPool2d(1),\n            nn.Conv2d(in_channels, in_channels // reduction, 1),\n            nn.ReLU(inplace=True),",
+        "detail": "src.models.maht_net",
+        "documentation": {}
+    },
+    {
+        "label": "VisionTransformerBottleneck",
+        "kind": 6,
+        "importPath": "src.models.maht_net",
+        "description": "src.models.maht_net",
+        "peekOfCode": "class VisionTransformerBottleneck(nn.Module):\n    \"\"\"\n    Vision Transformer bottleneck for global context modeling\n    Processes the deepest CNN features with transformer attention\n    \"\"\"\n    def __init__(self, \n                 feature_dim: int = 384,\n                 num_heads: int = 8,\n                 num_layers: int = 4,\n                 mlp_ratio: int = 4):",
+        "detail": "src.models.maht_net",
+        "documentation": {}
+    },
+    {
+        "label": "AttentionGatedDecoder",
+        "kind": 6,
+        "importPath": "src.models.maht_net",
+        "description": "src.models.maht_net",
+        "peekOfCode": "class AttentionGatedDecoder(nn.Module):\n    \"\"\"\n    Attention-gated decoder with FPN-style multi-scale feature fusion\n    Combines features from different scales with attention mechanisms\n    \"\"\"\n    def __init__(self, feature_dims: List[int], output_dim: int = 256):\n        super().__init__()\n        self.feature_dims = feature_dims\n        self.output_dim = output_dim\n        # Lateral connections for FPN",
+        "detail": "src.models.maht_net",
+        "documentation": {}
+    },
+    {
+        "label": "LandmarkDetectionHead",
+        "kind": 6,
+        "importPath": "src.models.maht_net",
+        "description": "src.models.maht_net",
+        "peekOfCode": "class LandmarkDetectionHead(nn.Module):\n    \"\"\"\n    Dual-output detection head for heatmap regression and coordinate prediction\n    Includes uncertainty quantification for clinical safety\n    \"\"\"\n    def __init__(self, \n                 input_dim: int = 256, \n                 num_landmarks: int = 7,\n                 heatmap_size: int = 64):\n        super().__init__()",
+        "detail": "src.models.maht_net",
+        "documentation": {}
+    },
+    {
+        "label": "MAHTNet",
+        "kind": 6,
+        "importPath": "src.models.maht_net",
+        "description": "src.models.maht_net",
+        "peekOfCode": "class MAHTNet(nn.Module):\n    \"\"\"\n    MAHT-Net: Multi-Stage Attention-enhanced Hybrid Transformer Network\n    Main architecture combining CNN feature extraction, Transformer bottleneck,\n    and attention-gated decoding for precise cephalometric landmark detection.\n    \"\"\"\n    def __init__(self, \n                 num_landmarks: int = 7,\n                 pretrained: bool = True,\n                 heatmap_size: int = 64):",
+        "detail": "src.models.maht_net",
+        "documentation": {}
+    },
+    {
+        "label": "create_maht_net",
+        "kind": 2,
+        "importPath": "src.models.maht_net",
+        "description": "src.models.maht_net",
+        "peekOfCode": "def create_maht_net(num_landmarks: int = 7, \n                   pretrained: bool = True,\n                   heatmap_size: int = 64) -> MAHTNet:\n    \"\"\"\n    Factory function to create MAHT-Net model\n    Args:\n        num_landmarks: Number of landmarks to detect (default: 7 for cephalometric)\n        pretrained: Use pretrained CNN backbone (recommended)\n        heatmap_size: Output heatmap resolution\n    Returns:",
+        "detail": "src.models.maht_net",
+        "documentation": {}
+    },
+    {
+        "label": "MAHTNetTrainer",
+        "kind": 6,
+        "importPath": "src.training.trainer",
+        "description": "src.training.trainer",
+        "peekOfCode": "class MAHTNetTrainer:\n    \"\"\"\n    Comprehensive trainer for MAHT-Net with progressive 3-stage training strategy\n    Stage 1: CNN Baseline Training (Weeks 9-12)\n    Stage 2: Transformer Integration (Weeks 13-16) \n    Stage 3: Full Multi-Task Learning (Weeks 17-20)\n    \"\"\"\n    def __init__(self,\n                 model: MAHTNet,\n                 train_loader: DataLoader,",
+        "detail": "src.training.trainer",
+        "documentation": {}
+    },
+    {
+        "label": "train_maht_net",
+        "kind": 2,
+        "importPath": "src.training.trainer",
+        "description": "src.training.trainer",
+        "peekOfCode": "def train_maht_net(config_path: str):\n    \"\"\"\n    Main training function for MAHT-Net with progressive 3-stage strategy\n    Args:\n        config_path: Path to training configuration file\n    \"\"\"\n    # Load configuration\n    with open(config_path, 'r') as f:\n        config = json.load(f)\n    # Setup device",
+        "detail": "src.training.trainer",
+        "documentation": {}
+    },
+    {
+        "label": "logger",
+        "kind": 5,
+        "importPath": "src.training.trainer",
+        "description": "src.training.trainer",
+        "peekOfCode": "logger = logging.getLogger(__name__)\nclass MAHTNetTrainer:\n    \"\"\"\n    Comprehensive trainer for MAHT-Net with progressive 3-stage training strategy\n    Stage 1: CNN Baseline Training (Weeks 9-12)\n    Stage 2: Transformer Integration (Weeks 13-16) \n    Stage 3: Full Multi-Task Learning (Weeks 17-20)\n    \"\"\"\n    def __init__(self,\n                 model: MAHTNet,",
+        "detail": "src.training.trainer",
+        "documentation": {}
+    },
+    {
+        "label": "HeatmapLoss",
+        "kind": 6,
+        "importPath": "src.utils.losses",
+        "description": "src.utils.losses",
+        "peekOfCode": "class HeatmapLoss(nn.Module):\n    \"\"\"\n    Loss function for heatmap regression with focal loss modification\n    Handles class imbalance in landmark detection\n    \"\"\"\n    def __init__(self, alpha: float = 2.0, beta: float = 4.0):\n        super().__init__()\n        self.alpha = alpha  # Focal loss alpha\n        self.beta = beta    # Focal loss beta\n    def forward(self, pred_heatmaps: torch.Tensor, target_heatmaps: torch.Tensor) -> torch.Tensor:",
+        "detail": "src.utils.losses",
+        "documentation": {}
+    },
+    {
+        "label": "CoordinateLoss",
+        "kind": 6,
+        "importPath": "src.utils.losses",
+        "description": "src.utils.losses",
+        "peekOfCode": "class CoordinateLoss(nn.Module):\n    \"\"\"\n    Loss function for direct coordinate regression\n    Uses smooth L1 loss for robustness to outliers\n    \"\"\"\n    def __init__(self, reduction: str = 'mean'):\n        super().__init__()\n        self.reduction = reduction\n    def forward(self, pred_coords: torch.Tensor, target_coords: torch.Tensor) -> torch.Tensor:\n        \"\"\"",
+        "detail": "src.utils.losses",
+        "documentation": {}
+    },
+    {
+        "label": "UncertaintyLoss",
+        "kind": 6,
+        "importPath": "src.utils.losses",
+        "description": "src.utils.losses",
+        "peekOfCode": "class UncertaintyLoss(nn.Module):\n    \"\"\"\n    Loss function for uncertainty estimation\n    Encourages higher uncertainty for more difficult predictions\n    \"\"\"\n    def __init__(self, lambda_var: float = 1.0):\n        super().__init__()\n        self.lambda_var = lambda_var\n    def forward(self, \n                pred_coords: torch.Tensor, ",
+        "detail": "src.utils.losses",
+        "documentation": {}
+    },
+    {
+        "label": "CombinedLandmarkLoss",
+        "kind": 6,
+        "importPath": "src.utils.losses",
+        "description": "src.utils.losses",
+        "peekOfCode": "class CombinedLandmarkLoss(nn.Module):\n    \"\"\"\n    Combined multi-task loss for MAHT-Net\n    Balances heatmap regression, coordinate prediction, and uncertainty estimation\n    \"\"\"\n    def __init__(self,\n                 heatmap_weight: float = 1.0,\n                 coord_weight: float = 1.0,\n                 uncertainty_weight: float = 0.1,\n                 adaptive_weighting: bool = True):",
+        "detail": "src.utils.losses",
+        "documentation": {}
+    },
+    {
+        "label": "PerceptualLoss",
+        "kind": 6,
+        "importPath": "src.utils.losses",
+        "description": "src.utils.losses",
+        "peekOfCode": "class PerceptualLoss(nn.Module):\n    \"\"\"\n    Perceptual loss using pretrained VGG features\n    Helps with spatial consistency in heatmaps\n    \"\"\"\n    def __init__(self, layers: list = ['relu1_2', 'relu2_2', 'relu3_3']):\n        super().__init__()\n        # Load pretrained VGG19\n        vgg = torch.hub.load('pytorch/vision:v0.10.0', 'vgg19', pretrained=True)\n        self.features = vgg.features",
+        "detail": "src.utils.losses",
+        "documentation": {}
+    },
+    {
+        "label": "ConsistencyLoss",
+        "kind": 6,
+        "importPath": "src.utils.losses",
+        "description": "src.utils.losses",
+        "peekOfCode": "class ConsistencyLoss(nn.Module):\n    \"\"\"\n    Consistency loss between heatmap and coordinate predictions\n    Ensures spatial consistency between different output heads\n    \"\"\"\n    def __init__(self, temperature: float = 1.0):\n        super().__init__()\n        self.temperature = temperature\n    def forward(self, \n                pred_heatmaps: torch.Tensor, ",
+        "detail": "src.utils.losses",
+        "documentation": {}
+    },
+    {
+        "label": "create_loss_function",
+        "kind": 2,
+        "importPath": "src.utils.losses",
+        "description": "src.utils.losses",
+        "peekOfCode": "def create_loss_function(config: dict) -> nn.Module:\n    \"\"\"\n    Factory function to create loss function based on configuration\n    Args:\n        config: Loss configuration dictionary\n    Returns:\n        Configured loss function\n    \"\"\"\n    loss_type = config.get('type', 'combined')\n    if loss_type == 'combined':",
+        "detail": "src.utils.losses",
+        "documentation": {}
+    },
+    {
+        "label": "compute_landmark_metrics",
+        "kind": 2,
+        "importPath": "src.utils.metrics",
+        "description": "src.utils.metrics",
+        "peekOfCode": "def compute_landmark_metrics(predictions: torch.Tensor, \n                           targets: torch.Tensor,\n                           pixel_spacing: float = 0.1) -> Dict[str, float]:\n    \"\"\"\n    Compute comprehensive landmark detection metrics\n    Args:\n        predictions: Predicted landmarks [B, N, 2]\n        targets: Ground truth landmarks [B, N, 2] \n        pixel_spacing: Pixel spacing in mm (default: 0.1mm)\n    Returns:",
+        "detail": "src.utils.metrics",
+        "documentation": {}
+    },
+    {
+        "label": "compute_clinical_accuracy_metrics",
+        "kind": 2,
+        "importPath": "src.utils.metrics",
+        "description": "src.utils.metrics",
+        "peekOfCode": "def compute_clinical_accuracy_metrics(predictions: torch.Tensor,\n                                   targets: torch.Tensor,\n                                   uncertainties: Optional[torch.Tensor] = None,\n                                   pixel_spacing: float = 0.1) -> Dict[str, float]:\n    \"\"\"\n    Compute clinical accuracy metrics following orthodontic standards\n    Args:\n        predictions: Predicted landmarks [B, N, 2]\n        targets: Ground truth landmarks [B, N, 2]\n        uncertainties: Prediction uncertainties [B, N] (optional)",
+        "detail": "src.utils.metrics",
+        "documentation": {}
+    },
+    {
+        "label": "compute_inter_observer_metrics",
+        "kind": 2,
+        "importPath": "src.utils.metrics",
+        "description": "src.utils.metrics",
+        "peekOfCode": "def compute_inter_observer_metrics(predictions_a: torch.Tensor,\n                                 predictions_b: torch.Tensor,\n                                 pixel_spacing: float = 0.1) -> Dict[str, float]:\n    \"\"\"\n    Compute inter-observer agreement metrics\n    Args:\n        predictions_a: First observer predictions [B, N, 2]\n        predictions_b: Second observer predictions [B, N, 2]\n        pixel_spacing: Pixel spacing in mm\n    Returns:",
+        "detail": "src.utils.metrics",
+        "documentation": {}
+    },
+    {
+        "label": "visualize_landmark_errors",
+        "kind": 2,
+        "importPath": "src.utils.metrics",
+        "description": "src.utils.metrics",
+        "peekOfCode": "def visualize_landmark_errors(predictions: torch.Tensor,\n                            targets: torch.Tensor,\n                            landmark_names: List[str],\n                            save_path: Optional[str] = None,\n                            pixel_spacing: float = 0.1) -> plt.Figure:\n    \"\"\"\n    Create comprehensive visualization of landmark detection errors\n    Args:\n        predictions: Predicted landmarks [B, N, 2]\n        targets: Ground truth landmarks [B, N, 2]",
+        "detail": "src.utils.metrics",
+        "documentation": {}
+    },
+    {
+        "label": "create_metrics_report",
+        "kind": 2,
+        "importPath": "src.utils.metrics",
+        "description": "src.utils.metrics",
+        "peekOfCode": "def create_metrics_report(metrics: Dict[str, float],\n                        landmark_names: List[str],\n                        save_path: Optional[str] = None) -> str:\n    \"\"\"\n    Create a comprehensive metrics report\n    Args:\n        metrics: Computed metrics dictionary\n        landmark_names: Names of landmarks\n        save_path: Optional path to save report\n    Returns:",
+        "detail": "src.utils.metrics",
+        "documentation": {}
+    },
+    {
+        "label": "MAHTNetEvaluator",
+        "kind": 6,
+        "importPath": "evaluate",
+        "description": "evaluate",
+        "peekOfCode": "class MAHTNetEvaluator:\n    \"\"\"\n    Comprehensive evaluator for MAHT-Net with clinical validation\n    \"\"\"\n    def __init__(self,\n                 model: torch.nn.Module,\n                 device: torch.device,\n                 config: Dict):\n        self.model = model.to(device)\n        self.device = device",
+        "detail": "evaluate",
+        "documentation": {}
+    },
+    {
+        "label": "parse_args",
+        "kind": 2,
+        "importPath": "evaluate",
+        "description": "evaluate",
+        "peekOfCode": "def parse_args():\n    \"\"\"Parse command line arguments\"\"\"\n    parser = argparse.ArgumentParser(description=\"Evaluate MAHT-Net for Cephalometric Landmark Detection\")\n    parser.add_argument(\n        '--checkpoint',\n        type=str,\n        required=True,\n        help='Path to model checkpoint'\n    )\n    parser.add_argument(",
+        "detail": "evaluate",
+        "documentation": {}
+    },
+    {
+        "label": "main",
+        "kind": 2,
+        "importPath": "evaluate",
+        "description": "evaluate",
+        "peekOfCode": "def main():\n    \"\"\"Main evaluation function\"\"\"\n    args = parse_args()\n    # Setup device\n    if args.gpu is not None:\n        device = torch.device(f'cuda:{args.gpu}' if torch.cuda.is_available() else 'cpu')\n    else:\n        device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')\n    logger.info(f\"🖥️  Using device: {device}\")\n    # Load configuration",
+        "detail": "evaluate",
+        "documentation": {}
+    },
+    {
+        "label": "logger",
+        "kind": 5,
+        "importPath": "evaluate",
+        "description": "evaluate",
+        "peekOfCode": "logger = logging.getLogger(__name__)\nclass MAHTNetEvaluator:\n    \"\"\"\n    Comprehensive evaluator for MAHT-Net with clinical validation\n    \"\"\"\n    def __init__(self,\n                 model: torch.nn.Module,\n                 device: torch.device,\n                 config: Dict):\n        self.model = model.to(device)",
+        "detail": "evaluate",
+        "documentation": {}
+    },
+    {
+        "label": "parse_args",
+        "kind": 2,
+        "importPath": "train",
+        "description": "train",
+        "peekOfCode": "def parse_args():\n    \"\"\"Parse command line arguments\"\"\"\n    parser = argparse.ArgumentParser(description=\"Train MAHT-Net for Cephalometric Landmark Detection\")\n    parser.add_argument(\n        '--config',\n        type=str,\n        default='configs/train_config.json',\n        help='Path to training configuration file'\n    )\n    parser.add_argument(",
+        "detail": "train",
+        "documentation": {}
+    },
+    {
+        "label": "load_config",
+        "kind": 2,
+        "importPath": "train",
+        "description": "train",
+        "peekOfCode": "def load_config(config_path: str, args) -> dict:\n    \"\"\"Load and validate training configuration\"\"\"\n    with open(config_path, 'r') as f:\n        config = json.load(f)\n    # Override config with command line arguments\n    if args.data_dir:\n        config['data']['data_dir'] = args.data_dir\n    if args.output_dir:\n        config['experiment']['output_dir'] = args.output_dir\n    # Debug mode adjustments",
+        "detail": "train",
+        "documentation": {}
+    },
+    {
+        "label": "setup_device",
+        "kind": 2,
+        "importPath": "train",
+        "description": "train",
+        "peekOfCode": "def setup_device(gpu_id: int = None) -> torch.device:\n    \"\"\"Setup compute device\"\"\"\n    if gpu_id is not None:\n        if torch.cuda.is_available():\n            device = torch.device(f'cuda:{gpu_id}')\n            torch.cuda.set_device(gpu_id)\n        else:\n            logger.warning(\"CUDA not available, falling back to CPU\")\n            device = torch.device('cpu')\n    else:",
+        "detail": "train",
+        "documentation": {}
+    },
+    {
+        "label": "main",
+        "kind": 2,
+        "importPath": "train",
+        "description": "train",
+        "peekOfCode": "def main():\n    \"\"\"Main training function\"\"\"\n    # Parse arguments\n    args = parse_args()\n    # Load configuration\n    config = load_config(args.config, args)\n    # Setup device\n    device = setup_device(args.gpu)\n    # Set random seeds for reproducibility\n    torch.manual_seed(config['experiment']['random_seed'])",
+        "detail": "train",
+        "documentation": {}
+    },
+    {
+        "label": "logger",
+        "kind": 5,
+        "importPath": "train",
+        "description": "train",
+        "peekOfCode": "logger = logging.getLogger(__name__)\ndef parse_args():\n    \"\"\"Parse command line arguments\"\"\"\n    parser = argparse.ArgumentParser(description=\"Train MAHT-Net for Cephalometric Landmark Detection\")\n    parser.add_argument(\n        '--config',\n        type=str,\n        default='configs/train_config.json',\n        help='Path to training configuration file'\n    )",
+        "detail": "train",
+        "documentation": {}
+    }
+]
