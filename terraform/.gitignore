@@ -1,0 +1,64 @@
+# Terraform State Files
+*.tfstate
+*.tfstate.*
+*.tfstate.backup
+
+# Terraform Crash Log Files
+crash.log
+crash.*.log
+
+# Terraform Variable Files (contains sensitive data)
+terraform.tfvars
+*.auto.tfvars
+*.auto.tfvars.json
+
+# Terraform CLI Configuration File
+.terraformrc
+terraform.rc
+
+# Terraform Lock Files
+.terraform.lock.hcl
+
+# Terraform Directories
+.terraform/
+
+# Override files (environment-specific)
+override.tf
+override.tf.json
+*_override.tf
+*_override.tf.json
+
+# SSH Keys (if stored locally)
+*.pem
+*.key
+id_rsa*
+
+# AWS Credentials
+.aws/
+
+# Local Environment Files
+.env
+.env.local
+.env.*.local
+
+# IDE Files
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# OS Files
+.DS_Store
+Thumbs.db
+
+# Backup Files
+*.backup
+*.bak
+*.tmp
+
+# Log Files
+*.log
+
+# Temporary Files
+*.temp

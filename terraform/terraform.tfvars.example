@@ -1,0 +1,38 @@
+# MAHT-Net Terraform Configuration
+# Example values for terraform.tfvars
+
+# AWS Configuration
+aws_region = "us-west-2"  # Choose region closest to you with GPU availability
+environment = "dev"       # dev, staging, or prod
+
+# Instance Configuration
+instance_type = "g4dn.xlarge"  # Cost-effective GPU instance for development
+# Alternative options:
+# "g4dn.2xlarge"  # More powerful for intensive training
+# "g5.xlarge"     # Latest generation NVIDIA A10G GPU
+# "g5.2xlarge"    # Recommended for production training
+
+# SSH Access - REPLACE WITH YOUR ACTUAL PUBLIC KEY
+ssh_public_key = "ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAAB... your-public-key-here"
+
+# Storage Configuration
+root_volume_size = 50   # GB - OS and software
+data_volume_size = 100  # GB - Datasets and models (adjust based on your needs)
+
+# Cost Management
+auto_shutdown_time = 480  # Auto-shutdown after 8 hours (0 to disable)
+enable_spot_instances = false  # Set to true for cost savings (less reliable)
+spot_price = "0.50"  # Maximum price per hour for spot instances
+
+# Monitoring
+enable_monitoring = true
+backup_retention_days = 7
+
+# Security (Optional - restrict SSH access)
+allowed_ssh_cidrs = ["0.0.0.0/0"]  # Allow from anywhere (change for better security)
+# Example: ["203.0.113.0/24", "198.51.100.0/24"]  # Restrict to specific IPs
+
+# Project Information
+project_name = "MAHT-Net"
+researcher_name = "Mohamed Nourdine"  
+university = "Konya Technical University"
