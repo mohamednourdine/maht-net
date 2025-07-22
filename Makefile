@@ -44,22 +44,28 @@ help:
 	@echo "    🏛️  Konya Technical University | PhD Research by Mohamed Nourdine 🏛️"
 	@echo "🦷════════════════════════════════════════════════════════════════════════════🦷"
 
-# Complete project setup
 setup:
 	@echo "🔧 Setting up MAHT-Net project environment..."
+	@echo "Accepting conda Terms of Service..."
+	conda tos accept --override-channels --channel https://repo.anaconda.com/pkgs/main
+	conda tos accept --override-channels --channel https://repo.anaconda.com/pkgs/r
 	conda create -n maht-net python=3.9 -y
-	@echo "Conda environment 'maht-net' created"
+	@echo "✅ Conda environment 'maht-net' created"
+
+	@echo "🔄 Updating package managers..."
 	conda run -n maht-net pip install --upgrade pip setuptools wheel
-	@echo "Package managers updated"
-	conda run -n maht-net pip install -r requirements.txt
-	@echo "Dependencies installed"
-	@echo "🏥 Creating project directories..."
+
+# 	@echo "📦 Installing Python dependencies..."
+# 	conda run -n maht-net pip install -r requirements.txt
+
+	@echo "📁 Creating project directories..."
 	mkdir -p data/{raw,processed,augmented,splits}
 	mkdir -p models/{checkpoints,pretrained,configs}
 	mkdir -p results/{experiments,ablation,clinical_validation}
 	mkdir -p logs/{training,evaluation,deployment}
 	mkdir -p scripts/{aws,deployment,evaluation}
-	@echo "Project structure created"
+	mkdir -p notebooks
+
 	@echo ""
 	@echo "🎉 MAHT-Net setup complete! ✅"
 	@echo "📖 Next steps:"
@@ -67,6 +73,7 @@ setup:
 	@echo "  2. Review documentation: documentation/00_executive_summary.md"
 	@echo "  3. Setup AWS (if needed): make aws-setup"
 	@echo "  4. Prepare data: make data-prep"
+
 
 # Install dependencies
 install:
