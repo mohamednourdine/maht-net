@@ -47,11 +47,11 @@ help:
 # Complete project setup
 setup:
 	@echo "🔧 Setting up MAHT-Net project environment..."
-	python3 -m venv venv
-	@echo "Virtual environment created"
-	./venv/bin/pip install --upgrade pip setuptools wheel
+	conda create -n maht-net python=3.9 -y
+	@echo "Conda environment 'maht-net' created"
+	conda run -n maht-net pip install --upgrade pip setuptools wheel
 	@echo "Package managers updated"
-	./venv/bin/pip install -r requirements.txt
+	conda run -n maht-net pip install -r requirements.txt
 	@echo "Dependencies installed"
 	@echo "🏥 Creating project directories..."
 	mkdir -p data/{raw,processed,augmented,splits}
@@ -63,7 +63,7 @@ setup:
 	@echo ""
 	@echo "🎉 MAHT-Net setup complete! ✅"
 	@echo "📖 Next steps:"
-	@echo "  1. Activate environment: source venv/bin/activate"
+	@echo "  1. Activate environment: conda activate maht-net"
 	@echo "  2. Review documentation: documentation/00_executive_summary.md"
 	@echo "  3. Setup AWS (if needed): make aws-setup"
 	@echo "  4. Prepare data: make data-prep"
@@ -71,8 +71,8 @@ setup:
 # Install dependencies
 install:
 	@echo "📦 Installing MAHT-Net dependencies..."
-	pip install --upgrade pip setuptools wheel
-	pip install -r requirements.txt
+	conda run -n maht-net pip install --upgrade pip setuptools wheel
+	conda run -n maht-net pip install -r requirements.txt
 	@echo "Installation complete ✅"
 
 # AWS EC2 Setup
@@ -154,8 +154,8 @@ clean:
 # Development environment
 dev-setup: setup
 	@echo "🛠️  Setting up development environment..."
-	./venv/bin/pip install -r requirements-dev.txt
-	pre-commit install
+	conda run -n maht-net pip install -r requirements-dev.txt
+	conda run -n maht-net pre-commit install
 	@echo "Development environment ready ✅"
 
 # Monitor training
