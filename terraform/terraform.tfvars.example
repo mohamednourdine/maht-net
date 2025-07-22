@@ -6,18 +6,18 @@ aws_region = "us-west-2"  # Choose region closest to you with GPU availability
 environment = "dev"       # dev, staging, or prod
 
 # Instance Configuration
-instance_type = "g4dn.xlarge"  # Cost-effective GPU instance for development
+instance_type = "t3.large"  # Cost-effective development instance
 # Alternative options:
-# "g4dn.2xlarge"  # More powerful for intensive training
-# "g5.xlarge"     # Latest generation NVIDIA A10G GPU
-# "g5.2xlarge"    # Recommended for production training
+# "t3.medium"   # 2 vCPUs, 4GB RAM - Basic development  
+# "t3.xlarge"   # 4 vCPUs, 16GB RAM - Enhanced development
+# "m5.large"    # 2 vCPUs, 8GB RAM - Balanced compute
 
 # SSH Access - REPLACE WITH YOUR ACTUAL PUBLIC KEY
 ssh_public_key = "ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAAB... your-public-key-here"
 
 # Storage Configuration
 root_volume_size = 50   # GB - OS and software
-data_volume_size = 100  # GB - Datasets and models (adjust based on your needs)
+data_volume_size = 50   # GB - Project data (adjust based on your needs)
 
 # Cost Management
 auto_shutdown_time = 480  # Auto-shutdown after 8 hours (0 to disable)

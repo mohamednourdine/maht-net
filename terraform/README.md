@@ -1,15 +1,14 @@
-# MAHT-Net AWS Infrastructure Deployment Guide
+# MAHT-Net AWS Development Infrastructure
 
 ## Overview
 
-This Terraform configuration creates a complete AWS infrastructure for the MAHT-Net research project, including:
+This Terraform configuration creates a cost-effective AWS development environment for the MAHT-Net research project, including:
 
-- **GPU-optimized EC2 instance** with NVIDIA drivers and CUDA 12.1
-- **Complete ML environment** with PyTorch, Jupyter, and research tools
-- **S3 bucket** for dataset and model storage
-- **Security groups** and networking configuration
-- **Monitoring and logging** setup
-- **Cost optimization** features
+- **CPU-optimized EC2 instance** (t3.large) for development and testing
+- **Complete ML environment** with PyTorch CPU, Jupyter, and development tools
+- **VS Code Remote Development** support with all necessary extensions
+- **Local storage** for datasets and models (no S3 dependency)
+- **Security and cost management** features
 
 ## Prerequisites
 
@@ -73,39 +72,42 @@ terraform plan
 terraform apply
 ```
 
-### 3. Access Your Instance
+### 3. Connect with VS Code
 
-After deployment completes (10-15 minutes), you'll get output with connection details:
+After deployment completes (5-10 minutes):
 
 ```bash
-# SSH to the instance
-ssh -i ~/.ssh/maht-net-key ubuntu@<PUBLIC_IP>
-
-# Access Jupyter Notebook
-# Open http://<PUBLIC_IP>:8888 in your browser
-
-# Access TensorBoard
-# Open http://<PUBLIC_IP>:6006 in your browser
+# Install VS Code Remote-SSH extension
+# Press Ctrl+Shift+P → "Remote-SSH: Connect to Host"
+# Enter: ubuntu@<PUBLIC_IP>
 ```
+
+**VS Code Connection Steps:**
+1. Install "Remote - SSH" extension
+2. Open Command Palette (Ctrl+Shift+P)
+3. Select "Remote-SSH: Connect to Host"
+4. Enter connection string from terraform output
+5. Select Linux platform
+6. Open ~/maht-net folder
 
 ## Configuration Options
 
 ### Instance Types
 
-| Instance Type | vCPUs | RAM | GPU | Use Case | Hourly Cost* |
-|---------------|-------|-----|-----|----------|-------------|
-| g4dn.xlarge   | 4     | 16GB| T4  | Development | ~$0.50 |
-| g4dn.2xlarge  | 8     | 32GB| T4  | Training | ~$0.75 |
-| g5.xlarge     | 4     | 16GB| A10G| Latest Gen | ~$1.00 |
-| g5.2xlarge    | 8     | 32GB| A10G| Production | ~$1.20 |
+| Instance Type | vCPUs | RAM | Use Case | Hourly Cost* |
+|---------------|-------|-----|----------|-------------|
+| t3.medium     | 2     | 4GB | Basic development | ~$0.04 |
+| t3.large      | 2     | 8GB | Recommended dev | ~$0.08 |
+| t3.xlarge     | 4     | 16GB| Enhanced dev | ~$0.17 |
+| m5.large      | 2     | 8GB | Balanced compute | ~$0.10 |
 
 *Prices are approximate and vary by region
 
 ### Storage Configuration
 
 - **Root Volume**: 50GB (OS and software)
-- **Data Volume**: 100GB+ (datasets and models)
-- **S3 Bucket**: Unlimited (pay for usage)
+- **Data Volume**: 50GB (project data and datasets)
+- **No S3**: All data stored locally for simplicity
 
 ### Cost Optimization
 
@@ -117,43 +119,50 @@ auto_shutdown_time = 480  # 8 hours
 enable_spot_instances = true
 spot_price = "0.50"
 
-# Smaller storage if budget is tight
-data_volume_size = 50
+# Minimal storage for development
+data_volume_size = 30
 ```
 
-## Post-Deployment Setup
+## Development Workflow
 
-### 1. Verify GPU Setup
-
-```bash
-# Check NVIDIA driver
-nvidia-smi
-
-# Test PyTorch CUDA
-python -c "import torch; print(f'CUDA available: {torch.cuda.is_available()}')"
-```
-
-### 2. Start Development
+### 1. VS Code Setup
 
 ```bash
-# Activate MAHT-Net environment
+# Connect to instance
+# VS Code will automatically detect Python environment
+# Open integrated terminal and activate conda:
 conda activate maht-net
+```
 
+### 2. Development Commands
+
+```bash
 # Navigate to project
 cd ~/maht-net
 
-# Start Jupyter (if not auto-started)
-jupyter notebook --ip=0.0.0.0 --port=8888 --no-browser
+# Install additional packages
+pip install package_name
+
+# Run Python scripts
+python src/train.py
+
+# Run tests
+pytest tests/
+
+# Format code
+black src/
 ```
 
 ### 3. Data Management
 
 ```bash
-# Upload datasets to S3
-aws s3 sync /local/datasets/ s3://your-bucket-name/datasets/
+# Upload small datasets via VS Code
+# For larger datasets, use scp:
+scp -i ~/.ssh/maht-net-key dataset.zip ubuntu@<IP>:~/maht-net/data/
 
-# Download to instance
-aws s3 sync s3://your-bucket-name/datasets/ /data/datasets/
+# Extract and organize
+cd ~/maht-net/data
+unzip dataset.zip
 ```
 
 ## Security Considerations
@@ -315,13 +324,11 @@ For AWS-specific issues:
 
 | Component | Cost (USD/month) |
 |-----------|------------------|
-| g4dn.xlarge (24/7) | ~$360 |
-| g4dn.xlarge (8h/day) | ~$120 |
-| EBS Storage (150GB) | ~$15 |
-| S3 Storage (100GB) | ~$2 |
-| Data Transfer | ~$5-20 |
+| t3.large (24/7) | ~$60 |
+| t3.large (8h/day) | ~$20 |
+| EBS Storage (100GB) | ~$10 |
 
-**Total for 8h/day usage**: ~$140-160/month
+**Total for 8h/day usage**: ~$30/month
 
 ### Cost Optimization Tips
 
@@ -329,4 +336,4 @@ For AWS-specific issues:
 2. **Spot instances**: Save up to 70% (less reliable)
 3. **Right-size storage**: Only allocate what you need
 4. **Monitor usage**: Set up billing alerts
-5. **Use S3 for long-term storage**: Much cheaper than EBS
+5. **Stop when not developing**: Use AWS console or CLI

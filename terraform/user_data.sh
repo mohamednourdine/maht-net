@@ -1,16 +1,16 @@
 #!/bin/bash
 # MAHT-Net EC2 Instance Initialization Script
-# This script sets up the complete environment for MAHT-Net research
+# This script sets up the development environment for MAHT-Net research
 
 set -e  # Exit on any error
 
 # Update system
-echo "🚀 Starting MAHT-Net instance setup..."
+echo "🚀 Starting MAHT-Net development instance setup..."
 export DEBIAN_FRONTEND=noninteractive
 apt-get update
 apt-get upgrade -y
 
-# Install essential packages
+# Install essential packages for development
 echo "📦 Installing essential packages..."
 apt-get install -y \
     curl \
@@ -38,14 +38,19 @@ apt-get install -y \
     python3-dev \
     python3-pip \
     python3-venv \
-    awscli \
     jq \
     tree \
     ncdu \
     iotop \
-    nethogs
+    nethogs \
+    zip \
+    software-properties-common \
+    apt-transport-https \
+    ca-certificates \
+    gnupg \
+    lsb-release
 
-# Install Docker
+# Install Docker (for containerized development)
 echo "🐳 Installing Docker..."
 curl -fsSL https://get.docker.com -o get-docker.sh
 sh get-docker.sh
@@ -59,39 +64,7 @@ DOCKER_COMPOSE_VERSION="2.21.0"
 curl -L "https://github.com/docker/compose/releases/download/v$${DOCKER_COMPOSE_VERSION}/docker-compose-$(uname -s)-$(uname -m)" -o /usr/local/bin/docker-compose
 chmod +x /usr/local/bin/docker-compose
 
-# Install NVIDIA drivers and CUDA
-echo "🎮 Installing NVIDIA drivers and CUDA..."
-# Add NVIDIA package repositories
-wget https://developer.download.nvidia.com/compute/cuda/repos/ubuntu2204/x86_64/cuda-keyring_1.0-1_all.deb
-dpkg -i cuda-keyring_1.0-1_all.deb
-apt-get update
-
-# Install NVIDIA driver
-apt-get install -y nvidia-driver-535
-
-# Install CUDA Toolkit 12.1
-apt-get install -y cuda-toolkit-12-1
-
-# Install cuDNN
-apt-get install -y libcudnn8 libcudnn8-dev
-
-# Add CUDA to PATH
-echo 'export PATH=/usr/local/cuda-12.1/bin:$PATH' >> /home/ubuntu/.bashrc
-echo 'export LD_LIBRARY_PATH=/usr/local/cuda-12.1/lib64:$LD_LIBRARY_PATH' >> /home/ubuntu/.bashrc
-
-# Install NVIDIA Container Toolkit for Docker
-echo "🐳 Installing NVIDIA Container Toolkit..."
-distribution=$(. /etc/os-release;echo $ID$VERSION_ID)
-curl -s -L https://nvidia.github.io/nvidia-docker/gpgkey | gpg --dearmor -o /usr/share/keyrings/nvidia-docker-keyring.gpg
-curl -s -L "https://nvidia.github.io/nvidia-docker/$distribution/nvidia-docker.list" | \
-    sed 's#deb https://#deb [signed-by=/usr/share/keyrings/nvidia-docker-keyring.gpg] https://#g' | \
-    tee /etc/apt/sources.list.d/nvidia-docker.list
-
-apt-get update
-apt-get install -y nvidia-container-toolkit
-systemctl restart docker
-
-# Setup data volume
+# Setup data volume for project storage
 echo "💾 Setting up data volume..."
 if [ -b /dev/nvme1n1 ]; then
     DEVICE="/dev/nvme1n1"
@@ -120,8 +93,8 @@ if [ ! -z "$DEVICE" ]; then
     chown ubuntu:ubuntu /data
     chmod 755 /data
     
-    # Create directories
-    mkdir -p /data/{datasets,models,results,logs,backups}
+    # Create directories for project data
+    mkdir -p /data/{datasets,models,results,logs,backups,notebooks}
     chown -R ubuntu:ubuntu /data
 fi
 
@@ -139,14 +112,14 @@ sudo -u ubuntu /home/ubuntu/miniconda3/bin/conda init bash
 echo "🧬 Creating MAHT-Net conda environment..."
 sudo -u ubuntu /home/ubuntu/miniconda3/bin/conda create -n maht-net python=3.9 -y
 
-# Activate environment and install packages
+# Activate environment and install packages for CPU-based development
 echo "📚 Installing Python packages..."
 sudo -u ubuntu bash -c "
 source /home/ubuntu/miniconda3/bin/activate maht-net
 pip install --upgrade pip setuptools wheel
 
-# PyTorch with CUDA support
-pip install torch==2.1.0 torchvision==0.16.0 torchaudio==2.1.0 --index-url https://download.pytorch.org/whl/cu121
+# PyTorch CPU version (much faster to install and sufficient for development)
+pip install torch==2.1.0 torchvision==0.16.0 torchaudio==2.1.0 --index-url https://download.pytorch.org/whl/cpu
 
 # Core ML packages
 pip install \
@@ -159,8 +132,7 @@ pip install \
     seaborn==0.12.2 \
     plotly==5.15.0 \
     tqdm==4.65.0 \
-    tensorboard==2.13.0 \
-    wandb==0.15.8
+    tensorboard==2.13.0
 
 # Medical imaging
 pip install \
@@ -186,25 +158,23 @@ pip install \
     flake8==6.0.0 \
     pytest==7.4.0 \
     pytest-cov==4.1.0 \
-    mypy==1.5.1
+    mypy==1.5.1 \
+    isort==5.12.0
 
-# FastAPI for deployment
+# FastAPI for development
 pip install \
     fastapi==0.101.1 \
     uvicorn==0.23.2 \
     pydantic==2.1.1 \
     python-multipart==0.0.6
-
-# AWS SDK
-pip install boto3==1.28.25 awscli==1.29.25
 "
 
-# Install Node.js for additional tools
+# Install Node.js for additional development tools
 echo "📦 Installing Node.js..."
 curl -fsSL https://deb.nodesource.com/setup_18.x | bash -
 apt-get install -y nodejs
 
-# Clone MAHT-Net repository
+# Setup MAHT-Net project directory
 echo "📁 Setting up MAHT-Net project..."
 cd /home/ubuntu
 if [ ! -d "maht-net" ]; then
@@ -218,7 +188,11 @@ if [ -d "/data" ]; then
     sudo -u ubuntu ln -sf /data /home/ubuntu/maht-net/data_volume
 fi
 
-# Setup Jupyter configuration
+# Create project structure for local development
+sudo -u ubuntu mkdir -p /home/ubuntu/maht-net/{data,models,results,logs,notebooks}
+chown -R ubuntu:ubuntu /home/ubuntu/maht-net
+
+# Setup Jupyter configuration (optional - primarily for VS Code development)
 echo "📓 Configuring Jupyter..."
 sudo -u ubuntu bash -c "
 source /home/ubuntu/miniconda3/bin/activate maht-net
@@ -235,7 +209,7 @@ c.NotebookApp.notebook_dir = '/home/ubuntu/maht-net'
 EOF
 "
 
-# Setup systemd service for Jupyter
+# Setup systemd service for Jupyter (optional)
 cat > /etc/systemd/system/jupyter.service << 'EOF'
 [Unit]
 Description=Jupyter Notebook Server
@@ -258,22 +232,10 @@ EOF
 systemctl enable jupyter
 systemctl start jupyter
 
-# Setup AWS CLI configuration
-echo "☁️  Configuring AWS CLI..."
-sudo -u ubuntu aws configure set region ${aws_region}
-sudo -u ubuntu aws configure set output json
-
-# Create helpful scripts
+# Create helpful development scripts
 echo "📜 Creating utility scripts..."
 
-# GPU monitoring script
-cat > /home/ubuntu/gpu_monitor.sh << 'EOF'
-#!/bin/bash
-watch -n 1 nvidia-smi
-EOF
-chmod +x /home/ubuntu/gpu_monitor.sh
-
-# Resource monitoring script
+# System monitoring script
 cat > /home/ubuntu/system_monitor.sh << 'EOF'
 #!/bin/bash
 echo "=== System Resources ==="
@@ -286,10 +248,25 @@ echo ""
 echo "Disk Usage:"
 df -h
 echo ""
-echo "GPU Status:"
-nvidia-smi --query-gpu=utilization.gpu,memory.used,memory.total --format=csv,noheader,nounits
+echo "Process List:"
+ps aux | head -10
 EOF
 chmod +x /home/ubuntu/system_monitor.sh
+
+# VS Code setup helper script
+cat > /home/ubuntu/setup_vscode.sh << 'EOF'
+#!/bin/bash
+echo "🔧 VS Code Remote Development Setup"
+echo "To connect from VS Code:"
+echo "1. Install 'Remote - SSH' extension in VS Code"
+echo "2. Press Ctrl+Shift+P and select 'Remote-SSH: Connect to Host'"
+echo "3. Enter: ubuntu@$(curl -s ifconfig.me)"
+echo "4. Use your SSH key for authentication"
+echo ""
+echo "Project is located at: ~/maht-net"
+echo "Python environment: conda activate maht-net"
+EOF
+chmod +x /home/ubuntu/setup_vscode.sh
 
 # Auto shutdown script (if enabled)
 if [ "${auto_shutdown_time}" != "0" ]; then
@@ -310,44 +287,36 @@ cat > /etc/logrotate.d/maht-net << 'EOF'
 }
 EOF
 
-# Create welcome message
+# Create welcome message for VS Code development
 cat > /home/ubuntu/README_MAHT_NET.md << 'EOF'
-# 🦷 MAHT-Net Research Instance Setup Complete! 🦷
+# 🦷 MAHT-Net Development Instance Setup Complete! 🦷
 
-## Quick Start Guide
+## VS Code Remote Development Setup
 
-### 1. Activate the MAHT-Net Environment
+### 1. Connect from VS Code
+```bash
+# Install "Remote - SSH" extension in VS Code
+# Press Ctrl+Shift+P → "Remote-SSH: Connect to Host"
+# Enter: ubuntu@YOUR_INSTANCE_IP
+```
+
+### 2. Activate the MAHT-Net Environment
 ```bash
 source ~/miniconda3/bin/activate maht-net
 ```
 
-### 2. Access Services
-- **Jupyter Notebook**: http://YOUR_IP:8888
-- **TensorBoard**: http://YOUR_IP:6006  
-- **FastAPI**: http://YOUR_IP:8000
-
-### 3. Monitor Resources
-```bash
-# GPU monitoring
-./gpu_monitor.sh
-
-# System monitoring  
-./system_monitor.sh
-
-# Check CUDA
-nvidia-smi
-```
-
-### 4. Navigate to Project
+### 3. Navigate to Project
 ```bash
 cd ~/maht-net
 ```
 
-### 5. Data Storage
-- **Local SSD**: `/data/` (high-performance storage)
-- **S3 Bucket**: `${bucket_name}`
+### 4. Development Setup
+- **Python Environment**: `conda activate maht-net`
+- **PyTorch**: CPU version installed (perfect for development)
+- **Project Structure**: All folders created locally
+- **Data Storage**: Use `/data/` for larger datasets or `~/maht-net/data/` for small files
 
-## Important Commands
+## Quick Commands
 
 ### Environment Management
 ```bash
@@ -357,26 +326,23 @@ conda activate maht-net
 # Install additional packages
 pip install package_name
 
-# Update environment
-conda env update -f environment.yml
+# Run Python scripts
+python src/train.py
 ```
 
-### GPU Operations
+### Development Workflow
 ```bash
-# Check GPU availability
-python -c "import torch; print(torch.cuda.is_available())"
+# Check system resources
+./system_monitor.sh
 
-# Monitor GPU usage
-watch -n 1 nvidia-smi
-```
+# Start Jupyter (optional)
+jupyter notebook
 
-### Data Management
-```bash
-# Sync data to S3
-aws s3 sync /data/datasets/ s3://${bucket_name}/datasets/
+# Run tests
+pytest tests/
 
-# Download from S3
-aws s3 sync s3://${bucket_name}/datasets/ /data/datasets/
+# Format code
+black src/
 ```
 
 ## Project Structure
@@ -384,48 +350,80 @@ aws s3 sync s3://${bucket_name}/datasets/ /data/datasets/
 ~/maht-net/
 ├── src/                 # Source code
 ├── data/               # Local datasets
-├── models/             # Model checkpoints
+├── models/             # Model checkpoints  
 ├── results/            # Experiment results
 ├── logs/               # Training logs
-├── scripts/            # Utility scripts
+├── notebooks/          # Jupyter notebooks
 └── documentation/      # Project documentation
 ```
 
+## Instance Information
+- **Instance Type**: t3.large (2 vCPUs, 8GB RAM)
+- **Storage**: 50GB root + 50GB data volume
+- **Python**: 3.9 with conda environment
+- **PyTorch**: CPU version (suitable for development and small experiments)
+
+## Development Tips
+
+### VS Code Extensions (Recommended)
+- Python
+- Jupyter
+- GitLens
+- Remote - SSH
+- Docker
+- Pylance
+
+### Cost Management
+- Instance auto-shuts down after 8 hours by default
+- Stop instance when not in use: `sudo shutdown -h now`
+- Monitor costs in AWS console
+
+### When Ready for GPU Training
+When you're ready to move to GPU training:
+1. Switch to g4dn.xlarge or g5.xlarge instance type
+2. Install CUDA version of PyTorch
+3. Transfer your working code
+
 ## Troubleshooting
 
-### CUDA Issues
-- Restart instance if CUDA not detected
-- Check driver installation: `nvidia-smi`
-- Verify PyTorch CUDA: `python -c "import torch; print(torch.cuda.get_device_name())"`
-
-### Storage Issues
-- Data volume: `/data/` (100GB+ available)
-- Check usage: `df -h`
-- Clean logs: `sudo logrotate -f /etc/logrotate.d/maht-net`
-
-### Service Issues
+### Connection Issues
 ```bash
-# Restart Jupyter
-sudo systemctl restart jupyter
+# Check SSH service
+sudo systemctl status ssh
 
-# Check service status
-sudo systemctl status jupyter
+# Restart SSH
+sudo systemctl restart ssh
 ```
 
-Happy researching! 🧬🤖
+### Python Issues
+```bash
+# Reinstall environment
+conda env remove -n maht-net
+conda create -n maht-net python=3.9
+```
+
+### Storage Issues
+```bash
+# Check disk usage
+df -h
+
+# Clean cache
+conda clean --all
+pip cache purge
+```
+
+Happy coding with VS Code! 💻🚀
 EOF
 
 chown ubuntu:ubuntu /home/ubuntu/README_MAHT_NET.md
 
-echo "✅ MAHT-Net instance setup complete!"
-echo "🌐 Access Jupyter at: http://$(curl -s ifconfig.me):8888"
-echo "📊 Monitor GPU with: nvidia-smi"
-echo "📖 Read README_MAHT_NET.md for detailed instructions"
+echo "✅ MAHT-Net development instance setup complete!"
+echo "🌐 Instance IP: $(curl -s ifconfig.me)"
+echo "� Connect with VS Code Remote SSH: ubuntu@$(curl -s ifconfig.me)"
+echo "📖 Read README_MAHT_NET.md for VS Code setup instructions"
 
 # Final system update and cleanup
 apt-get autoremove -y
 apt-get autoclean
 
-# Reboot to ensure all drivers are properly loaded
-echo "🔄 Rebooting to finalize driver installation..."
-reboot
+echo "🔄 Setup complete! Ready for VS Code remote development."

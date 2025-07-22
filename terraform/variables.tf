@@ -4,7 +4,7 @@
 variable "aws_region" {
   description = "AWS region for MAHT-Net infrastructure"
   type        = string
-  default     = "us-west-2"
+  default     = "us-east-1"
   
   validation {
     condition = contains([
@@ -28,22 +28,22 @@ variable "environment" {
 }
 
 variable "instance_type" {
-  description = "EC2 instance type for MAHT-Net training and inference"
+  description = "EC2 instance type for MAHT-Net development and testing"
   type        = string
-  default     = "g4dn.xlarge"
+  default     = "t3.large"
   
   validation {
     condition = contains([
-      "g4dn.xlarge",    # 4 vCPUs, 16 GB RAM, 1x NVIDIA T4 GPU - Cost-effective for development
-      "g4dn.2xlarge",   # 8 vCPUs, 32 GB RAM, 1x NVIDIA T4 GPU - Better for training
-      "g4dn.4xlarge",   # 16 vCPUs, 64 GB RAM, 1x NVIDIA T4 GPU - High performance
-      "g5.xlarge",      # 4 vCPUs, 16 GB RAM, 1x NVIDIA A10G GPU - Latest generation
-      "g5.2xlarge",     # 8 vCPUs, 32 GB RAM, 1x NVIDIA A10G GPU - Recommended for training
-      "g5.4xlarge",     # 16 vCPUs, 64 GB RAM, 1x NVIDIA A10G GPU - High performance
-      "p3.2xlarge",     # 8 vCPUs, 61 GB RAM, 1x NVIDIA V100 GPU - High-end training
-      "p4d.24xlarge"    # 96 vCPUs, 1152 GB RAM, 8x NVIDIA A100 GPU - Enterprise scale
+      "t3.medium",      # 2 vCPUs, 4 GB RAM - Basic development
+      "t3.large",       # 2 vCPUs, 8 GB RAM - Recommended for development
+      "t3.xlarge",      # 4 vCPUs, 16 GB RAM - Enhanced development
+      "t3.2xlarge",     # 8 vCPUs, 32 GB RAM - Heavy development workloads
+      "m5.large",       # 2 vCPUs, 8 GB RAM - Balanced compute
+      "m5.xlarge",      # 4 vCPUs, 16 GB RAM - Balanced compute
+      "c5.large",       # 2 vCPUs, 4 GB RAM - Compute optimized
+      "c5.xlarge"       # 4 vCPUs, 8 GB RAM - Compute optimized
     ], var.instance_type)
-    error_message = "Please select a supported GPU instance type for deep learning."
+    error_message = "Please select a supported CPU instance type for development."
   }
 }
 
@@ -71,11 +71,11 @@ variable "root_volume_size" {
 variable "data_volume_size" {
   description = "Size of the additional data EBS volume in GB for datasets and models"
   type        = number
-  default     = 100
+  default     = 50
   
   validation {
-    condition     = var.data_volume_size >= 50 && var.data_volume_size <= 1000
-    error_message = "Data volume size must be between 50 and 1000 GB."
+    condition     = var.data_volume_size >= 20 && var.data_volume_size <= 500
+    error_message = "Data volume size must be between 20 and 500 GB."
   }
 }
 

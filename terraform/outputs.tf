@@ -27,28 +27,21 @@ output "ssh_connection_command" {
 }
 
 output "jupyter_url" {
-  description = "URL to access Jupyter Notebook"
+  description = "URL to access Jupyter Notebook (optional)"
   value       = "http://${aws_eip.maht_net_eip.public_ip}:8888"
 }
 
-output "tensorboard_url" {
-  description = "URL to access TensorBoard"
-  value       = "http://${aws_eip.maht_net_eip.public_ip}:6006"
+output "vscode_connection" {
+  description = "VS Code Remote SSH connection string"
+  value       = "ubuntu@${aws_eip.maht_net_eip.public_ip}"
 }
 
-output "api_url" {
-  description = "URL to access the FastAPI service"
-  value       = "http://${aws_eip.maht_net_eip.public_ip}:8000"
-}
-
-output "s3_bucket_name" {
-  description = "Name of the S3 bucket for data storage"
-  value       = aws_s3_bucket.maht_net_bucket.bucket
-}
-
-output "s3_bucket_arn" {
-  description = "ARN of the S3 bucket"
-  value       = aws_s3_bucket.maht_net_bucket.arn
+output "development_ports" {
+  description = "Available development ports"
+  value = {
+    jupyter = "8888"
+    dev_server = "8000-8080"
+  }
 }
 
 output "vpc_id" {
@@ -99,22 +92,22 @@ output "root_volume_id" {
 output "estimated_monthly_cost" {
   description = "Estimated monthly cost for the infrastructure (USD)"
   value = {
-    instance_cost = "Depends on instance type and usage hours"
+    instance_cost = "t3.large: ~$60-75/month (24/7) or ~$20-25/month (8h/day)"
     storage_cost  = "~$${(var.root_volume_size + var.data_volume_size) * 0.10} for EBS storage"
     data_transfer = "First 1GB outbound free, then $0.09/GB"
-    total_estimate = "Check AWS Pricing Calculator for exact costs"
+    total_estimate_8h = "~$25-30/month for 8 hours daily usage"
   }
 }
 
 output "quick_start_guide" {
-  description = "Quick start commands and URLs"
+  description = "Quick start commands and connection info"
   value = {
-    ssh_command     = "ssh -i ~/.ssh/maht-net-key ubuntu@${aws_eip.maht_net_eip.public_ip}"
-    jupyter_url     = "http://${aws_eip.maht_net_eip.public_ip}:8888"
-    tensorboard_url = "http://${aws_eip.maht_net_eip.public_ip}:6006"
-    api_url         = "http://${aws_eip.maht_net_eip.public_ip}:8000"
-    s3_bucket       = aws_s3_bucket.maht_net_bucket.bucket
-    setup_status    = "Instance will be ready in ~10-15 minutes after launch"
+    ssh_command      = "ssh -i ~/.ssh/maht-net-key ubuntu@${aws_eip.maht_net_eip.public_ip}"
+    vscode_remote    = "ubuntu@${aws_eip.maht_net_eip.public_ip}"
+    jupyter_url      = "http://${aws_eip.maht_net_eip.public_ip}:8888"
+    project_location = "~/maht-net"
+    python_env       = "conda activate maht-net"
+    setup_status     = "Instance ready in ~5-10 minutes after launch"
   }
 }
 
@@ -124,8 +117,8 @@ output "security_information" {
     vpc_cidr           = aws_vpc.maht_net_vpc.cidr_block
     public_subnet_cidr = aws_subnet.maht_net_public_subnet.cidr_block
     ssh_access         = "Configured for global access (0.0.0.0/0) - consider restricting"
-    encryption         = "EBS volumes and S3 bucket are encrypted"
-    iam_role          = "Instance has permissions for S3 bucket access only"
+    encryption         = "EBS volumes are encrypted"
+    iam_role          = "Instance has minimal CloudWatch permissions only"
   }
 }
 

@@ -42,8 +42,8 @@ resource "random_password" "maht_net_password" {
   special = true
 }
 
-# Data source for the latest Ubuntu 22.04 LTS AMI with GPU support
-data "aws_ami" "ubuntu_gpu" {
+# Data source for the latest Ubuntu 22.04 LTS AMI
+data "aws_ami" "ubuntu" {
   most_recent = true
   owners      = ["099720109477"] # Canonical
 
@@ -126,16 +126,16 @@ resource "aws_security_group" "maht_net_sg" {
   description = "Security group for MAHT-Net research instance"
   vpc_id      = aws_vpc.maht_net_vpc.id
 
-  # SSH access
+  # SSH access (includes VS Code Remote Development)
   ingress {
-    description = "SSH"
+    description = "SSH and VS Code Remote"
     from_port   = 22
     to_port     = 22
     protocol    = "tcp"
     cidr_blocks = ["0.0.0.0/0"]
   }
 
-  # Jupyter notebook
+  # Jupyter notebook (optional)
   ingress {
     description = "Jupyter Notebook"
     from_port   = 8888
@@ -144,38 +144,11 @@ resource "aws_security_group" "maht_net_sg" {
     cidr_blocks = ["0.0.0.0/0"]
   }
 
-  # TensorBoard
-  ingress {
-    description = "TensorBoard"
-    from_port   = 6006
-    to_port     = 6006
-    protocol    = "tcp"
-    cidr_blocks = ["0.0.0.0/0"]
-  }
-
-  # FastAPI/REST API
-  ingress {
-    description = "FastAPI"
-    from_port   = 8000
-    to_port     = 8000
-    protocol    = "tcp"
-    cidr_blocks = ["0.0.0.0/0"]
-  }
-
-  # HTTP for documentation
+  # HTTP for development servers
   ingress {
     description = "HTTP"
-    from_port   = 80
-    to_port     = 80
-    protocol    = "tcp"
-    cidr_blocks = ["0.0.0.0/0"]
-  }
-
-  # HTTPS
-  ingress {
-    description = "HTTPS"
-    from_port   = 443
-    to_port     = 443
+    from_port   = 8000
+    to_port     = 8080
     protocol    = "tcp"
     cidr_blocks = ["0.0.0.0/0"]
   }
@@ -203,7 +176,7 @@ resource "aws_key_pair" "maht_net_key" {
   }
 }
 
-# IAM role for the EC2 instance
+# IAM role for the EC2 instance (simplified - no S3 access needed)
 resource "aws_iam_role" "maht_net_role" {
   name = "maht-net-ec2-role"
 
@@ -225,9 +198,9 @@ resource "aws_iam_role" "maht_net_role" {
   }
 }
 
-# IAM policy for S3 access (for datasets and model storage)
-resource "aws_iam_role_policy" "maht_net_s3_policy" {
-  name = "maht-net-s3-policy"
+# Basic CloudWatch policy for logs
+resource "aws_iam_role_policy" "maht_net_cloudwatch_policy" {
+  name = "maht-net-cloudwatch-policy"
   role = aws_iam_role.maht_net_role.id
 
   policy = jsonencode({
@@ -236,15 +209,12 @@ resource "aws_iam_role_policy" "maht_net_s3_policy" {
       {
         Effect = "Allow"
         Action = [
-          "s3:GetObject",
-          "s3:PutObject",
-          "s3:DeleteObject",
-          "s3:ListBucket"
+          "logs:CreateLogGroup",
+          "logs:CreateLogStream",
+          "logs:PutLogEvents",
+          "logs:DescribeLogStreams"
         ]
-        Resource = [
-          "${aws_s3_bucket.maht_net_bucket.arn}",
-          "${aws_s3_bucket.maht_net_bucket.arn}/*"
-        ]
+        Resource = "arn:aws:logs:*:*:*"
       }
     ]
   })
@@ -260,37 +230,9 @@ resource "aws_iam_instance_profile" "maht_net_profile" {
   }
 }
 
-# S3 bucket for data storage
-resource "aws_s3_bucket" "maht_net_bucket" {
-  bucket = "maht-net-${random_password.maht_net_password.id}"
-
-  tags = {
-    Name = "maht-net-data-bucket"
-  }
-}
-
-# S3 bucket versioning
-resource "aws_s3_bucket_versioning" "maht_net_bucket_versioning" {
-  bucket = aws_s3_bucket.maht_net_bucket.id
-  versioning_configuration {
-    status = "Enabled"
-  }
-}
-
-# S3 bucket encryption
-resource "aws_s3_bucket_server_side_encryption_configuration" "maht_net_bucket_encryption" {
-  bucket = aws_s3_bucket.maht_net_bucket.id
-
-  rule {
-    apply_server_side_encryption_by_default {
-      sse_algorithm = "AES256"
-    }
-  }
-}
-
-# EC2 Instance for MAHT-Net
+# EC2 Instance for MAHT-Net Development
 resource "aws_instance" "maht_net_instance" {
-  ami                    = data.aws_ami.ubuntu_gpu.id
+  ami                    = data.aws_ami.ubuntu.id
   instance_type          = var.instance_type
   key_name               = aws_key_pair.maht_net_key.key_name
   vpc_security_group_ids = [aws_security_group.maht_net_sg.id]
@@ -311,7 +253,7 @@ resource "aws_instance" "maht_net_instance" {
     }
   }
 
-  # Additional EBS volume for datasets and models
+  # Additional EBS volume for project data
   ebs_block_device {
     device_name           = "/dev/sdf"
     volume_type           = "gp3"
@@ -327,13 +269,13 @@ resource "aws_instance" "maht_net_instance" {
   }
 
   user_data = base64encode(templatefile("${path.module}/user_data.sh", {
-    bucket_name = aws_s3_bucket.maht_net_bucket.bucket
-    aws_region  = var.aws_region
+    aws_region         = var.aws_region
+    auto_shutdown_time = var.auto_shutdown_time
   }))
 
   tags = {
-    Name = "maht-net-research-instance"
-    Type = "GPU-ML-Instance"
+    Name = "maht-net-development-instance"
+    Type = "Development-Instance"
   }
 
   # Ensure the instance stops automatically after a certain time to save costs
