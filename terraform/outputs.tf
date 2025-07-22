@@ -102,7 +102,7 @@ output "estimated_monthly_cost" {
 output "quick_start_guide" {
   description = "Quick start commands and connection info"
   value = {
-    ssh_command      = "ssh -i ~/.ssh/maht-net-key ubuntu@${aws_eip.maht_net_eip.public_ip}"
+    ssh_command      = "ssh -i ~/.ssh/id_rsa ubuntu@${aws_eip.maht_net_eip.public_ip}"
     vscode_remote    = "ubuntu@${aws_eip.maht_net_eip.public_ip}"
     jupyter_url      = "http://${aws_eip.maht_net_eip.public_ip}:8888"
     project_location = "~/maht-net"
