@@ -16,6 +16,7 @@ class DataConfig:
     """Configuration for data processing and augmentation"""
 
     # Dataset paths
+    dataset_path: str = "data"  # Root dataset directory
     raw_data_path: str = "data/raw"
     processed_data_path: str = "data/processed"
     dataset_name: str = "isbi_2015"    # Image specifications
@@ -26,8 +27,10 @@ class DataConfig:
 
     # Heatmap generation (inspired by proven success)
     heatmap_size: Tuple[int, int] = (256, 256)
+    heatmap_sigma: float = 5.0  # Alias for gaussian_sigma
     gaussian_sigma: float = 5.0
     gaussian_amplitude: float = 1000.0
+    heatmap_amplitude: float = 1000.0  # Alias for gaussian_amplitude
 
     # Data splits
     train_split: float = 0.85
@@ -54,6 +57,9 @@ class DataConfig:
 class ModelConfig:
     """Configuration for MAHT-Net model architecture"""
 
+    # Input configuration
+    input_channels: int = 1  # Grayscale X-ray images
+    
     # Model type
     model_name: str = "maht_net"
 
@@ -76,6 +82,7 @@ class ModelConfig:
     use_attention_gates: bool = True
 
     # Output configuration
+    num_classes: int = 19  # Number of landmarks (alias for output_channels)
     output_channels: int = 19  # Number of landmarks
     use_coordinate_regression: bool = True
     use_uncertainty: bool = True
@@ -324,6 +331,30 @@ def create_default_configs() -> None:
     for filename, config in configs.items():
         config.to_yaml(base_dir / filename)
         print(f"Created configuration: {base_dir / filename}")
+
+
+def load_experiment_config(config_path: Union[str, Path]) -> ExperimentConfig:
+    """
+    Load experiment configuration from YAML file
+
+    Args:
+        config_path: Path to the YAML configuration file
+
+    Returns:
+        ExperimentConfig object with loaded configuration
+    """
+    config_path = Path(config_path)
+
+    if not config_path.exists():
+        raise FileNotFoundError(f"Configuration file not found: {config_path}")
+
+    print(f"Loading configuration from: {config_path}")
+
+    # Create configuration object from YAML using the proper method
+    config = ExperimentConfig.from_yaml(config_path)
+
+    print(f"✅ Configuration loaded successfully!")
+    return config
 
 
 if __name__ == "__main__":

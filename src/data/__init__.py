@@ -7,12 +7,536 @@ for cephalometric landmark detection using the ISBI 2015 dataset.
 
 import os
 import json
+import zipfile
 from pathlib import Path
 from typing import Dict, List, Tuple, Optional, Union, Any
 import random
+import math
+
+# Optional imports with graceful fallbacks
+try:
+    import numpy as np
+    HAS_NUMPY = True
+except ImportError:
+    HAS_NUMPY = False
+    print("⚠️  NumPy not available - some functionality will be limited")
+
+try:
+    from PIL import Image
+    HAS_PIL = True
+except ImportError:
+    HAS_PIL = False
+    print("⚠️  PIL not available - image processing will be limited")
+
+try:
+    import cv2
+    HAS_CV2 = True
+except ImportError:
+    HAS_CV2 = False
+    print("⚠️  OpenCV not available - image processing will be limited")
 
 
+class ISBIDatasetProcessor:
+    """
+    Comprehensive ISBI 2015 cephalometric dataset processor
+
+    Handles extraction, preprocessing, and organization of the ISBI dataset
+    for MAHT-Net training with proven preprocessing techniques.
+    """
+
+    def __init__(self,
+                 data_config,
+                 use_senior_annotations: bool = True):
+        """
+        Initialize ISBI dataset processor
+
+        Args:
+            data_config: Data configuration object with dataset paths
+            use_senior_annotations: Whether to use senior or junior annotations
+        """
+        self.data_config = data_config
+        self.use_senior_annotations = use_senior_annotations
+
+        # Dataset paths - working with already extracted data
+        self.dataset_path = Path(data_config.dataset_path)
+        self.processed_dir = self.dataset_path / "processed"
+        self.splits_dir = self.dataset_path / "splits"
+
+        # Specific paths for ISBI dataset structure
+        self.images_dir = self.processed_dir / "RawImage"
+        self.annotations_dir = self.processed_dir / "AnnotationsByMD"
+
+        # Choose annotation source
+        annotation_folder = "400_senior" if use_senior_annotations else "400_junior"
+        self.landmarks_dir = self.annotations_dir / annotation_folder
+
+        # Create necessary directories
+        self.splits_dir.mkdir(parents=True, exist_ok=True)
+
+        # Processing parameters from config
+        self.image_size = tuple(data_config.image_size)
+        self.original_size = tuple(data_config.original_size)
+        self.num_landmarks = data_config.num_landmarks
+        self.heatmap_sigma = getattr(data_config, 'heatmap_sigma', 5.0)
+
+        # Dataset information
+        self.samples = []
+        self.landmark_names = [
+            'S', 'N', 'ANS', 'PNS', 'A', 'SUBSPINALE', 'B', 'SUPRAMENTALE',
+            'POG', 'GN', 'ME', 'GO', 'CO', 'OR', 'PO', 'SO', 'SELLA', 'AR', 'BA'
+        ]
+
+        print(f"ISBI Dataset Processor initialized:")
+        print(f"  Dataset path: {self.dataset_path}")
+        print(f"  Images directory: {self.images_dir}")
+        print(f"  Landmarks directory: {self.landmarks_dir}")
+        print(f"  Target image size: {self.image_size}")
+        print(f"  Number of landmarks: {self.num_landmarks}")
+        print(f"  Using {'senior' if use_senior_annotations else 'junior'} annotations")
+
+    def validate_dataset_structure(self) -> bool:
+        """
+        Validate that the dataset structure is correct and accessible
+
+        Returns:
+            True if dataset structure is valid, False otherwise
+        """
+        print("🔍 Validating dataset structure...")
+
+        # Check if main directories exist
+        required_dirs = [
+            self.images_dir,
+            self.annotations_dir,
+            self.landmarks_dir
+        ]
+
+        for dir_path in required_dirs:
+            if not dir_path.exists():
+                print(f"❌ Missing directory: {dir_path}")
+                return False
+            print(f"✅ Found directory: {dir_path}")
+
+        # Check for image subdirectories
+        image_subdirs = ['TrainingData', 'Test1Data', 'Test2Data']
+        found_subdirs = []
+
+        for subdir in image_subdirs:
+            subdir_path = self.images_dir / subdir
+            if subdir_path.exists():
+                found_subdirs.append(subdir)
+                print(f"✅ Found image directory: {subdir}")
+            else:
+                print(f"⚠️  Missing image directory: {subdir}")
+
+        if not found_subdirs:
+            print("❌ No image subdirectories found!")
+            return False
+
+        print(f"✅ Dataset structure validation completed - {len(found_subdirs)} image directories found")
+        return True
+
+    def discover_dataset_files(self) -> Dict[str, List[Path]]:
+        """
+        Discover and organize dataset files from the existing processed structure
+
+        Returns:
+            Dictionary containing organized file paths
+        """
+        print("🔍 Discovering dataset files from processed structure...")
+
+        found_files = {
+            'images': [],
+            'landmarks': [],
+            'directories': []
+        }
+
+        # Search in the known image directories
+        image_subdirs = ['TrainingData', 'Test1Data', 'Test2Data']
+
+        for subdir in image_subdirs:
+            subdir_path = self.images_dir / subdir
+            if subdir_path.exists():
+                print(f"  📂 Searching in: {subdir_path}")
+                found_files['directories'].append(subdir_path)
+
+                # Find BMP image files (ISBI dataset uses BMP format)
+                images = list(subdir_path.glob("*.bmp"))
+                found_files['images'].extend(images)
+                print(f"    Found {len(images)} BMP files in {subdir}")
+
+        # Find landmark files in the annotations directory
+        if self.landmarks_dir.exists():
+            print(f"  📂 Searching landmarks in: {self.landmarks_dir}")
+            landmarks = list(self.landmarks_dir.glob("*.txt"))
+            found_files['landmarks'].extend(landmarks)
+            print(f"    Found {len(landmarks)} landmark files")
+
+        # Remove duplicates and sort
+        found_files['images'] = sorted(list(set(found_files['images'])))
+        found_files['landmarks'] = sorted(list(set(found_files['landmarks'])))
+
+        print(f"📊 Discovery summary:")
+        print(f"  Total images: {len(found_files['images'])}")
+        print(f"  Total landmark files: {len(found_files['landmarks'])}")
+
+        return found_files
+
+    def parse_landmark_file(self, landmark_path: Path) -> Optional['np.ndarray']:
+        """
+        Parse landmark coordinates from ISBI format file
+
+        The ISBI format contains:
+        - 19 lines with x,y coordinates separated by comma
+        - Additional lines with quality/confidence scores
+
+        Args:
+            landmark_path: Path to landmark file
+
+        Returns:
+            Numpy array of landmark coordinates (19, 2) or None if parsing fails
+        """
+        if not HAS_NUMPY:
+            print("❌ NumPy required for landmark parsing")
+            return None
+
+        try:
+            landmarks = []
+            with open(landmark_path, 'r') as f:
+                lines = f.readlines()
+
+            # Parse first 19 lines as landmark coordinates
+            for i in range(min(self.num_landmarks, len(lines))):
+                line = lines[i].strip()
+                if line and ',' in line:
+                    try:
+                        # ISBI format: x,y coordinates separated by comma
+                        parts = line.split(',')
+                        if len(parts) >= 2:
+                            x = float(parts[0].strip())
+                            y = float(parts[1].strip())
+                            landmarks.append([x, y])
+                    except ValueError as e:
+                        print(f"⚠️  Error parsing line {i+1} in {landmark_path.name}: {e}")
+                        continue
+
+            if len(landmarks) == self.num_landmarks:
+                return np.array(landmarks, dtype=np.float32)
+            else:
+                print(f"⚠️  Expected {self.num_landmarks} landmarks, found {len(landmarks)} in {landmark_path.name}")
+                return None
+
+        except Exception as e:
+            print(f"❌ Error parsing landmark file {landmark_path}: {e}")
+            return None
+
+    def match_images_landmarks(self, discovered_files: Dict[str, List[Path]]) -> List[Dict[str, Any]]:
+        """
+        Match image files with their corresponding landmark files using ISBI naming convention
+
+        ISBI dataset uses consistent numbering: 001.bmp <-> 001.txt, etc.
+
+        Args:
+            discovered_files: Dictionary containing discovered file paths
+
+        Returns:
+            List of matched sample dictionaries
+        """
+        print("🔗 Matching images with landmark files...")
+
+        matched_samples = []
+        images = discovered_files['images']
+        landmarks = discovered_files['landmarks']
+
+        # Create lookup dictionary for landmarks by number
+        landmark_lookup = {}
+        for landmark_path in landmarks:
+            # Extract number from filename (e.g., "001.txt" -> "001")
+            number = landmark_path.stem
+            landmark_lookup[number] = landmark_path
+
+        print(f"  📊 Found landmarks for IDs: {sorted(landmark_lookup.keys())[:10]}... (showing first 10)")
+
+        for image_path in images:
+            # Extract number from image filename (e.g., "001.bmp" -> "001")
+            image_number = image_path.stem
+
+            # Look for corresponding landmark file
+            if image_number in landmark_lookup:
+                landmark_path = landmark_lookup[image_number]
+
+                # Parse landmarks to validate
+                landmark_coords = self.parse_landmark_file(landmark_path)
+                if landmark_coords is not None:
+                    # Determine dataset split from directory
+                    parent_dir = image_path.parent.name
+                    if parent_dir == "TrainingData":
+                        split = "train"
+                    elif parent_dir == "Test1Data":
+                        split = "test1"
+                    elif parent_dir == "Test2Data":
+                        split = "test2"
+                    else:
+                        split = "unknown"
+
+                    sample = {
+                        'id': f"{split}_{image_number}",
+                        'number': image_number,
+                        'image_path': str(image_path),
+                        'landmarks_path': str(landmark_path),
+                        'landmarks': landmark_coords.tolist(),
+                        'split': split,
+                        'processed': False
+                    }
+                    matched_samples.append(sample)
+                    print(f"  ✅ Matched: {image_path.name} -> {landmark_path.name} ({split})")
+                else:
+                    print(f"  ❌ Invalid landmarks: {landmark_path.name}")
+            else:
+                print(f"  ⚠️  No landmarks found for: {image_path.name}")
+
+        # Sort by ID for consistent ordering
+        matched_samples.sort(key=lambda x: (x['split'], x['number']))
+
+        print(f"📊 Matching summary: {len(matched_samples)} valid samples created")
+
+        # Print split summary
+        split_counts = {}
+        for sample in matched_samples:
+            split = sample['split']
+            split_counts[split] = split_counts.get(split, 0) + 1
+
+        for split, count in split_counts.items():
+            print(f"  {split}: {count} samples")
+
+        return matched_samples
+
+    def process_dataset(self) -> bool:
+        """
+        Complete dataset processing pipeline for extracted ISBI dataset
+
+        Returns:
+            True if processing successful
+        """
+        print("🚀 Starting ISBI dataset processing...")
+
+        # Step 1: Validate dataset structure
+        if not self.validate_dataset_structure():
+            print("❌ Dataset structure validation failed!")
+            return False
+
+        # Step 2: Discover files from processed structure
+        discovered_files = self.discover_dataset_files()
+        if not discovered_files['images']:
+            print("❌ No image files found!")
+            return False
+
+        # Step 3: Match images with landmarks using ISBI naming convention
+        self.samples = self.match_images_landmarks(discovered_files)
+        if not self.samples:
+            print("❌ No valid image-landmark pairs found!")
+            return False
+
+        # Step 4: Save sample list
+        self._save_sample_list()
+
+        print("✅ Dataset processing completed successfully!")
+        print(f"📊 Final statistics:")
+        print(f"  Total samples: {len(self.samples)}")
+
+        # Show split breakdown
+        split_counts = {}
+        for sample in self.samples:
+            split = sample['split']
+            split_counts[split] = split_counts.get(split, 0) + 1
+
+        for split, count in split_counts.items():
+            print(f"  {split.capitalize()}: {count} samples")
+
+        return True
+
+    def _save_sample_list(self) -> None:
+        """Save the sample list to JSON file"""
+        sample_list_path = self.splits_dir / "sample_list.json"
+        with open(sample_list_path, 'w') as f:
+            json.dump(self.samples, f, indent=2)
+        print(f"💾 Saved {len(self.samples)} samples to {sample_list_path}")
+
+
+class GaussianHeatmapGenerator:
+    """
+    Generates Gaussian heatmaps for landmark representation
+
+    Implements proven heatmap generation techniques inspired by
+    successful landmark detection approaches.
+    """
+
+    def __init__(self,
+                 image_size: Tuple[int, int] = (256, 256),
+                 num_landmarks: int = 19,
+                 sigma: float = 5.0,
+                 amplitude: float = 1000.0):
+        """
+        Initialize heatmap generator
+
+        Args:
+            image_size: Size of generated heatmaps
+            num_landmarks: Number of landmarks
+            sigma: Gaussian sigma parameter
+            amplitude: Peak amplitude of heatmaps
+        """
+        self.image_size = image_size
+        self.heatmap_size = image_size  # Alias for compatibility
+        self.num_landmarks = num_landmarks
+        self.sigma = sigma
+        self.amplitude = amplitude
+
+        # Pre-compute Gaussian kernel for efficiency
+        self.kernel_size = int(6 * sigma + 1)
+        if self.kernel_size % 2 == 0:
+            self.kernel_size += 1
+
+        print(f"Gaussian Heatmap Generator initialized:")
+        print(f"  Image size: {self.image_size}")
+        print(f"  Number of landmarks: {self.num_landmarks}")
+        print(f"  Sigma: {self.sigma}")
+        print(f"  Amplitude: {self.amplitude}")
+        print(f"  Kernel size: {self.kernel_size}")
+
+    def generate_single_heatmap(self,
+                               landmark_x: float,
+                               landmark_y: float) -> 'np.ndarray':
+        """
+        Generate a single Gaussian heatmap for one landmark
+
+        Args:
+            landmark_x: X coordinate of landmark
+            landmark_y: Y coordinate of landmark
+
+        Returns:
+            Gaussian heatmap as numpy array
+        """
+        if not HAS_NUMPY:
+            print("❌ NumPy required for heatmap generation")
+            return None
+
+        height, width = self.image_size
+        heatmap = np.zeros((height, width), dtype=np.float32)        # Convert to integer coordinates
+        center_x = int(round(landmark_x))
+        center_y = int(round(landmark_y))
+
+        # Check if landmark is within image bounds
+        if center_x < 0 or center_x >= width or center_y < 0 or center_y >= height:
+            return heatmap  # Return empty heatmap for out-of-bounds landmarks
+
+        # Calculate bounds for efficient computation
+        half_kernel = self.kernel_size // 2
+
+        y_min = max(0, center_y - half_kernel)
+        y_max = min(height, center_y + half_kernel + 1)
+        x_min = max(0, center_x - half_kernel)
+        x_max = min(width, center_x + half_kernel + 1)
+
+        # Generate Gaussian values
+        for y in range(y_min, y_max):
+            for x in range(x_min, x_max):
+                # Calculate squared distance
+                dist_sq = (x - landmark_x) ** 2 + (y - landmark_y) ** 2
+
+                # Gaussian formula
+                value = self.amplitude * math.exp(-dist_sq / (2 * self.sigma ** 2))
+                heatmap[y, x] = value
+
+        return heatmap
+
+    def generate_heatmaps(self, landmarks: 'np.ndarray') -> 'np.ndarray':
+        """
+        Generate heatmaps for all landmarks
+
+        Args:
+            landmarks: Array of landmark coordinates (N, 2)
+
+        Returns:
+            Heatmaps array (N, height, width)
+        """
+        if not HAS_NUMPY:
+            print("❌ NumPy required for heatmap generation")
+            return None
+
+        num_landmarks = landmarks.shape[0]
+        height, width = self.image_size
+
+        heatmaps = np.zeros((num_landmarks, height, width), dtype=np.float32)
+
+        for i, (x, y) in enumerate(landmarks):
+            heatmaps[i] = self.generate_single_heatmap(x, y)
+
+        return heatmaps
+
+
+# Keep the existing DatasetManager class but simplify it
 class DatasetManager:
+    """
+    High-level dataset management interface
+
+    Provides a simplified interface for dataset operations
+    building on the comprehensive ISBI processor.
+    """
+
+    def __init__(self,
+                 data_config,
+                 use_senior_annotations: bool = True):
+        """
+        Initialize dataset manager
+
+        Args:
+            data_config: Data configuration object
+            use_senior_annotations: Whether to use senior or junior annotations
+        """
+        self.data_config = data_config
+
+        # Initialize components
+        self.processor = ISBIDatasetProcessor(data_config, use_senior_annotations)
+        self.heatmap_generator = GaussianHeatmapGenerator(
+            image_size=data_config.image_size,
+            num_landmarks=data_config.num_landmarks,
+            sigma=getattr(data_config, 'heatmap_sigma', 5.0),
+            amplitude=getattr(data_config, 'heatmap_amplitude', 1000.0)
+        )
+
+        self.samples = []
+        self.train_indices = []
+        self.val_indices = []
+
+    def setup_dataset(self) -> bool:
+        """
+        Complete dataset setup pipeline
+
+        Returns:
+            True if setup successful
+        """
+        return self.processor.process_dataset()
+
+    def load_sample_list(self) -> None:
+        """Load processed sample list"""
+        sample_list_path = self.processor.splits_dir / "sample_list.json"
+        if sample_list_path.exists():
+            with open(sample_list_path, 'r') as f:
+                self.samples = json.load(f)
+            print(f"📊 Loaded {len(self.samples)} samples")
+        else:
+            print("❌ No sample list found. Run setup_dataset() first.")
+
+    def get_dataset_statistics(self) -> Dict[str, Any]:
+        """Get comprehensive dataset statistics"""
+        if not self.samples:
+            self.load_sample_list()
+
+        return {
+            'total_samples': len(self.samples),
+            'num_landmarks': self.processor.num_landmarks,
+            'image_size': self.processor.image_size,
+            'heatmap_size': self.heatmap_generator.image_size
+        }
     """
     Manages the ISBI 2015 cephalometric dataset for MAHT-Net training
 
@@ -412,7 +936,7 @@ class AugmentationPipeline:
 
 def create_data_loaders(dataset_manager: DatasetManager,
                        batch_size: int = 8,
-                       num_workers: int = 4) -> Tuple['DataLoader', 'DataLoader']:
+                       num_workers: int = 4) -> Tuple[Any, Any]:
     """
     Create PyTorch data loaders for training and validation
 
