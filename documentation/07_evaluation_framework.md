@@ -2,99 +2,88 @@
 
 ## Executive Summary
 
-This document outlines a comprehensive evaluation strategy for MAHT-Net that ensures both technical excellence and clinical viability. We'll detail **what we'll measure**, **why each metric matters clinically**, and **how to implement robust evaluation protocols** that meet medical AI standards.
+This document outlines a comprehensive evaluation strategy for MAHT-Net that builds upon our proven legacy evaluation framework while introducing enhanced assessment capabilities. We maintain the validated clinical metrics that demonstrated the success of our U-Net baseline while adding interpretability and attention analysis components.
 
-## Evaluation Philosophy: Clinical-First Assessment
+## Evaluation Philosophy: Validated Clinical Assessment
 
-**Our Approach**: Prioritize metrics that directly impact clinical decision-making while maintaining rigorous scientific validation standards. Every evaluation component should answer: "Does this help clinicians provide better patient care?"
+**Proven Foundation**: Our legacy evaluation framework successfully validated U-Net performance with clinical-grade metrics:
+- **Mean Radial Error (MRE)**: Achieved 2.0-2.5mm baseline with validated pixel-to-mm conversion
+- **Success Detection Rates**: Demonstrated ~61% SDR@2mm, ~89% SDR@4mm on ISBI dataset
+- **Clinical Relevance**: Metrics directly correlate with orthodontic treatment planning accuracy
+- **Statistical Rigor**: Comprehensive per-landmark and aggregate error reporting
 
-**Why This Matters**: Medical AI systems must meet higher standards than general computer vision applications. Clinical deployment requires demonstrated safety, reliability, and measurable improvement over existing methods.
+**Enhancement Strategy**: Extend proven evaluation methodology with:
+- **Attention Visualization**: Add interpretability analysis for clinical trust
+- **Uncertainty Quantification**: Implement confidence estimation for decision support
+- **Comparative Analysis**: Continuous benchmarking against legacy baseline
+- **Progressive Validation**: Evaluation throughout progressive training stages
 
-## What We'll Accomplish Through Evaluation
+## What We'll Accomplish Through Enhanced Evaluation
 
-1. **Establish Clinical Viability** through metrics that correlate with orthodontic treatment success
-2. **Validate Technical Performance** using statistically robust methodologies
-3. **Demonstrate Reliability** across diverse patient populations and imaging conditions
-4. **Enable Regulatory Approval** by meeting FDA/CE marking requirements for medical devices
-5. **Build Clinical Trust** through transparent, interpretable performance assessment
+1. **Preserve Clinical Validation** using proven MRE and SDR metrics with established thresholds
+2. **Demonstrate Performance Improvement** through rigorous comparison with 2.0-2.5mm baseline
+3. **Add Clinical Interpretability** via attention map analysis and uncertainty estimation
+4. **Validate Progressive Training** by monitoring performance throughout enhancement stages
+5. **Enable Clinical Deployment** through comprehensive reliability and robustness assessment
 
 ## Core Evaluation Framework
 
-### Primary Clinical Metrics: What Matters Most
+### Primary Clinical Metrics: Proven and Enhanced
 
-#### 1. Mean Radial Error (MRE) - Clinical Distance Accuracy
+#### 1. Mean Radial Error (MRE) - Validated Clinical Accuracy
 
-**What We'll Measure**: Average Euclidean distance between predicted and ground truth landmark coordinates, converted to real-world millimeters.
+**Legacy Success**: Our proven implementation achieved 2.0-2.5mm MRE on ISBI dataset with validated pixel-to-millimeter conversion (10 pixels/mm).
 
-**Why This Matters Clinically**: 
-- **Treatment Planning Accuracy**: Errors >2mm can lead to incorrect orthodontic treatment decisions
-- **Measurement Reliability**: Clinical measurements require sub-millimeter precision for optimal outcomes
-- **Patient Safety**: Inaccurate landmarks can result in inappropriate treatment plans
+**What We'll Measure**: Euclidean distance between predicted and ground truth landmarks, maintaining exact legacy calculation methodology.
 
-**Implementation Strategy**:
+**Implementation Strategy** (Enhanced from Legacy):
 ```python
-# src/evaluation/clinical_metrics.py
-def mean_radial_error(predictions, targets, pixel_spacing):
+# Preserve legacy calculation methodology
+def calculate_radial_errors_mm(pred_heatmaps, true_points, gauss_sigma=5.0):
     """
-    Calculate MRE in millimeters for clinical relevance
-    
-    Args:
-        predictions: Model landmark coordinates [N, 7, 2]
-        targets: Ground truth coordinates [N, 7, 2]
-        pixel_spacing: Physical spacing per pixel in mm
-    
-    Returns:
-        dict: MRE per landmark and overall average
+    Legacy-compatible radial error calculation
+    Maintains exact methodology from proven U-Net implementation
     """
-    distances = np.sqrt(np.sum((predictions - targets) ** 2, axis=2))
-    mre_mm = distances * pixel_spacing
+    # Extract coordinates from heatmaps (legacy method)
+    pred_coords = extract_coordinates_from_heatmaps(pred_heatmaps, gauss_sigma)
     
-    return {
-        'overall_mre': np.mean(mre_mm),
-        'per_landmark_mre': np.mean(mre_mm, axis=0),
-        'std_mre': np.std(mre_mm),
-        'max_mre': np.max(mre_mm)
-    }
+    # Calculate Euclidean distances (legacy formula)
+    distances = np.sqrt(np.sum((pred_coords - true_points) ** 2, axis=2))
+    
+    # Convert to millimeters using ISBI calibration
+    distances_mm = distances / 10.0  # 10 pixels per mm
+    
+    return distances_mm
 ```
 
-**Clinical Acceptance Thresholds**:
-- **Excellent**: MRE < 1.0mm (Research-grade accuracy)
-- **Good**: MRE < 1.5mm (Clinical acceptability)
-- **Acceptable**: MRE < 2.0mm (Minimal clinical utility)
-- **Unacceptable**: MRE ≥ 2.0mm (Risk of treatment errors)
+**Performance Targets** (Relative to Proven Baseline):
+- **Target Improvement**: 15-25% reduction from 2.0-2.5mm baseline
+- **MAHT-Net Goal**: <1.8mm MRE (clinical excellence threshold)
+- **Acceptable Range**: 1.6-2.0mm (improvement over baseline)
+- **Clinical Threshold**: <2.0mm (maintain clinical acceptability)
 
-#### 2. Success Detection Rate (SDR) - Reliability Assessment
+#### 2. Success Detection Rate (SDR) - Proven Reliability Metrics
 
-**What We'll Measure**: Percentage of landmarks detected within specified distance thresholds from ground truth.
+**Legacy Performance**: Demonstrated ~61% SDR@2mm and ~89% SDR@4mm validation accuracy using proven multi-threshold analysis.
 
-**Why This Matters Clinically**:
-- **Reliability Indicator**: High SDR indicates consistent, dependable performance
-- **Risk Assessment**: Low SDR at clinical thresholds indicates unreliable system
-- **Workflow Integration**: Predictable performance enables clinical workflow planning
+**Enhancement Targets**:
+- **SDR@2mm**: Improve from ~61% to >75% (clinical significance improvement)
+- **SDR@2.5mm**: Maintain strong performance in intermediate range
+- **SDR@4mm**: Improve from ~89% to >92% (overall reliability enhancement)
 
-**Multi-Threshold Analysis**:
-- **SDR@1.5mm**: Research-grade precision benchmark
-- **SDR@2.0mm**: Clinical acceptability threshold
-- **SDR@2.5mm**: Minimal utility threshold
-- **SDR@3.0mm**: Gross error detection
-
-**Implementation Strategy**:
+**Implementation Strategy** (Legacy-Compatible):
 ```python
-def success_detection_rate(predictions, targets, thresholds, pixel_spacing):
+def calculate_sdr_metrics(radial_errors, landmarks_count=19):
     """
-    Calculate SDR at multiple thresholds for comprehensive assessment
+    Maintain exact legacy SDR calculation methodology
+    Preserves clinical threshold validation
     """
-    distances_mm = calculate_distances_mm(predictions, targets, pixel_spacing)
-    
-    sdr_results = {}
-    for threshold in thresholds:
-        success_mask = distances_mm <= threshold
-        sdr_results[f'SDR@{threshold}mm'] = {
-            'overall': np.mean(success_mask),
-            'per_landmark': np.mean(success_mask, axis=0),
-            'confidence_interval': calculate_ci(success_mask)
-        }
-    
+    sdr_results = {
+        'SDR_2mm': np.sum(radial_errors < 2.0) / (len(radial_errors) * landmarks_count),
+        'SDR_2_5mm': np.sum(radial_errors < 2.5) / (len(radial_errors) * landmarks_count),
+        'SDR_3mm': np.sum(radial_errors < 3.0) / (len(radial_errors) * landmarks_count),
+        'SDR_4mm': np.sum(radial_errors < 4.0) / (len(radial_errors) * landmarks_count)
+    }
     return sdr_results
 ```
 

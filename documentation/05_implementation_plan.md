@@ -1,103 +1,86 @@
-# Implementation Plan: MAHT-Net Development Roadmap
+# Implementation Plan: MAHT-Net Progressive Enhancement Roadmap
 
 ## Executive Summary
 
-This document provides a comprehensive, step-by-step roadmap for implementing MAHT-Net from initial setup through production deployment. We focus on explaining **what we'll accomplish** at each stage and **why each step matters** for successful project execution.
+This document provides a comprehensive roadmap for implementing MAHT-Net as a progressive enhancement of our proven U-Net baseline. We prioritize building upon validated components while systematically introducing transformer innovations, ensuring clinical reliability throughout development.
 
-## Development Philosophy: Progressive Excellence
+## Development Philosophy: Foundation-First Enhancement
 
-**Our Approach**: Build MAHT-Net incrementally using a "validate-then-enhance" strategy. Each phase builds upon proven foundations, allowing for early validation, systematic debugging, and risk mitigation.
+**Our Approach**: Build upon proven U-Net success (2.0-2.5mm MRE, 61% SDR@2mm) using progressive enhancement rather than complete reimplementation. Each phase preserves clinical viability while introducing carefully validated improvements.
 
-**Why This Matters**: Medical AI systems require extreme reliability. By building progressively, we ensure each component works correctly before adding complexity, leading to more robust final systems.
+**Why This Strategy**: Medical AI requires demonstrated reliability. By enhancing proven components progressively, we maintain clinical utility while achieving performance improvements, reducing development risk and ensuring deployable results.
 
-## Phase 1: Foundation Setup (Week 1-2)
+## Phase 1: Foundation Establishment (Weeks 1-4)
 
 ### What We'll Accomplish
-- **Establish Rock-Solid Project Infrastructure** that supports reproducible research and scalable development
-- **Create Modular Architecture** that allows independent development and testing of components
-- **Implement Clinical-Grade Configuration Management** for experiment tracking and deployment
-- **Build Essential Utilities** for debugging, monitoring, and quality assurance
+- **Reproduce Legacy U-Net Baseline** with exact performance matching (2.0-2.5mm MRE)
+- **Establish Enhanced Development Infrastructure** supporting progressive architecture evolution
+- **Validate Proven Data Pipeline** including Gaussian heatmaps and augmentation strategies
+- **Create Transfer Learning Foundation** for subsequent transformer integration
 
-### Step 1.1: Project Structure Creation
+### Week 1: Legacy System Reproduction
 
-**What We'll Do**: Create a professional-grade project structure that supports both research and production deployment.
+**What We'll Do**: Implement exact replica of proven U-Net architecture with validated training methodology.
 
-**Why This Matters**: Proper project organization prevents technical debt, enables team collaboration, and simplifies deployment processes.
+**Why This Matters**: Establishing identical baseline performance ensures no regression during enhancement phases and validates our implementation accuracy.
 
 **Implementation Strategy**:
-```bash
-# Create comprehensive directory structure
-mkdir -p src/{models,datasets,training,evaluation,utils,visualization,clinical}
-mkdir -p configs/{models,training,datasets,experiments,deployment}
-mkdir -p {data/{raw,processed,augmented},experiments,notebooks,tests,checkpoints,logs,results}
-mkdir -p scripts/{setup,training,evaluation,deployment}
-mkdir -p docs/{technical,clinical,user}
-
-# Initialize all Python modules
-find src -type d -exec touch {}/__init__.py \;
+```python
+# src/models/legacy_unet.py - Exact replication
+class LegacyUNet(nn.Module):
+    """
+    Exact replication of proven U-Net architecture
+    Channels: 64→128→256→512→1024 (validated progression)
+    Dropout: 0.4 for down/up sampling (proven configuration)
+    """
+    def __init__(self, in_ch=3, out_ch=19, down_drop=[0.4]*4, up_drop=[0.4]*4):
+        super().__init__()
+        # Maintain exact architecture from legacy success
+        self.inconv = DoubleConv(in_ch, 64)
+        self.down1 = DownBlock(64, 128, down_drop[0])
+        self.down2 = DownBlock(128, 256, down_drop[1])
+        self.down3 = DownBlock(256, 512, down_drop[2])
+        self.down4 = DownBlock(512, 1024, down_drop[3])
+        # ... exact legacy implementation
 ```
 
-**Directory Purpose**:
-- **src/**: Core implementation code organized by functionality
-- **configs/**: YAML/JSON configuration files for all aspects of the system
-- **data/**: Raw, processed, and augmented datasets with clear separation
-- **experiments/**: Experimental results, logs, and analysis notebooks
-- **scripts/**: Automation scripts for setup, training, and deployment
-- **docs/**: Comprehensive documentation for technical and clinical users
+**Success Criteria**: 
+- Performance matches legacy baseline (2.0-2.5mm MRE)
+- Training converges within 10-15 epochs
+- Validation metrics identical to proven results
 
-### Step 1.2: Configuration Management System
+### Week 2: Enhanced Data Pipeline Foundation
 
-**What We'll Do**: Build a hierarchical configuration system that manages all aspects of the MAHT-Net project, from model architecture to deployment settings.
+**What We'll Do**: Implement proven data pipeline with multi-scale preparation for FPN readiness.
 
-**Why This Matters**: Configuration management enables reproducible experiments, easy hyperparameter tuning, and seamless transition from research to production.
+**Data Pipeline Components**:
+```python
+# Preserve proven augmentation parameters
+PROVEN_ELASTIC_PARAMS = {'sigma': 10.0, 'alpha': 15.0}
+PROVEN_AFFINE_PARAMS = {'angle': 5, 'scales': [0.95, 1.05], 'translation': 0.03}
+PROVEN_GAUSS_PARAMS = {'sigma': 5.0, 'amplitude': 1000.0}
 
-**Configuration Architecture**:
+# Enhanced for multi-scale (preserve single-scale compatibility)
+class EnhancedLandmarkDataset(LegacyLandmarkDataset):
+    """
+    Extend proven dataset with multi-scale preparation
+    Maintains backward compatibility with legacy training
+    """
+    def __init__(self, *args, multi_scale=False, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.multi_scale = multi_scale
+        # Preserve exact legacy augmentation pipeline
+```
 
-1. **Base Configuration Classes**:
-   ```python
-   # configs/base_config.py
-   from dataclasses import dataclass
-   from typing import List, Optional, Union
-   
-   @dataclass
-   class ModelConfig:
-       encoder_type: str = 'efficientnet_b3'
-       transformer_layers: int = 6
-       transformer_heads: int = 12
-       num_landmarks: int = 7
-       pretrained: bool = True
-   
-   @dataclass
-   class TrainingConfig:
-       batch_size: int = 8
-       learning_rate: float = 1e-4
-       num_epochs: int = 100
-       mixed_precision: bool = True
-       gradient_clip: float = 1.0
-   
-   @dataclass
-   class DataConfig:
-       image_size: tuple = (512, 512)
-       heatmap_size: tuple = (128, 128)
-       augmentation_prob: float = 0.8
-       normalization: str = 'imagenet'
-   ```
+### Week 3-4: Transfer Learning Preparation
 
-2. **Experiment-Specific Configurations**:
-   - `configs/experiments/baseline_unet.yaml`: Baseline U-Net for initial validation
-   - `configs/experiments/maht_net_stage1.yaml`: CNN encoder + decoder only
-   - `configs/experiments/maht_net_stage2.yaml`: Add transformer bottleneck
-   - `configs/experiments/maht_net_full.yaml`: Complete MAHT-Net architecture
+**What We'll Do**: Prepare validated weights for transformer integration with enhanced architecture hooks.
 
-**Success Criteria**: All model components configurable through YAML files, reproducible experiments through config versioning.
-
-### Step 1.3: Essential Utility Functions
-
-**What We'll Do**: Implement core utilities that ensure reproducibility, enable effective debugging, and provide robust experiment tracking.
-
-**Why This Matters**: Proper utilities prevent common ML pitfalls like non-reproducible results, memory leaks, and unclear experiment tracking.
-
-**Key Utilities to Implement**:
+**Architecture Enhancement Points**:
+- Add feature extraction interfaces at multiple scales
+- Implement attention-ready skip connections
+- Prepare transformer-compatible feature dimensions
+- Maintain exact legacy training configuration
 
 1. **Reproducibility Framework**:
    ```python
