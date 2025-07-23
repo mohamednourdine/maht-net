@@ -1,0 +1,100 @@
+Training model 1
+Number of train images: 1148, Number of validation images: 202
+Graphic Cart Used
+for the experiment: cuda: 0
+Epoch: 1, train_loss: 0.1144, train_MRE: 37.27, train_SDR_2mm: 0.1211, train_SDR_2_5mm: 0.1711, train_SDR_3mm: 0.2077, train_SDR_4mm: 0.2924,
+    Duration: 149 seconds
+val_loss: 0.08854, val_MRE: 12.04, val_SDR_2mm: 0.2603 val_SDR_2_5mm: 0.3762 val_SDR_3mm: 0.4625 val_SDR_4mm: 0.6196
+____________________________________________________________________________
+Saving model checkpoint to trained\ ensemble\ Ensemble\ 1. pth.
+Epoch: 2, train_loss: 0.064, train_MRE: 5.087, train_SDR_2mm: 0.3875, train_SDR_2_5mm: 0.5375, train_SDR_3mm: 0.6346, train_SDR_4mm: 0.8014,
+    Duration: 314 seconds
+val_loss: 0.05579, val_MRE: 2.517, val_SDR_2mm: 0.451 val_SDR_2_5mm: 0.5985 val_SDR_3mm: 0.7006 val_SDR_4mm: 0.8656
+____________________________________________________________________________
+Saving model checkpoint to trained\ ensemble\ Ensemble\ 1. pth.
+Epoch: 3, train_loss: 0.04898, train_MRE: 2.284, train_SDR_2mm: 0.4944, train_SDR_2_5mm: 0.6503, train_SDR_3mm: 0.7555, train_SDR_4mm: 0.9049,
+    Duration: 479 seconds
+val_loss: 0.05652, val_MRE: 2.485, val_SDR_2mm: 0.475 val_SDR_2_5mm: 0.6269 val_SDR_3mm: 0.723 val_SDR_4mm: 0.8713
+____________________________________________________________________________
+Epoch: 4, train_loss: 0.04217, train_MRE: 2.0, train_SDR_2mm: 0.5754, train_SDR_2_5mm: 0.7252, train_SDR_3mm: 0.8227, train_SDR_4mm: 0.9412,
+    Duration: 645 seconds
+val_loss: 0.05534, val_MRE: 2.386, val_SDR_2mm: 0.4935 val_SDR_2_5mm: 0.636 val_SDR_3mm: 0.7397 val_SDR_4mm: 0.8749
+____________________________________________________________________________
+Saving model checkpoint to trained\ ensemble\ Ensemble\ 1. pth.
+Epoch: 5, train_loss: 0.0373, train_MRE: 1.789, train_SDR_2mm: 0.6474, train_SDR_2_5mm: 0.7838, train_SDR_3mm: 0.8669, train_SDR_4mm: 0.9629,
+    Duration: 810 seconds
+val_loss: 0.0485, val_MRE: 2.198, val_SDR_2mm: 0.5714 val_SDR_2_5mm: 0.7183 val_SDR_3mm: 0.7869 val_SDR_4mm: 0.896
+____________________________________________________________________________
+Saving model checkpoint to trained\ ensemble\ Ensemble\ 1. pth.
+Epoch: 6, train_loss: 0.03275, train_MRE: 1.604, train_SDR_2mm: 0.7052, train_SDR_2_5mm: 0.8377, train_SDR_3mm: 0.9113, train_SDR_4mm: 0.9794,
+    Duration: 974 seconds
+val_loss: 0.0533, val_MRE: 2.366, val_SDR_2mm: 0.5125 val_SDR_2_5mm: 0.6639 val_SDR_3mm: 0.7613 val_SDR_4mm: 0.8825
+____________________________________________________________________________
+Epoch: 7, train_loss: 0.02856, train_MRE: 1.437, train_SDR_2mm: 0.7687, train_SDR_2_5mm: 0.8853, train_SDR_3mm: 0.9434, train_SDR_4mm: 0.9895,
+    Duration: 1139 seconds
+val_loss: 0.05007, val_MRE: 2.596, val_SDR_2mm: 0.5745 val_SDR_2_5mm: 0.7032 val_SDR_3mm: 0.7757 val_SDR_4mm: 0.883
+____________________________________________________________________________
+Epoch: 8, train_loss: 0.02488, train_MRE: 1.28, train_SDR_2mm: 0.8216, train_SDR_2_5mm: 0.9193, train_SDR_3mm: 0.9637, train_SDR_4mm: 0.9945,
+    Duration: 1303 seconds
+val_loss: 0.04604, val_MRE: 2.073, val_SDR_2mm: 0.6141 val_SDR_2_5mm: 0.7389 val_SDR_3mm: 0.8101 val_SDR_4mm: 0.9078
+____________________________________________________________________________
+Saving model checkpoint to trained\ ensemble\ Ensemble\ 1. pth.
+Epoch: 9, train_loss: 0.0214, train_MRE: 1.139, train_SDR_2mm: 0.8731, train_SDR_2_5mm: 0.9462, train_SDR_3mm: 0.9812, train_SDR_4mm: 0.9971,
+    Duration: 1469 seconds
+val_loss: 0.04756, val_MRE: 2.134, val_SDR_2mm: 0.6175 val_SDR_2_5mm: 0.7423 val_SDR_3mm: 0.8025 val_SDR_4mm: 0.8927
+____________________________________________________________________________
+Epoch: 10, train_loss: 0.01836, train_MRE: 1.015, train_SDR_2mm: 0.915, train_SDR_2_5mm: 0.9676, train_SDR_3mm: 0.9907, train_SDR_4mm: 0.9984,
+    Duration: 1633 seconds
+val_loss: 0.04965, val_MRE: 2.601, val_SDR_2mm: 0.5925 val_SDR_2_5mm: 0.7254 val_SDR_3mm: 0.7908 val_SDR_4mm: 0.8867
+____________________________________________________________________________
+Epoch: 11, train_loss: 0.01602, train_MRE: 0.9054, train_SDR_2mm: 0.9462, train_SDR_2_5mm: 0.982, train_SDR_3mm: 0.9948, train_SDR_4mm: 0.9986,
+    Duration: 1797 seconds
+val_loss: 0.04591, val_MRE: 2.082, val_SDR_2mm: 0.6258 val_SDR_2_5mm: 0.7465 val_SDR_3mm: 0.8166 val_SDR_4mm: 0.8999
+____________________________________________________________________________
+Saving model checkpoint to trained\ ensemble\ Ensemble\ 1. pth.
+Epoch: 12, train_loss: 0.01394, train_MRE: 0.8244, train_SDR_2mm: 0.9662, train_SDR_2_5mm: 0.9907, train_SDR_3mm: 0.9976, train_SDR_4mm: 0.9991,
+    Duration: 1961 seconds
+val_loss: 0.04705, val_MRE: 2.243, val_SDR_2mm: 0.6144 val_SDR_2_5mm: 0.74 val_SDR_3mm: 0.8111 val_SDR_4mm: 0.8947
+____________________________________________________________________________
+Epoch: 13, train_loss: 0.01228, train_MRE: 0.748, train_SDR_2mm: 0.979, train_SDR_2_5mm: 0.995, train_SDR_3mm: 0.9985, train_SDR_4mm: 0.9991,
+    Duration: 2125 seconds
+val_loss: 0.0478, val_MRE: 2.198, val_SDR_2mm: 0.6266 val_SDR_2_5mm: 0.7421 val_SDR_3mm: 0.8025 val_SDR_4mm: 0.8874
+____________________________________________________________________________
+Epoch: 14, train_loss: 0.01126, train_MRE: 0.695, train_SDR_2mm: 0.9843, train_SDR_2_5mm: 0.9963, train_SDR_3mm: 0.9988, train_SDR_4mm: 0.9992,
+    Duration: 2290 seconds
+val_loss: 0.04719, val_MRE: 2.191, val_SDR_2mm: 0.6277 val_SDR_2_5mm: 0.7449 val_SDR_3mm: 0.8153 val_SDR_4mm: 0.895
+____________________________________________________________________________
+Epoch: 15, train_loss: 0.009859, train_MRE: 0.6024, train_SDR_2mm: 0.9925, train_SDR_2_5mm: 0.9985, train_SDR_3mm: 0.999, train_SDR_4mm: 0.9991,
+    Duration: 2458 seconds
+val_loss: 0.04721, val_MRE: 2.115, val_SDR_2mm: 0.6258 val_SDR_2_5mm: 0.7478 val_SDR_3mm: 0.8111 val_SDR_4mm: 0.8986
+____________________________________________________________________________
+Epoch: 16, train_loss: 0.00915, train_MRE: 0.5756, train_SDR_2mm: 0.9944, train_SDR_2_5mm: 0.9989, train_SDR_3mm: 0.9991, train_SDR_4mm: 0.9992,
+    Duration: 2622 seconds
+val_loss: 0.04751, val_MRE: 2.131, val_SDR_2mm: 0.6295 val_SDR_2_5mm: 0.753 val_SDR_3mm: 0.815 val_SDR_4mm: 0.9018
+____________________________________________________________________________
+Epoch: 17, train_loss: 0.008436, train_MRE: 0.5205, train_SDR_2mm: 0.9961, train_SDR_2_5mm: 0.9992, train_SDR_3mm: 0.9994, train_SDR_4mm: 0.9995,
+    Duration: 2787 seconds
+val_loss: 0.04818, val_MRE: 2.179, val_SDR_2mm: 0.6152 val_SDR_2_5mm: 0.7491 val_SDR_3mm: 0.8137 val_SDR_4mm: 0.8953
+____________________________________________________________________________
+Epoch: 18, train_loss: 0.007975, train_MRE: 0.501, train_SDR_2mm: 0.9968, train_SDR_2_5mm: 0.9994, train_SDR_3mm: 0.9995, train_SDR_4mm: 0.9995,
+    Duration: 2952 seconds
+val_loss: 0.04854, val_MRE: 2.081, val_SDR_2mm: 0.6261 val_SDR_2_5mm: 0.7546 val_SDR_3mm: 0.8142 val_SDR_4mm: 0.8932
+____________________________________________________________________________
+Epoch: 19, train_loss: 0.007412, train_MRE: 0.4571, train_SDR_2mm: 0.9975, train_SDR_2_5mm: 0.9994, train_SDR_3mm: 0.9995, train_SDR_4mm: 0.9996,
+    Duration: 3116 seconds
+val_loss: 0.04732, val_MRE: 2.096, val_SDR_2mm: 0.6316 val_SDR_2_5mm: 0.7574 val_SDR_3mm: 0.8124 val_SDR_4mm: 0.8947
+____________________________________________________________________________
+Epoch: 20, train_loss: 0.006833, train_MRE: 0.4183, train_SDR_2mm: 0.9985, train_SDR_2_5mm: 0.9994, train_SDR_3mm: 0.9995, train_SDR_4mm: 0.9996,
+    Duration: 3279 seconds
+val_loss: 0.04692, val_MRE: 2.304, val_SDR_2mm: 0.6449 val_SDR_2_5mm: 0.7613 val_SDR_3mm: 0.8134 val_SDR_4mm: 0.8979
+____________________________________________________________________________
+Epoch: 21, train_loss: 0.006332, train_MRE: 0.3964, train_SDR_2mm: 0.9984, train_SDR_2_5mm: 0.9995, train_SDR_3mm: 0.9996, train_SDR_4mm: 0.9996,
+    Duration: 3443 seconds
+val_loss: 0.04821, val_MRE: 2.189, val_SDR_2mm: 0.6347 val_SDR_2_5mm: 0.7592 val_SDR_3mm: 0.8184 val_SDR_4mm: 0.8973
+____________________________________________________________________________
+Epoch: 22, train_loss: 0.005933, train_MRE: 0.3668, train_SDR_2mm: 0.9991, train_SDR_2_5mm: 0.9995, train_SDR_3mm: 0.9995, train_SDR_4mm: 0.9995,
+    Duration: 3607 seconds
+val_loss: 0.04773, val_MRE: 2.168, val_SDR_2mm: 0.6371 val_SDR_2_5mm: 0.7561 val_SDR_3mm: 0.8103 val_SDR_4mm: 0.8942
+____________________________________________________________________________
+Stopping experiment due to plateauing.
+    (pytorchenv)

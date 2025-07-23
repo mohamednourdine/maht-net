@@ -1,0 +1,202 @@
+Evaluating performance metrics for model Ensemble
+Split: test1, no. images: 150
+======================================
+Accuracy metrics for  model: Ensemble, test split: test1, mode: ensemble, samples: 1
+Mean Root Error (MRE): 2.08 mm, Standard Deviation (STD): 3.21 mm
+Success Detection Rate
+SDR 2mm: 0.6389
+SDR 2.5mm: 0.7449
+SDR 3mm: 0.8204
+SDR 4mm: 0.907
+150
+STATISCAL VALUES ON TEST1
+Null []
+------------------------------------------------------------------------
+Results of L1
+{'mre': 2.0318551568355137, 'std': 6.344375300608743, 'sdr_2': 0.76, 'sdr_2_5': 0.8533333333333334, 'sdr_3': 0.9266666666666666, 'sdr_4': 0.98}
+Mean Root Error (MRE): 2.032 mm, Standard Deviation (STD): 6.344 mm
+Success Detection Rate
+SDR 2mm: 0.76
+SDR 2.5mm: 0.8533
+SDR 3mm: 0.9267
+SDR 4mm: 0.98
+Null []
+------------------------------------------------------------------------
+Results of L2
+{'mre': 2.3754020051679983, 'std': 2.062877920247307, 'sdr_2': 0.5666666666666667, 'sdr_2_5': 0.7333333333333333, 'sdr_3': 0.7933333333333333, 'sdr_4': 0.8466666666666667}
+Mean Root Error (MRE): 2.375 mm, Standard Deviation (STD): 2.063 mm
+Success Detection Rate
+SDR 2mm: 0.5667
+SDR 2.5mm: 0.7333
+SDR 3mm: 0.7933
+SDR 4mm: 0.8467
+Null []
+------------------------------------------------------------------------
+Results of L3
+{'mre': 2.2140138545733, 'std': 1.2472406818349626, 'sdr_2': 0.5266666666666666, 'sdr_2_5': 0.66, 'sdr_3': 0.7666666666666667, 'sdr_4': 0.92}
+Mean Root Error (MRE): 2.214 mm, Standard Deviation (STD): 1.247 mm
+Success Detection Rate
+SDR 2mm: 0.5267
+SDR 2.5mm: 0.66
+SDR 3mm: 0.7667
+SDR 4mm: 0.92
+Null []
+------------------------------------------------------------------------
+Results of L4
+{'mre': 3.2390509318594627, 'std': 2.3558612849982636, 'sdr_2': 0.4066666666666667, 'sdr_2_5': 0.4866666666666667, 'sdr_3': 0.5666666666666667, 'sdr_4': 0.7066666666666667}
+Mean Root Error (MRE): 3.239 mm, Standard Deviation (STD): 2.356 mm
+Success Detection Rate
+SDR 2mm: 0.4067
+SDR 2.5mm: 0.4867
+SDR 3mm: 0.5667
+SDR 4mm: 0.7067
+Null []
+------------------------------------------------------------------------
+Results of L5
+{'mre': 2.329613174320502, 'std': 1.4298376800761978, 'sdr_2': 0.48, 'sdr_2_5': 0.6333333333333333, 'sdr_3': 0.7533333333333333, 'sdr_4': 0.8933333333333333}
+Mean Root Error (MRE): 2.33 mm, Standard Deviation (STD): 1.43 mm
+Success Detection Rate
+SDR 2mm: 0.48
+SDR 2.5mm: 0.6333
+SDR 3mm: 0.7533
+SDR 4mm: 0.8933
+Null []
+------------------------------------------------------------------------
+Results of L6
+{'mre': 2.3483210307282207, 'std': 1.3539528561362675, 'sdr_2': 0.44666666666666666, 'sdr_2_5': 0.5933333333333334, 'sdr_3': 0.74, 'sdr_4': 0.9066666666666666}
+Mean Root Error (MRE): 2.348 mm, Standard Deviation (STD): 1.354 mm
+Success Detection Rate
+SDR 2mm: 0.4467
+SDR 2.5mm: 0.5933
+SDR 3mm: 0.74
+SDR 4mm: 0.9067
+Null []
+------------------------------------------------------------------------
+Results of L7
+{'mre': 1.542803937041413, 'std': 0.8656920229020159, 'sdr_2': 0.7466666666666667, 'sdr_2_5': 0.86, 'sdr_3': 0.94, 'sdr_4': 0.9933333333333333}
+Mean Root Error (MRE): 1.543 mm, Standard Deviation (STD): 0.8657 mm
+Success Detection Rate
+SDR 2mm: 0.7467
+SDR 2.5mm: 0.86
+SDR 3mm: 0.94
+SDR 4mm: 0.9933
+Null []
+------------------------------------------------------------------------
+Results of L8
+{'mre': 1.3552167800638464, 'std': 0.9931704179210045, 'sdr_2': 0.8133333333333334, 'sdr_2_5': 0.9, 'sdr_3': 0.94, 'sdr_4': 0.9866666666666667}
+Mean Root Error (MRE): 1.355 mm, Standard Deviation (STD): 0.9932 mm
+Success Detection Rate
+SDR 2mm: 0.8133
+SDR 2.5mm:  0.9
+SDR 3mm: 0.94
+SDR 4mm: 0.9867
+Null []
+------------------------------------------------------------------------
+Results of L9
+{'mre': 1.243878853493002, 'std': 0.8963065311783331, 'sdr_2': 0.8666666666666667, 'sdr_2_5': 0.9466666666666667, 'sdr_3': 0.9733333333333334, 'sdr_4': 0.9933333333333333}
+Mean Root Error (MRE): 1.244 mm, Standard Deviation (STD): 0.8963 mm
+Success Detection Rate
+SDR 2mm: 0.8667
+SDR 2.5mm: 0.9467
+SDR 3mm: 0.9733
+SDR 4mm: 0.9933
+Null []
+------------------------------------------------------------------------
+Results of L10
+{'mre': 3.590923176899658, 'std': 2.09696703302767, 'sdr_2': 0.25333333333333335, 'sdr_2_5': 0.3466666666666667, 'sdr_3': 0.41333333333333333, 'sdr_4': 0.64}
+Mean Root Error (MRE): 3.591 mm, Standard Deviation (STD): 2.097 mm
+Success Detection Rate
+SDR 2mm: 0.2533
+SDR 2.5mm: 0.3467
+SDR 3mm: 0.4133
+SDR 4mm: 0.64
+Null []
+------------------------------------------------------------------------
+Results of L11
+{'mre': 1.3081566994811438, 'std': 0.8440730909914939, 'sdr_2': 0.8333333333333334, 'sdr_2_5': 0.9266666666666666, 'sdr_3': 0.9666666666666667, 'sdr_4': 0.9933333333333333}
+Mean Root Error (MRE): 1.308 mm, Standard Deviation (STD): 0.8441 mm
+Success Detection Rate
+SDR 2mm: 0.8333
+SDR 2.5mm: 0.9267
+SDR 3mm: 0.9667
+SDR 4mm: 0.9933
+Null []
+------------------------------------------------------------------------
+Results of L12
+{'mre': 1.7863241100815572, 'std': 7.521066824177362, 'sdr_2': 0.9133333333333333, 'sdr_2_5': 0.9533333333333334, 'sdr_3': 0.98, 'sdr_4': 0.9933333333333333}
+Mean Root Error (MRE): 1.786 mm, Standard Deviation (STD): 7.521 mm
+Success Detection Rate
+SDR 2mm: 0.9133
+SDR 2.5mm: 0.9533
+SDR 3mm: 0.98
+SDR 4mm: 0.9933
+Null []
+------------------------------------------------------------------------
+Results of L13
+{'mre': 1.417032151720524, 'std': 0.9700617923567056, 'sdr_2': 0.8066666666666666, 'sdr_2_5': 0.8666666666666667, 'sdr_3': 0.9133333333333333, 'sdr_4': 0.9733333333333334}
+Mean Root Error (MRE): 1.417 mm, Standard Deviation (STD): 0.9701 mm
+Success Detection Rate
+SDR 2mm: 0.8067
+SDR 2.5mm: 0.8667
+SDR 3mm: 0.9133
+SDR 4mm: 0.9733
+Null []
+------------------------------------------------------------------------
+Results of L14
+{'mre': 1.1943990092803596, 'std': 0.7189420514177504, 'sdr_2': 0.8666666666666667, 'sdr_2_5': 0.9333333333333333, 'sdr_3': 0.98, 'sdr_4': 1.0}
+Mean Root Error (MRE): 1.194 mm, Standard Deviation (STD): 0.7189 mm
+Success Detection Rate
+SDR 2mm: 0.8667
+SDR 2.5mm: 0.9333
+SDR 3mm: 0.98
+SDR 4mm:  1.0
+Null []
+------------------------------------------------------------------------
+Results of L15
+{'mre': 1.607604768268031, 'std': 1.086772090048579, 'sdr_2': 0.7266666666666667, 'sdr_2_5': 0.84, 'sdr_3': 0.9066666666666666, 'sdr_4': 0.96}
+Mean Root Error (MRE): 1.608 mm, Standard Deviation (STD): 1.087 mm
+Success Detection Rate
+SDR 2mm: 0.7267
+SDR 2.5mm: 0.84
+SDR 3mm: 0.9067
+SDR 4mm: 0.96
+Null []
+------------------------------------------------------------------------
+Results of L16
+{'mre': 2.4344795530144903, 'std': 1.4956969298472074, 'sdr_2': 0.4666666666666667, 'sdr_2_5': 0.6066666666666667, 'sdr_3': 0.7466666666666667, 'sdr_4': 0.8666666666666667}
+Mean Root Error (MRE): 2.434 mm, Standard Deviation (STD): 1.496 mm
+Success Detection Rate
+SDR 2mm: 0.4667
+SDR 2.5mm: 0.6067
+SDR 3mm: 0.7467
+SDR 4mm: 0.8667
+Null []
+------------------------------------------------------------------------
+Results of L17
+{'mre': 1.6007078543834954, 'std': 0.9498777280515222, 'sdr_2': 0.7333333333333333, 'sdr_2_5': 0.82, 'sdr_3': 0.9066666666666666, 'sdr_4': 0.9733333333333334}
+Mean Root Error (MRE): 1.601 mm, Standard Deviation (STD): 0.9499 mm
+Success Detection Rate
+SDR 2mm: 0.7333
+SDR 2.5mm: 0.82
+SDR 3mm: 0.9067
+SDR 4mm: 0.9733
+Null []
+------------------------------------------------------------------------
+Results of L18
+{'mre': 2.2877820580514237, 'std': 1.56964537020033, 'sdr_2': 0.5133333333333333, 'sdr_2_5': 0.6533333333333333, 'sdr_3': 0.7666666666666667, 'sdr_4': 0.88}
+Mean Root Error (MRE): 2.288 mm, Standard Deviation (STD): 1.57 mm
+Success Detection Rate
+SDR 2mm: 0.5133
+SDR 2.5mm: 0.6533
+SDR 3mm: 0.7667
+SDR 4mm: 0.88
+Null []
+------------------------------------------------------------------------
+Results of L19
+{'mre': 3.6157592239200222, 'std': 7.588716529688707, 'sdr_2': 0.41333333333333333, 'sdr_2_5': 0.54, 'sdr_3': 0.6066666666666667, 'sdr_4': 0.7266666666666667}
+Mean Root Error (MRE): 3.616 mm, Standard Deviation (STD): 7.589 mm
+Success Detection Rate
+SDR 2mm: 0.4133
+SDR 2.5mm: 0.54
+SDR 3mm: 0.6067
+SDR 4mm: 0.7267

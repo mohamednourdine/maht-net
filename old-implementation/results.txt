@@ -1,0 +1,34 @@
+
+Generating predictions on data split: test. 
+Number of test images: 150 Ensemble prediction. 
+Log dir:logs\test\ensemble\Ensemble\predictions 
+Processed 30/150 
+Processed 60/150 
+Processed 90/150 
+Processed 120/150 
+Processed 150/150 
+Model 1/1 evaluated 
+Evaluating performance metrics for model Ensemble Split: test, no. images: 150 
+Accuracy metrics for model: Ensemble, 
+test split: test, 
+mode: ensemble, 
+samples: 1 Mean 
+Root Error (MRE): 1.069 mm, Standard Deviation (STD): 4.116 mm 
+Success Detection Rate 
+SDR 2mm: 0.8972 
+SDR 2.5mm: 0.9246 SDR 
+3mm: 0.9428 SDR 
+4mm: 0.9674
+
+---------------------------
+
+Evaluating performance metrics for model Ensemble
+Split: test1, no. images: 150
+Accuracy metrics for model: Ensemble, test split: test1, mode: ensemble, samples: 1
+Mean Root Error (MRE): 2.08 mm, Standard Deviation (STD): 3.21 mm
+Success Detection Rate
+SDR 2mm: 0.6389
+SDR 2.5mm: 0.7449
+SDR 3mm: 0.8204
+SDR 4mm: 0.907
+(pytorchenv)
