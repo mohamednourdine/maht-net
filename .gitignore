@@ -1,0 +1,241 @@
+# MAHT-Net Project .gitignore
+
+# ================================================
+# Python Related
+# ================================================
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+build/
+develop-eggs/
+dist/
+downloads/
+eggs/
+.eggs/
+lib/
+lib64/
+parts/
+sdist/
+var/
+wheels/
+*.egg-info/
+.installed.cfg
+*.egg
+MANIFEST
+
+# ================================================
+# Virtual Environments
+# ================================================
+.env
+.venv
+env/
+venv/
+ENV/
+env.bak/
+venv.bak/
+conda-env/
+.conda/
+
+# ================================================
+# IDE and Editor Files
+# ================================================
+.vscode/settings.json
+.vscode/launch.json
+.vscode/extensions.json
+.vscode/tasks.json
+.idea/
+*.swp
+*.swo
+*~
+.project
+.pydevproject
+
+# ================================================
+# Jupyter Notebooks
+# ================================================
+.ipynb_checkpoints/
+*.ipynb_checkpoints
+Untitled*.ipynb
+
+# ================================================
+# Machine Learning & Data Science
+# ================================================
+# Large dataset files
+data/raw/
+data/external/
+data/cache/
+data/backup/
+data/temp/
+*.h5
+*.hdf5
+*.pkl
+*.pickle
+
+# Model files (keep only checkpoints, not full models)
+models/trained/
+models/pretrained/
+models/checkpoints/*.pth
+models/checkpoints/*.pt
+models/checkpoints/*.ckpt
+!models/checkpoints/.gitkeep
+
+# TensorBoard logs
+logs/tensorboard/
+logs/training/
+logs/evaluation/
+logs/deployment/
+runs/
+tb_logs/
+
+# MLflow tracking
+mlruns/
+mlflow_tracking/
+
+# Weights & Biases
+wandb/
+
+# ================================================
+# Medical Data & DICOM Files
+# ================================================
+*.dcm
+*.dicom
+*.nii
+*.nii.gz
+data/raw/images/
+data/raw/dicom/
+data/processed/cache/
+annotations/private/
+patient_data/
+
+# ================================================
+# Results and Outputs
+# ================================================
+results/experiments/
+results/predictions/
+results/visualizations/
+results/reports/private/
+outputs/
+*.png
+*.jpg
+*.jpeg
+*.gif
+*.bmp
+*.tiff
+!documentation/assets/*.png
+!documentation/figures/*.png
+!README_assets/*.png
+
+# ================================================
+# Configuration Files with Sensitive Data
+# ================================================
+.env.local
+.env.production
+config/secrets.yaml
+config/api_keys.json
+aws_credentials.json
+terraform.tfvars
+*.pem
+*.key
+*.crt
+*.p12
+
+# ================================================
+# AWS and Cloud
+# ================================================
+.aws/
+terraform/.terraform/
+terraform/terraform.tfstate*
+terraform/.terraform.lock.hcl
+.terraform/
+*.tfstate
+*.tfstate.*
+.terraform.lock.hcl
+
+# ================================================
+# Docker
+# ================================================
+.dockerignore
+Dockerfile.prod
+docker-compose.override.yml
+.docker/
+
+# ================================================
+# System Files
+# ================================================
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+ehthumbs.db
+Thumbs.db
+desktop.ini
+
+# ================================================
+# Temporary Files
+# ================================================
+*.tmp
+*.temp
+*.log
+*.out
+*.err
+.cache/
+tmp/
+temp/
+
+# ================================================
+# Testing
+# ================================================
+.coverage
+.pytest_cache/
+.tox/
+.coverage.*
+coverage.xml
+*.cover
+.hypothesis/
+.cache
+
+# ================================================
+# Documentation Build
+# ================================================
+docs/_build/
+docs/build/
+site/
+.mkdocs/
+
+# ================================================
+# Package Management
+# ================================================
+pip-log.txt
+pip-delete-this-directory.txt
+.tox/
+.coverage
+.coverage.*
+.cache
+nosetests.xml
+coverage.xml
+*.cover
+.hypothesis/
+
+# ================================================
+# Research and Papers
+# ================================================
+papers/drafts/
+manuscripts/private/
+*.aux
+*.bbl
+*.blg
+*.fdb_latexmk
+*.fls
+*.synctex.gz
+
+# ================================================
+# Keep Important Empty Directories
+# ================================================
+!data/.gitkeep
+!models/.gitkeep
+!logs/.gitkeep
+!results/.gitkeep
+!notebooks/.gitkeep

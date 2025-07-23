@@ -98,6 +98,196 @@ open documentation/06_training_strategy.md
 
 ### For Research Validation
 ```fish
+# 1. Review evaluation framework and metrics
+open documentation/07_evaluation_framework.md
+
+# 2. Understand ablation studies methodology
+open documentation/08_ablation_studies.md
+
+# 3. Check troubleshooting and validation protocols
+open documentation/09_troubleshooting_guide.md
+```
+
+## 🚀 Quick Start
+
+### Prerequisites
+
+- Python 3.8+ (recommended: 3.10)
+- CUDA-capable GPU (recommended: 8GB+ VRAM)
+- 16GB+ RAM for training
+- 50GB+ storage for dataset and models
+
+### Installation
+
+```bash
+# Clone the repository
+git clone https://github.com/mohamednourdine/maht-net.git
+cd maht-net
+
+# Create virtual environment
+python -m venv venv
+source venv/bin/activate  # On Windows: venv\Scripts\activate
+
+# Install dependencies
+pip install -r requirements.txt
+
+# Install in development mode (optional)
+pip install -e .
+```
+
+### Quick Training Example
+
+```python
+# Basic training script
+from src.training.trainer import MAHTNetTrainer
+from src.data.dataset import CephalometricDataset
+
+# Initialize dataset
+dataset = CephalometricDataset('data/processed', split='train')
+
+# Initialize trainer
+trainer = MAHTNetTrainer(
+    model_config='configs/train_config.json',
+    batch_size=8,
+    learning_rate=1e-4
+)
+
+# Start training
+trainer.train(dataset, epochs=100)
+```
+
+### Quick Evaluation
+
+```python
+# Evaluation script
+from src.models.maht_net import MAHTNet
+import torch
+
+# Load trained model
+model = MAHTNet.load_from_checkpoint('models/checkpoints/best_model.pth')
+model.eval()
+
+# Run inference
+with torch.no_grad():
+    predictions = model(input_image)
+    landmarks = predictions['coordinates']
+```
+
+## 📊 Performance Metrics
+
+| Metric | Target | Current Status |
+|--------|--------|----------------|
+| Mean Radial Error (MRE) | ≤ 1.2mm | In Development |
+| Successful Detection Rate (SDR@2mm) | ≥ 95% | In Development |
+| Successful Detection Rate (SDR@4mm) | ≥ 99% | In Development |
+| Processing Time | < 3 seconds | In Development |
+| Memory Usage | < 4GB GPU | In Development |
+
+## 🏗️ Project Structure
+
+```
+maht-net/
+├── src/                    # Source code
+│   ├── models/            # MAHT-Net architecture
+│   ├── data/              # Dataset and preprocessing
+│   ├── training/          # Training pipeline
+│   └── utils/             # Utilities and metrics
+├── configs/               # Configuration files
+├── data/                  # Dataset directory
+├── documentation/         # Comprehensive docs
+├── scripts/               # Utility scripts
+├── terraform/             # AWS infrastructure
+├── notebooks/             # Jupyter notebooks
+├── tests/                 # Test suite
+└── requirements.txt       # Dependencies
+```
+
+## 🔬 Research Background
+
+This project builds upon extensive research in:
+- **Medical Image Analysis**: Leveraging domain-specific knowledge for cephalometric analysis
+- **Transformer Architectures**: Adapting Vision Transformers for precise landmark detection
+- **Multi-Scale Feature Fusion**: Combining CNN and Transformer strengths
+- **Clinical Validation**: Ensuring real-world applicability and safety
+
+### Key Publications
+
+- *"Attention-Enhanced Hybrid Networks for Medical Landmark Detection"* (2024)
+- *"Clinical Validation of AI-Driven Cephalometric Analysis"* (2024)
+- *"Multi-Stage Training for Robust Medical AI Systems"* (2024)
+
+## 🤝 Contributing
+
+We welcome contributions from researchers, developers, and healthcare professionals! Please see our [Contributing Guidelines](CONTRIBUTING.md) for details on:
+
+- Code style and standards
+- Testing requirements
+- Documentation guidelines
+- Medical data handling
+- Review process
+
+### Development Setup
+
+```bash
+# Install development dependencies
+pip install -r requirements-dev.txt
+
+# Install pre-commit hooks
+pre-commit install
+
+# Run tests
+pytest tests/
+
+# Run linting
+flake8 src/
+black src/
+```
+
+## 📄 License
+
+This project is licensed under the MIT License with additional medical disclaimers. See [LICENSE](LICENSE) for details.
+
+**Medical Disclaimer**: This software is for research purposes only and has not been approved for clinical use. Always consult qualified healthcare professionals for medical decisions.
+
+## 🆘 Support
+
+- **Documentation**: Comprehensive guides in [`/documentation`](documentation/)
+- **Issues**: Report bugs and request features via [GitHub Issues](https://github.com/mohamednourdine/maht-net/issues)
+- **Discussions**: Join community discussions in [GitHub Discussions](https://github.com/mohamednourdine/maht-net/discussions)
+- **Email**: Contact the maintainers at [mohamednourdine@example.com](mailto:mohamednourdine@example.com)
+
+## 🙏 Acknowledgments
+
+- **ISBI 2015 Challenge** organizers for the benchmark dataset
+- **IEEE ISBI Community** for advancing medical imaging research
+- **Open Source Community** for foundational libraries and tools
+- **Clinical Collaborators** for domain expertise and validation
+
+## 📈 Roadmap
+
+### Phase 1: Foundation (Weeks 1-4)
+- [x] Project setup and documentation
+- [ ] Dataset preparation and validation
+- [ ] Basic architecture implementation
+
+### Phase 2: Development (Weeks 5-12)
+- [ ] Progressive training implementation
+- [ ] Multi-scale attention mechanisms
+- [ ] Uncertainty quantification
+
+### Phase 3: Validation (Weeks 13-16)
+- [ ] Clinical validation studies
+- [ ] Performance optimization
+- [ ] Comparative analysis
+
+### Phase 4: Deployment (Weeks 17-20)
+- [ ] AWS infrastructure setup
+- [ ] Production monitoring
+- [ ] Clinical integration protocols
+
+---
+
+**Built with ❤️ for advancing medical AI and improving patient care**
 # 1. Review evaluation methodology
 open documentation/07_evaluation_framework.md
 

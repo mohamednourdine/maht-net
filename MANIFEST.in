@@ -1,0 +1,63 @@
+# MANIFEST.in for MAHT-Net package
+# Specifies additional files to include in the source distribution
+
+# Include documentation
+include README.md
+include ENHANCEMENT_SUMMARY.md
+recursive-include documentation *.md
+recursive-include documentation *.png
+recursive-include documentation *.jpg
+
+# Include configuration files
+include *.yaml
+include *.yml
+include *.json
+include *.toml
+include *.cfg
+include *.ini
+
+# Include requirements
+include requirements.txt
+include requirements-dev.txt
+
+# Include scripts
+recursive-include scripts *.py
+recursive-include scripts *.sh
+recursive-include scripts *.fish
+
+# Include configuration directories
+recursive-include configs *.json
+recursive-include configs *.yaml
+recursive-include configs *.yml
+
+# Include Terraform files
+recursive-include terraform *.tf
+recursive-include terraform *.sh
+include terraform/README.md
+
+# Include Makefile
+include Makefile
+
+# Exclude development files
+exclude .gitignore
+exclude .vscode/*
+exclude .idea/*
+exclude *.log
+exclude *.tmp
+
+# Exclude data directories (too large for package)
+prune data/raw
+prune data/processed
+prune data/external
+prune logs
+prune results
+prune models/trained
+prune models/checkpoints
+
+# Exclude cache and temporary files
+global-exclude __pycache__
+global-exclude *.py[cod]
+global-exclude *.so
+global-exclude .DS_Store
+global-exclude *.swp
+global-exclude *.swo
