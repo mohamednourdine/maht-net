@@ -68,6 +68,7 @@ data/external/
 data/cache/
 data/backup/
 data/temp/
+data/processed/
 *.h5
 *.hdf5
 *.pkl

@@ -43,6 +43,7 @@ hydra-core>=1.3.0
 omegaconf>=2.3.0
 rich>=13.6.0
 tqdm>=4.66.0
+rarfile>=4.1  # For RAR archive extraction
 
 # AWS Integration
 boto3>=1.29.0

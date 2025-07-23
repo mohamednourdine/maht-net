@@ -31,6 +31,8 @@ help:
 	@echo "  make deploy         		- Deploy model to production"
 	@echo ""
 	@echo "📊 Data & Development:"
+	@echo "  make extract-data   		- Extract dataset archives (bash script)"
+	@echo "  make extract-data-py		- Extract dataset archives (Python script)"
 	@echo "  make data-prep      		- Prepare datasets for training"
 	@echo "  make test           		- Run all tests"
 	@echo "  make lint           		- Run code quality checks"
@@ -89,9 +91,22 @@ aws-setup:
 	./scripts/aws/setup_ec2.sh
 	@echo "AWS EC2 setup complete ✅"
 
+# Data extraction and preparation
+extract-data:
+	@echo "📦 Extracting dataset archives..."
+	chmod +x scripts/extract_dataset.sh
+	./scripts/extract_dataset.sh
+	@echo "Dataset extraction complete ✅"
+
+# Python-based extraction (with rarfile support)
+extract-data-py:
+	@echo "🐍 Extracting dataset with Python script..."
+	python scripts/extract_dataset.py
+	@echo "Python extraction complete ✅"
+
 # Data preparation
 data-prep:
-	@echo "Preparing cephalometric datasets..."
+	@echo "📋 Preparing cephalometric datasets..."
 	python src/data/prepare_datasets.py --config configs/data_config.yaml
 	python src/data/preprocess.py --augment --validate
 	@echo "Data preparation complete ✅"
