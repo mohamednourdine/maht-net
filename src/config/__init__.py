@@ -202,6 +202,25 @@ class ExperimentConfig:
         with open(config_path, 'r') as f:
             config_dict = yaml.safe_load(f)
 
+        # Convert lists back to tuples where needed
+        def convert_lists_to_tuples(obj, target_keys):
+            """Convert specific list values back to tuples"""
+            if isinstance(obj, dict):
+                result = {}
+                for k, v in obj.items():
+                    if k in target_keys and isinstance(v, list):
+                        result[k] = tuple(v)
+                    elif isinstance(v, dict):
+                        result[k] = convert_lists_to_tuples(v, target_keys)
+                    else:
+                        result[k] = v
+                return result
+            return obj
+
+        # Define which keys should be converted back to tuples
+        tuple_keys = {'image_size', 'original_size', 'heatmap_size', 'affine_scale_range'}
+        config_dict = convert_lists_to_tuples(config_dict, tuple_keys)
+
         return cls(**config_dict)
 
     def to_yaml(self, output_path: Union[str, Path]) -> None:
@@ -209,12 +228,23 @@ class ExperimentConfig:
         output_path = Path(output_path)
         output_path.parent.mkdir(parents=True, exist_ok=True)
 
-        # Convert dataclass to dict for YAML serialization
+        # Convert dataclass to dict for YAML serialization with tuple handling
+        def convert_tuples(obj):
+            """Convert tuples to lists for YAML compatibility"""
+            if isinstance(obj, tuple):
+                return list(obj)
+            elif isinstance(obj, dict):
+                return {k: convert_tuples(v) for k, v in obj.items()}
+            elif isinstance(obj, list):
+                return [convert_tuples(item) for item in obj]
+            else:
+                return obj
+
         config_dict = {
-            'data': self.data.__dict__,
-            'model': self.model.__dict__,
-            'training': self.training.__dict__,
-            'evaluation': self.evaluation.__dict__,
+            'data': convert_tuples(self.data.__dict__),
+            'model': convert_tuples(self.model.__dict__),
+            'training': convert_tuples(self.training.__dict__),
+            'evaluation': convert_tuples(self.evaluation.__dict__),
             'experiment_name': self.experiment_name,
             'project_root': self.project_root,
             'device': self.device,

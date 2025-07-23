@@ -1,0 +1,105 @@
+checkpoint_dir: models/checkpoints
+data:
+  affine_rotation: 5.0
+  affine_scale_range: !!python/tuple
+  - 0.95
+  - 1.05
+  affine_translation: 0.03
+  dataset_name: isbi_2015
+  elastic_alpha: 15.0
+  elastic_sigma: 10.0
+  gaussian_amplitude: 1000.0
+  gaussian_sigma: 5.0
+  heatmap_size: &id001 !!python/tuple
+  - 256
+  - 256
+  horizontal_flip: false
+  image_size: *id001
+  num_landmarks: 19
+  original_size: !!python/tuple
+  - 1935
+  - 2400
+  pixels_per_mm: 10.0
+  processed_data_path: data/processed
+  random_seed: 42
+  raw_data_path: data/raw
+  train_split: 0.85
+  use_augmentation: true
+  val_split: 0.15
+device: cuda
+evaluation:
+  bootstrap_samples: 1000
+  clinical_threshold_mm: 2.0
+  confidence_level: 0.95
+  excellent_threshold_mm: 1.5
+  max_visualization_samples: 20
+  primary_metrics:
+  - mre
+  - sdr_2mm
+  - sdr_4mm
+  save_attention_maps: true
+  save_prediction_images: true
+  sdr_thresholds:
+  - 1.5
+  - 2.0
+  - 2.5
+  - 3.0
+  - 4.0
+experiment_name: test_maht_net_config
+log_level: INFO
+mixed_precision: true
+model:
+  decoder_channels:
+  - 512
+  - 256
+  - 128
+  - 64
+  decoder_type: attention_fpn
+  encoder_channels:
+  - 64
+  - 128
+  - 256
+  - 512
+  - 1024
+  encoder_dropout: 0.4
+  encoder_type: unet_encoder
+  model_name: maht_net
+  output_channels: 19
+  transformer_dim: 1024
+  transformer_dropout: 0.1
+  transformer_heads: 12
+  transformer_layers: 6
+  transformer_mlp_ratio: 4.0
+  use_attention_gates: true
+  use_coordinate_regression: true
+  use_transformer: true
+  use_uncertainty: true
+output_dir: experiments
+project_root: /var/www/phd-researches/maht-net
+random_seed: 42
+results_dir: results
+training:
+  attention_loss_weight: 0.1
+  batch_size: 8
+  coordinate_loss_weight: 0.5
+  early_stopping_patience: 25
+  gradient_clip_norm: 1.0
+  heatmap_loss_weight: 1.0
+  learning_rate: 0.001
+  log_interval: 10
+  num_epochs: 200
+  optimizer: adam
+  primary_loss: mse
+  save_interval: 5
+  scheduler_factor: 0.5
+  scheduler_min_lr: 1.0e-06
+  scheduler_patience: 15
+  scheduler_type: reduce_on_plateau
+  stage_1_epochs: 50
+  stage_2_epochs: 75
+  stage_3_epochs: 75
+  use_auxiliary_losses: true
+  use_progressive_training: true
+  use_scheduler: true
+  validate_interval: 1
+  weight_decay: 0.0
