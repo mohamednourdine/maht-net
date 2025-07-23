@@ -254,7 +254,7 @@ This project is licensed under the MIT License with additional medical disclaime
 - **Documentation**: Comprehensive guides in [`/documentation`](documentation/)
 - **Issues**: Report bugs and request features via [GitHub Issues](https://github.com/mohamednourdine/maht-net/issues)
 - **Discussions**: Join community discussions in [GitHub Discussions](https://github.com/mohamednourdine/maht-net/discussions)
-- **Email**: Contact the maintainers at [mohamednourdine@example.com](mailto:mohamednourdine@example.com)
+- **Email**: Contact the maintainers at [mohamednjikam25@hotmail..com](mailto:mohamednjikam25@hotmail..com)
 
 ## 🙏 Acknowledgments
 

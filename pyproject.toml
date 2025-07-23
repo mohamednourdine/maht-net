@@ -7,7 +7,7 @@ name = "maht-net"
 version = "1.0.0"
 description = "Multi-Stage Attention-enhanced Hybrid Transformer Network for Cephalometric Landmark Detection"
 authors = [
-    {name = "Mohamed Nourdine", email = "mohamednourdine@example.com"}
+    {name = "Mohamed Nourdine", email = "mohamednjikam25@hotmail..com"}
 ]
 readme = "README.md"
 license = {text = "MIT"}
