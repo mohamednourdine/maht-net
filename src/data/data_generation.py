@@ -315,19 +315,52 @@ class EnhancedDataGenerator:
         # Generate heatmaps
         heatmaps = self.heatmap_generator.generate_heatmap(augmented_landmarks)
         
+        # Generate descriptive filename based on original image and augmentation
+        original_name = Path(image_path).stem  # Get filename without extension
+        
+        # Determine augmentation suffix
+        aug_suffix = ""
+        augmentation_detected = False
+        landmark_diff = 0.0
+        
+        if self.config.enable_augmentation:
+            # Check if augmentation was actually applied by comparing landmarks
+            # Only compare if shapes match
+            if augmented_landmarks.shape == scaled_landmarks.shape:
+                landmark_diff = float(np.mean(np.abs(augmented_landmarks - scaled_landmarks)))
+                if landmark_diff > 0.1:  # Threshold to detect if augmentation occurred
+                    aug_suffix = "_aug"
+                    augmentation_detected = True
+                else:
+                    aug_suffix = "_noaug"
+            else:
+                # If shapes don't match, something went wrong with augmentation
+                logger.warning(f"Landmark shape mismatch: {augmented_landmarks.shape} vs {scaled_landmarks.shape}")
+                aug_suffix = "_noaug"
+        else:
+            aug_suffix = "_orig"
+        
+        # Create descriptive filename: originalname_aug_count_targetsize
+        target_size_str = f"{self.config.target_size[0]}x{self.config.target_size[1]}"
+        descriptive_name = f"{original_name}{aug_suffix}_{sample_id:03d}_{target_size_str}"
+        
         # Create processed sample
         processed_sample = {
             'sample_id': sample_id,
             'original_image_path': str(image_path),
+            'original_name': original_name,
+            'descriptive_name': descriptive_name,
             'original_size': original_size,
             'target_size': self.config.target_size,
             'landmarks': augmented_landmarks.tolist(),
-            'image_path': f'images/sample_{sample_id:06d}.png',
-            'heatmap_path': f'heatmaps/sample_{sample_id:06d}.npy',
+            'image_path': f'images/{descriptive_name}.png',
+            'heatmap_path': f'heatmaps/{descriptive_name}.npy',
             'metadata': {
                 'original_landmarks': landmarks.tolist(),
                 'scaled_landmarks': scaled_landmarks.tolist(),
-                'augmentation_applied': self.config.enable_augmentation
+                'augmentation_applied': bool(self.config.enable_augmentation),
+                'augmentation_detected': bool(augmentation_detected),
+                'augmentation_strength': float(landmark_diff)
             }
         }
         
@@ -340,7 +373,8 @@ class EnhancedDataGenerator:
             self._save_sample_visualization(
                 image, resized_image, landmarks, scaled_landmarks, 
                 augmented_image, augmented_landmarks, heatmaps,
-                output_path / 'visualizations' / f'sample_{sample_id:06d}.png'
+                output_path / 'visualizations' / f'{descriptive_name}_pipeline.png',
+                descriptive_name
             )
         
         return processed_sample
@@ -462,14 +496,23 @@ class EnhancedDataGenerator:
         
         # Check minimum size
         if h < self.config.min_image_size[0] or w < self.config.min_image_size[1]:
+            logger.debug(f"Image too small: {h}x{w} < {self.config.min_image_size}")
             return False
         
         # Check landmark bounds
         if np.any(landmarks < 0) or np.any(landmarks[:, 0] >= w) or np.any(landmarks[:, 1] >= h):
+            logger.debug(f"Landmarks out of bounds")
+            return False
+        
+        # Check expected number of landmarks (ISBI should have 19)
+        expected_landmarks = 19
+        if len(landmarks) != expected_landmarks:
+            logger.debug(f"Unexpected landmark count: {len(landmarks)} != {expected_landmarks}")
             return False
         
         # Check image quality (not completely black/white)
         if np.std(image) < 10:
+            logger.debug(f"Low image variance: {np.std(image)}")
             return False
         
         return True
@@ -547,10 +590,25 @@ class EnhancedDataGenerator:
                                   augmented_image: np.ndarray,
                                   augmented_landmarks: np.ndarray,
                                   heatmaps: np.ndarray,
-                                  save_path: Path):
-        """Save comprehensive sample visualization"""
+                                  save_path: Path,
+                                  descriptive_name: str = None):
+        """Save comprehensive sample visualization with descriptive naming"""
+        
+        # Extract augmentation info from filename if provided
+        aug_info = ""
+        if descriptive_name:
+            if "_aug_" in descriptive_name:
+                aug_info = " (Augmented)"
+            elif "_noaug_" in descriptive_name:
+                aug_info = " (No Augmentation Applied)"
+            elif "_orig_" in descriptive_name:
+                aug_info = " (Original)"
         
         fig, axes = plt.subplots(2, 3, figsize=(18, 12))
+        
+        # Add main title with descriptive information
+        main_title = f'Data Pipeline: {descriptive_name if descriptive_name else "Sample"}{aug_info}'
+        fig.suptitle(main_title, fontsize=16, fontweight='bold')
         
         # Original
         axes[0, 0].imshow(original_image, cmap='gray')
@@ -566,7 +624,7 @@ class EnhancedDataGenerator:
         
         # Augmented
         axes[0, 2].imshow(augmented_image, cmap='gray')
-        axes[0, 2].set_title('Augmented')
+        axes[0, 2].set_title(f'Processed{aug_info}')
         for i, (x, y) in enumerate(augmented_landmarks):
             axes[0, 2].scatter(x, y, c='red', s=30, marker='o')
         
