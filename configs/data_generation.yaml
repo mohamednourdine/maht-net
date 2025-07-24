@@ -1,0 +1,43 @@
+# MAHT-Net Data Generation Configuration
+# Production settings for ISBI 2015 cephalometric dataset
+
+# Image Processing
+target_size: [512, 512]       # Target image size (height, width)
+heatmap_size: [128, 128]      # Heatmap resolution
+gaussian_sigma: 2.0           # Gaussian standard deviation for heatmaps
+heatmap_amplitude: 1.0        # Peak amplitude of Gaussian
+
+# Data Augmentation
+enable_augmentation: true
+augmentation_probability: 0.7
+
+# Augmentation Parameters
+geometric_transforms:
+  shift_limit: 0.1            # Maximum shift as fraction of image size
+  scale_limit: 0.1            # Maximum scale change
+  rotate_limit: 15            # Maximum rotation in degrees
+  horizontal_flip: 0.5        # Probability of horizontal flip
+  elastic_alpha: 1            # Elastic transform strength
+  elastic_sigma: 50           # Elastic transform smoothness
+
+intensity_transforms:
+  brightness_limit: 0.2       # Brightness adjustment range
+  contrast_limit: 0.2         # Contrast adjustment range
+  noise_variance: [10, 50]    # Gaussian noise variance range
+  blur_limit: 3               # Maximum blur kernel size
+  clahe_clip_limit: 2.0       # CLAHE clip limit
+
+# Quality Control
+min_image_size: [256, 256]    # Minimum acceptable image size
+max_landmark_displacement: 0.1 # Maximum landmark displacement (fraction)
+
+# Dataset Splits
+train_ratio: 0.7              # Training set ratio
+val_ratio: 0.15               # Validation set ratio
+test_ratio: 0.15              # Test set ratio
+
+# Output Settings
+save_intermediate_results: true
+visualization_samples: 5      # Number of samples to visualize
+output_format: 'png'          # Image output format
+heatmap_format: 'npy'         # Heatmap storage format

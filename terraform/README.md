@@ -158,7 +158,7 @@ black src/
 ```bash
 # Upload small datasets via VS Code
 # For larger datasets, use scp:
-scp -i ~/.ssh/maht-net-key dataset.zip ubuntu@<IP>:~/maht-net/data/
+scp -i ~/.ssh/id_rsa dataset.zip ubuntu@3.224.200.252:/home/ubuntu/maht-net/data/raw
 
 # Extract and organize
 cd ~/maht-net/data
